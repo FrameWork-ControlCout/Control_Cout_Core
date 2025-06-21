@@ -1,0 +1,114 @@
+ 
+management:
+    security:
+        enabled: false
+    endpoint:
+        health: 
+            group: 
+                custom :
+                    show-details: always
+        
+        
+security:
+    jwt:
+        secret-key : S8r3+G/0bJ1m/f4l8a/6e/h6l/s0k+r7p+d1n/a4h/t0q+t8n+y2s=
+#        expiration-time:  4200000 
+        expiration-time:  86400000  
+ 
+#        expiration-time:  60000 
+        jwtRefreshExpirationMs : 8640000
+#                expiration-time:  600000  1min
+ 
+thymeleaf:
+    encoding: UTF-8
+ 
+ 
+ 
+spring:
+   
+    jackson:
+ 
+#// Libya + Cairo 
+#        time-zone: EET   
+#Tunisie
+        time-zone: CET 
+       
+ 
+    main:
+        allow-bean-definition-overriding: true
+    profiles:
+      active: dev,javamelody
+  
+    data:
+        rest:
+            base-path: /api/data
+    output:
+        ansi:
+            enabled: DETECT
+    application:
+        name: ControlCout-core
+    batch:
+        job:
+            enabled: false        
+ 
+    jmx.enabled: true
+    devtools:
+        add-properties:
+            false
+        restart:
+            enabled: true
+        livereload:
+            enabled: true
+    datasource:
+        url: jdbc:sqlserver://localhost\sql2019;database=ControlCout;integratedSecurity=false;encrypt=false;trustServerCertificate=true
+        username: sa
+        password: 123
+        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver   
+ 
+        hikari:
+            maximumPoolSize: 10  
+            connectionTimeout: 5000   
+        
+    jpa:
+        open-in-view : false
+        defer-datasource-initialization : true 
+        database: SQL_SERVER
+        show-sql: false
+        generate-ddl: true 
+#        generate-ddl: false
+
+        hibernate:
+            ddl-auto: update  
+            use_sql_comments : true
+            show-sql: true
+            naming:
+                implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        properties:
+            hibernate.default_schema: dbo
+            hibernate.id.new_generator_mappings: true
+            hibernate.cache.use_second_level_cache: false
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: false
+            org.hibernate.envers.store_data_at_delete: true
+            hibernate:
+                transaction:
+                    jta:
+                        platform: org.hibernate.engine.transaction.jta.platform.internal.AtomikosJtaPlatform
+    messages:
+        basename: i18n/messages 
+lang:
+    secondary: ar
+server:
+    port: 8085
+    contextPath: /ControlCout-core
+    error:
+        include-stacktrace: ON_PARAM
+ 
+environnement : local 
+  
+  
+  
+IpServer: http://localhost:6060
+
+   
