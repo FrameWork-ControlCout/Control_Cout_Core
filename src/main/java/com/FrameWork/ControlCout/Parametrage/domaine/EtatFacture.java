@@ -2,48 +2,61 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.FrameWork.ControlCout.Parametrage.dto;
+package com.FrameWork.ControlCout.Parametrage.domaine;
 
-import com.FrameWork.ControlCout.Parametrage.domaine.FamilleArticle;
-import com.FrameWork.ControlCout.Parametrage.domaine.Unite;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.Date;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 /**
  *
  * @author Administrator
  */
-public class ArticleDTO {
-
+@Entity
+@Table(name = "Etat_Facture", schema = "param_achat")
+@Audited
+@AuditTable("Etat_Facture_AUD")
+public class EtatFacture {
+     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Code")
     private Integer code;
 
+    @Size(max = 200)
+    @NotNull
+    @Column(name = "Code_Saisie", length = 200)
     private String codeSaisie;
 
+    @Size(max = 200)
+    @Column(name = "Designation_Ar", length = 200, nullable = false, columnDefinition = "nvarchar(200)")
     private String designationAr;
 
+    @Size(max = 200)
+    @Column(name = "Designation_Lt", length = 200, nullable = false, columnDefinition = "nvarchar(200)")
     private String designationLt;
+ 
 
-    private boolean actif;
-
+    @Column(name = "User_Create", nullable = false, length = 255, columnDefinition = "nvarchar(200)")
     private String userCreate;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "Date_Create", nullable = false, columnDefinition = "datetime default (getdate())")
     private Date dateCreate;
-    private String type;
 
-    private FamilleArticleDTO familleArticleDTO;
-
-    private Integer codeFamille;
-    
-        private UniteDTO uniteDTO;
-  private Integer codeUnite;
-  
-     private Integer packages;
-
-    public ArticleDTO() {
+   
+     
+    public EtatFacture() {
     }
 
     public Integer getCode() {
@@ -78,13 +91,7 @@ public class ArticleDTO {
         this.designationLt = designationLt;
     }
 
-    public boolean isActif() {
-        return actif;
-    }
-
-    public void setActif(boolean actif) {
-        this.actif = actif;
-    }
+   
 
     public String getUserCreate() {
         return userCreate;
@@ -102,54 +109,7 @@ public class ArticleDTO {
         this.dateCreate = dateCreate;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public FamilleArticleDTO getFamilleArticleDTO() {
-        return familleArticleDTO;
-    }
-
-    public void setFamilleArticleDTO(FamilleArticleDTO familleArticleDTO) {
-        this.familleArticleDTO = familleArticleDTO;
-    }
-
-    public Integer getCodeFamille() {
-        return codeFamille;
-    }
-
-    public void setCodeFamille(Integer codeFamille) {
-        this.codeFamille = codeFamille;
-    }
-
-    public UniteDTO getUniteDTO() {
-        return uniteDTO;
-    }
-
-    public void setUniteDTO(UniteDTO uniteDTO) {
-        this.uniteDTO = uniteDTO;
-    }
-
-    public Integer getCodeUnite() {
-        return codeUnite;
-    }
-
-    public void setCodeUnite(Integer codeUnite) {
-        this.codeUnite = codeUnite;
-    }
-
-    public Integer getPackages() {
-        return packages;
-    }
-
-    public void setPackages(Integer packages) {
-        this.packages = packages;
-    }
-
+  
     
     
     

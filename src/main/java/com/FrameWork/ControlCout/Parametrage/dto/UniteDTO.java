@@ -4,8 +4,6 @@
  */
 package com.FrameWork.ControlCout.Parametrage.dto;
 
-import com.FrameWork.ControlCout.Parametrage.domaine.FamilleArticle;
-import com.FrameWork.ControlCout.Parametrage.domaine.Unite;
 import jakarta.persistence.Column;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -17,7 +15,7 @@ import java.util.Date;
  *
  * @author Administrator
  */
-public class ArticleDTO {
+public class UniteDTO {
 
     private Integer code;
 
@@ -31,19 +29,9 @@ public class ArticleDTO {
 
     private String userCreate;
 
-    private Date dateCreate;
-    private String type;
+    private Date dateCreate; 
 
-    private FamilleArticleDTO familleArticleDTO;
-
-    private Integer codeFamille;
-    
-        private UniteDTO uniteDTO;
-  private Integer codeUnite;
-  
-     private Integer packages;
-
-    public ArticleDTO() {
+    public UniteDTO() {
     }
 
     public Integer getCode() {
@@ -101,56 +89,6 @@ public class ArticleDTO {
     public void setDateCreate(Date dateCreate) {
         this.dateCreate = dateCreate;
     }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public FamilleArticleDTO getFamilleArticleDTO() {
-        return familleArticleDTO;
-    }
-
-    public void setFamilleArticleDTO(FamilleArticleDTO familleArticleDTO) {
-        this.familleArticleDTO = familleArticleDTO;
-    }
-
-    public Integer getCodeFamille() {
-        return codeFamille;
-    }
-
-    public void setCodeFamille(Integer codeFamille) {
-        this.codeFamille = codeFamille;
-    }
-
-    public UniteDTO getUniteDTO() {
-        return uniteDTO;
-    }
-
-    public void setUniteDTO(UniteDTO uniteDTO) {
-        this.uniteDTO = uniteDTO;
-    }
-
-    public Integer getCodeUnite() {
-        return codeUnite;
-    }
-
-    public void setCodeUnite(Integer codeUnite) {
-        this.codeUnite = codeUnite;
-    }
-
-    public Integer getPackages() {
-        return packages;
-    }
-
-    public void setPackages(Integer packages) {
-        this.packages = packages;
-    }
-
-    
-    
+ 
     
 }

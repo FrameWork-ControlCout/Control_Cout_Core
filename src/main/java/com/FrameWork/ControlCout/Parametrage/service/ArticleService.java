@@ -43,7 +43,7 @@ public class ArticleService {
     public ArticleDTO findOne(Integer code) {
         Article domaine = articleRepo.findByCode(code);
         Preconditions.checkArgument(domaine != null, "error.ArticleNotFound");
-        return ArticleFactory.familleArticleToArticleDTO(domaine);
+        return ArticleFactory.articleToArticleDTO(domaine);
     }
 
     @Transactional(readOnly = true)
@@ -64,7 +64,7 @@ public class ArticleService {
     }
 
     public ArticleDTO save(ArticleDTO dto) {
-        Article domaine = ArticleFactory.familleArticleDTOToArticle(dto, new Article());
+        Article domaine = ArticleFactory.articleDTOToArticle(dto, new Article());
 
         domaine.setDateCreate(new Date());  // Set in domaine
         domaine.setUserCreate(Helper.getUserAuthenticated());
@@ -76,14 +76,14 @@ public class ArticleService {
 
         domaine = articleRepo.save(domaine);
 
-        return ArticleFactory.familleArticleToArticleDTO(domaine);
+        return ArticleFactory.articleToArticleDTO(domaine);
     }
 
     public Article update(ArticleDTO dto) {
         Article domaine = articleRepo.findByCode(dto.getCode());
         Preconditions.checkArgument(domaine != null, "error.ArticleNotFound");
         dto.setCode(domaine.getCode());
-        ArticleFactory.familleArticleDTOToArticle(dto, domaine);
+        ArticleFactory.articleDTOToArticle(dto, domaine);
 
         return articleRepo.save(domaine);
     }

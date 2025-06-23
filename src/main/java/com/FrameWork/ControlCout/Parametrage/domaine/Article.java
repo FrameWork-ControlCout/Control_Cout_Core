@@ -73,6 +73,17 @@ public class Article {
     @Column(name = "Code_Famille", updatable = false, insertable = false, nullable = false)
     private Integer codeFamille;
 
+    @JoinColumn(name = "Code_Unite", referencedColumnName = "Code", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Unite unite;
+
+    @Column(name = "Code_Unite", updatable = false, insertable = false, nullable = false)
+    private Integer codeUnite;
+
+    @Column(name = "Packge", nullable = false, length = 255, columnDefinition = "int")
+    private Integer packages;
+
     public Article() {
     }
 
@@ -154,6 +165,30 @@ public class Article {
 
     public void setCodeFamille(Integer codeFamille) {
         this.codeFamille = codeFamille;
+    }
+
+    public Unite getUnite() {
+        return unite;
+    }
+
+    public void setUnite(Unite unite) {
+        this.unite = unite;
+    }
+
+    public Integer getCodeUnite() {
+        return codeUnite;
+    }
+
+    public void setCodeUnite(Integer codeUnite) {
+        this.codeUnite = codeUnite;
+    }
+
+    public Integer getPackages() {
+        return packages;
+    }
+
+    public void setPackages(Integer packages) {
+        this.packages = packages;
     }
 
     

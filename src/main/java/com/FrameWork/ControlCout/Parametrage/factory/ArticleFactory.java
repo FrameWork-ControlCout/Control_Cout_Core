@@ -24,20 +24,30 @@ public class ArticleFactory {
         return domaine;
     }
 
-    public static Article familleArticleDTOToArticle(ArticleDTO dto, Article domaine) {
+    public static Article articleDTOToArticle(ArticleDTO dto, Article domaine) {
         if (dto != null) {
             domaine.setCode(dto.getCode());
             domaine.setCodeSaisie(dto.getCodeSaisie());
             domaine.setDesignationLt(dto.getDesignationLt());
             domaine.setDesignationAr(dto.getDesignationAr());
             domaine.setActif(dto.isActif());
-            domaine.setType(dto.getType());
+            domaine.setType(dto.getType());  
+            domaine.setPackages(dto.getPackages());
+
 
             domaine.setCodeFamille(dto.getCodeFamille());
             if (domaine.getCodeFamille() != null) {
                 domaine.setFamilleArticle(FamilleArticleFactory.createFamilleArticleByCode(dto.getCodeFamille()));
 
             }
+            
+            
+             domaine.setCodeUnite(dto.getCodeUnite());
+            if (domaine.getCodeUnite() != null) {
+                domaine.setUnite(UniteFactory.createUniteByCode(dto.getCodeUnite()));
+
+            }
+
 
             return domaine;
         } else {
@@ -45,7 +55,7 @@ public class ArticleFactory {
         }
     }
 
-    public static ArticleDTO familleArticleToArticleDTO(Article domaine) {
+    public static ArticleDTO articleToArticleDTO(Article domaine) {
 
         if (domaine != null) {
             ArticleDTO dto = new ArticleDTO();
@@ -60,16 +70,23 @@ public class ArticleFactory {
             dto.setFamilleArticleDTO(FamilleArticleFactory.familleArticleToFamilleArticleDTO(domaine.getFamilleArticle()));
             dto.setCodeFamille(domaine.getCodeFamille());
 
+               dto.setUniteDTO(UniteFactory.uniteToUniteDTO(domaine.getUnite()));
+            dto.setCodeUnite(domaine.getCodeUnite());
+
+            dto.setType(domaine.getType());
+            
+                        dto.setPackages(domaine.getPackages());
+
             return dto;
         } else {
             return null;
         }
     }
 
-    public static List<ArticleDTO> listArticleToArticleDTOs(List<Article> familleArticles) {
+    public static List<ArticleDTO> listArticleToArticleDTOs(List<Article> articles) {
         List<ArticleDTO> list = new ArrayList<>();
-        for (Article familleArticle : familleArticles) {
-            list.add(familleArticleToArticleDTO(familleArticle));
+        for (Article article : articles) {
+            list.add(articleToArticleDTO(article));
         }
         return list;
     }

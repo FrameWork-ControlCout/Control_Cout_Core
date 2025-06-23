@@ -4,8 +4,6 @@
  */
 package com.FrameWork.ControlCout.Parametrage.dto;
 
-import com.FrameWork.ControlCout.Parametrage.domaine.FamilleArticle;
-import com.FrameWork.ControlCout.Parametrage.domaine.Unite;
 import jakarta.persistence.Column;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -17,7 +15,7 @@ import java.util.Date;
  *
  * @author Administrator
  */
-public class ArticleDTO {
+public class FournisseurDTO {
 
     private Integer code;
 
@@ -31,19 +29,13 @@ public class ArticleDTO {
 
     private String userCreate;
 
-    private Date dateCreate;
-    private String type;
+    private Date dateCreate; 
 
-    private FamilleArticleDTO familleArticleDTO;
-
-    private Integer codeFamille;
-    
-        private UniteDTO uniteDTO;
-  private Integer codeUnite;
+     private String adress;
+       
+  private String numTel;
   
-     private Integer packages;
-
-    public ArticleDTO() {
+    public FournisseurDTO() {
     }
 
     public Integer getCode() {
@@ -102,55 +94,21 @@ public class ArticleDTO {
         this.dateCreate = dateCreate;
     }
 
-    public String getType() {
-        return type;
+    public String getAdress() {
+        return adress;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setAdress(String adress) {
+        this.adress = adress;
     }
 
-    public FamilleArticleDTO getFamilleArticleDTO() {
-        return familleArticleDTO;
+    public String getNumTel() {
+        return numTel;
     }
 
-    public void setFamilleArticleDTO(FamilleArticleDTO familleArticleDTO) {
-        this.familleArticleDTO = familleArticleDTO;
+    public void setNumTel(String numTel) {
+        this.numTel = numTel;
     }
-
-    public Integer getCodeFamille() {
-        return codeFamille;
-    }
-
-    public void setCodeFamille(Integer codeFamille) {
-        this.codeFamille = codeFamille;
-    }
-
-    public UniteDTO getUniteDTO() {
-        return uniteDTO;
-    }
-
-    public void setUniteDTO(UniteDTO uniteDTO) {
-        this.uniteDTO = uniteDTO;
-    }
-
-    public Integer getCodeUnite() {
-        return codeUnite;
-    }
-
-    public void setCodeUnite(Integer codeUnite) {
-        this.codeUnite = codeUnite;
-    }
-
-    public Integer getPackages() {
-        return packages;
-    }
-
-    public void setPackages(Integer packages) {
-        this.packages = packages;
-    }
-
-    
-    
+ 
     
 }
