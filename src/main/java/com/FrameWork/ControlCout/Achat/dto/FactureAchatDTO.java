@@ -4,8 +4,11 @@
  */
 package com.FrameWork.ControlCout.Achat.dto;
 
+import com.FrameWork.ControlCout.Parametrage.domaine.CostProfitCentre;
+import com.FrameWork.ControlCout.Parametrage.dto.CostProfitCentreDTO;
 import com.FrameWork.ControlCout.Parametrage.dto.EtatFactureDTO;
 import com.FrameWork.ControlCout.Parametrage.dto.FournisseurDTO;
+import jakarta.persistence.Column;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +48,12 @@ public class FactureAchatDTO {
 
     
      private List<DetailsFactureAchatDTO> detailsFactureAchatsAchatDTOs; 
+     
+        private CostProfitCentreDTO costProfitCentreDTO;
+ 
+    private Integer codeCodeProfitCentre;
+    
+    private String type;
      
     public FactureAchatDTO() {
     }
@@ -158,7 +167,32 @@ public class FactureAchatDTO {
         this.detailsFactureAchatsAchatDTOs = detailsFactureAchatsAchatDTOs;
     }
 
+    public CostProfitCentreDTO getCostProfitCentreDTO() {
+        return costProfitCentreDTO;
+    }
+
+    public void setCostProfitCentreDTO(CostProfitCentreDTO costProfitCentreDTO) {
+        this.costProfitCentreDTO = costProfitCentreDTO;
+    }
+
+    public Integer getCodeCodeProfitCentre() {
+        return codeCodeProfitCentre;
+    }
+
+    public void setCodeCodeProfitCentre(Integer codeCodeProfitCentre) {
+        this.codeCodeProfitCentre = codeCodeProfitCentre;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
   
+    
     
     
     

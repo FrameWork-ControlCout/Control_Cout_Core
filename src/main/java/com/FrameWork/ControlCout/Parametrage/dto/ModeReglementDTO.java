@@ -4,26 +4,19 @@
  */
 package com.FrameWork.ControlCout.Parametrage.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.util.Date;
 
 /**
  *
  * @author Administrator
  */
-public class UniteDTO {
+public class ModeReglementDTO {
 
     private Integer code;
 
     private String codeSaisie;
 
-    private String designationAr; 
-    private String designationArUnite;
-
+    private String designationAr;
 
     private String designationLt;
 
@@ -31,9 +24,11 @@ public class UniteDTO {
 
     private String userCreate;
 
-    private Date dateCreate; 
+    private Date dateCreate;
 
-    public UniteDTO() {
+    private boolean reqBanque;
+
+    public ModeReglementDTO() {
     }
 
     public Integer getCode() {
@@ -92,13 +87,14 @@ public class UniteDTO {
         this.dateCreate = dateCreate;
     }
 
-    public String getDesignationArUnite() {
-        return designationArUnite;
+    public boolean isReqBanque() {
+        return reqBanque;
     }
 
-    public void setDesignationArUnite(String designationArUnite) {
-        this.designationArUnite = designationArUnite;
+    public void setReqBanque(boolean reqBanque) {
+        this.reqBanque = reqBanque;
     }
- 
     
+    
+
 }

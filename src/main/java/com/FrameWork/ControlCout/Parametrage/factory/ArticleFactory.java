@@ -31,23 +31,20 @@ public class ArticleFactory {
             domaine.setDesignationLt(dto.getDesignationLt());
             domaine.setDesignationAr(dto.getDesignationAr());
             domaine.setActif(dto.isActif());
-            domaine.setType(dto.getType());  
+            domaine.setType(dto.getType());
             domaine.setPackages(dto.getPackages());
-
 
             domaine.setCodeFamille(dto.getCodeFamille());
             if (domaine.getCodeFamille() != null) {
                 domaine.setFamilleArticle(FamilleArticleFactory.createFamilleArticleByCode(dto.getCodeFamille()));
 
             }
-            
-            
-             domaine.setCodeUnite(dto.getCodeUnite());
+
+            domaine.setCodeUnite(dto.getCodeUnite());
             if (domaine.getCodeUnite() != null) {
                 domaine.setUnite(UniteFactory.createUniteByCode(dto.getCodeUnite()));
 
             }
-
 
             return domaine;
         } else {
@@ -70,12 +67,16 @@ public class ArticleFactory {
             dto.setFamilleArticleDTO(FamilleArticleFactory.familleArticleToFamilleArticleDTO(domaine.getFamilleArticle()));
             dto.setCodeFamille(domaine.getCodeFamille());
 
-               dto.setUniteDTO(UniteFactory.uniteToUniteDTO(domaine.getUnite()));
+            dto.setUniteDTO(UniteFactory.uniteToUniteDTO(domaine.getUnite()));
             dto.setCodeUnite(domaine.getCodeUnite());
 
             dto.setType(domaine.getType());
-            
-                        dto.setPackages(domaine.getPackages());
+
+            dto.setPackages(domaine.getPackages());
+
+            dto.setCodeSaisieArticle(domaine.getCodeSaisie());
+            dto.setDesignationArArticle(domaine.getDesignationAr());
+            dto.setDesignationLtArticle(domaine.getDesignationLt());
 
             return dto;
         } else {

@@ -21,11 +21,17 @@ public class ArticleDTO {
 
     private Integer code;
 
-    private String codeSaisie;
+    private String codeSaisie;   
+    private String codeSaisieArticle;
 
-    private String designationAr;
+
+    private String designationAr;   
+    private String designationArArticle;
+
 
     private String designationLt;
+        private String designationLtArticle;
+
 
     private boolean actif;
 
@@ -148,6 +154,30 @@ public class ArticleDTO {
 
     public void setPackages(Integer packages) {
         this.packages = packages;
+    }
+
+    public String getCodeSaisieArticle() {
+        return codeSaisieArticle;
+    }
+
+    public void setCodeSaisieArticle(String codeSaisieArticle) {
+        this.codeSaisieArticle = codeSaisieArticle;
+    }
+
+    public String getDesignationArArticle() {
+        return designationArArticle;
+    }
+
+    public void setDesignationArArticle(String designationArArticle) {
+        this.designationArArticle = designationArArticle;
+    }
+
+    public String getDesignationLtArticle() {
+        return designationLtArticle;
+    }
+
+    public void setDesignationLtArticle(String designationLtArticle) {
+        this.designationLtArticle = designationLtArticle;
     }
 
     

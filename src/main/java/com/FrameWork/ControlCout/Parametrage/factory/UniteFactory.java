@@ -46,7 +46,9 @@ public class UniteFactory {
             UniteDTO dto = new UniteDTO();
             dto.setCode(domaine.getCode());    
             dto.setCodeSaisie(domaine.getCodeSaisie());  
-            dto.setDesignationAr(domaine.getDesignationAr());
+            dto.setDesignationAr(domaine.getDesignationAr()); 
+            dto.setDesignationArUnite(domaine.getDesignationAr());
+
             dto.setDesignationLt(domaine.getDesignationLt()); 
             dto.setActif(domaine.isActif());
             dto.setDateCreate(domaine.getDateCreate());

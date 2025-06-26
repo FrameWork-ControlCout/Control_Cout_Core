@@ -76,6 +76,16 @@ public class FactureAchat {
     @Column(name = "Fournisseur", updatable = false, insertable = false, nullable = false)
     private Integer codeFournisseur;
 
+    
+       @JoinColumn(name = "Cost_Centre", referencedColumnName = "Code", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonBackReference
+    private CostProfitCentre costProfitCentre;
+
+    @Column(name = "Cost_Centre", updatable = false, insertable = false, nullable = false)
+    private Integer codeCodeProfitCentre;
+    
+    
     @Column(name = "Montant_Ht", nullable = false, columnDefinition = ("decimal(18,3)"))
     private BigDecimal montantHt;
 
@@ -199,6 +209,22 @@ public class FactureAchat {
 
     public void setDetailsFactureAchats(List<DetailsFactureAchat> detailsFactureAchats) {
         this.detailsFactureAchats = detailsFactureAchats;
+    }
+
+    public CostProfitCentre getCostProfitCentre() {
+        return costProfitCentre;
+    }
+
+    public void setCostProfitCentre(CostProfitCentre costProfitCentre) {
+        this.costProfitCentre = costProfitCentre;
+    }
+
+    public Integer getCodeCodeProfitCentre() {
+        return codeCodeProfitCentre;
+    }
+
+    public void setCodeCodeProfitCentre(Integer codeCodeProfitCentre) {
+        this.codeCodeProfitCentre = codeCodeProfitCentre;
     }
  
     

@@ -96,10 +96,19 @@ public class FactureAchatService {
     public FactureAchatDTO save(FactureAchatDTO dto) {
 
         FactureAchat domaine = FactureAchatFactory.factureAchatDTOToFactureAchat(dto, new FactureAchat());
-        Compteur CompteurCodeSaisie = compteurService.findOne("CodeSaisieADMOPD");
-        String codeSaisieAC = CompteurCodeSaisie.getPrefixe() + CompteurCodeSaisie.getSuffixe();
-        domaine.setCodeSaisie(codeSaisieAC);
-        compteurService.incrementeSuffixe(CompteurCodeSaisie);
+
+        if ("ECO".equals(dto.getType())) {
+            Compteur CompteurCodeSaisie = compteurService.findOne("FactureAchatEC");
+            String codeSaisieAC = CompteurCodeSaisie.getPrefixe() + CompteurCodeSaisie.getSuffixe();
+            domaine.setCodeSaisie(codeSaisieAC);
+            compteurService.incrementeSuffixe(CompteurCodeSaisie);
+        } else {
+            Compteur CompteurCodeSaisie = compteurService.findOne("FactureAchatIMMO");
+            String codeSaisieAC = CompteurCodeSaisie.getPrefixe() + CompteurCodeSaisie.getSuffixe();
+            domaine.setCodeSaisie(codeSaisieAC);
+            compteurService.incrementeSuffixe(CompteurCodeSaisie);
+        }
+
         domaine.setDateCreate(new Date());  // Set in domaine
         domaine.setUserCreate(Helper.getUserAuthenticated());
 
@@ -110,17 +119,16 @@ public class FactureAchatService {
 
             List<DetailsFactureAchatDTO> detailsFactureAchatDTOs = dto.getDetailsFactureAchatsAchatDTOs();
             for (DetailsFactureAchatDTO detailsDto : detailsFactureAchatDTOs) {
-                DetailsFactureAchat detailsDomaine = DetailsFactureAchatFactory.detailsFactureAchatDTOToDetailsFactureAchat(detailsDto, new DetailsFactureAchat()); 
-                detailsDomaine.setFactureAchat(domaine);  
+                DetailsFactureAchat detailsDomaine = DetailsFactureAchatFactory.detailsFactureAchatDTOToDetailsFactureAchat(detailsDto, new DetailsFactureAchat());
+                detailsDomaine.setFactureAchat(domaine);
                 detailsDomaine.setDateCreate(new Date());
                 detailsDomaine.setUsercreate(Helper.getUserAuthenticated());
                 detailsDomaine.setMontantHt(detailsDto.getMontantHt());
                 detailsDomaine.setMontantTTC(detailsDto.getMontantTTC());
                 detailsDomaine.setMontantTva(detailsDto.getMontantTva());
                 detailsDomaine.setQteReceptionner(detailsDto.getQteReceptionner());
-                detailsDomaine.setCaracterstique(detailsDto.getCaracterstique());  
+                detailsDomaine.setCaracterstique(detailsDto.getCaracterstique());
                 detailsDomaine.setPrixUnitaire(detailsDto.getPrixUnitaire());
-
 
                 detailsDomaine.setCodeArticle(detailsDto.getCodeArticle());
                 if (detailsDomaine.getCodeArticle() != null) {
@@ -160,24 +168,23 @@ public class FactureAchatService {
         Preconditions.checkArgument(domaine != null, "error.AlimentationCaisseNotFound");
         domaine = FactureAchatFactory.factureAchatDTOToFactureAchat(dto, domaine);
         domaine = factureAchatRepo.save(domaine);
-        
+
         detailsFactureAchatRepo.deleteByCodeFactureAchat(domaine.getCode());
-        
+
         if (dto.getDetailsFactureAchatsAchatDTOs() != null) {
 
             List<DetailsFactureAchatDTO> detailsFactureAchatDTOs = dto.getDetailsFactureAchatsAchatDTOs();
             for (DetailsFactureAchatDTO detailsDto : detailsFactureAchatDTOs) {
-                DetailsFactureAchat detailsDomaine = DetailsFactureAchatFactory.detailsFactureAchatDTOToDetailsFactureAchat(detailsDto, new DetailsFactureAchat()); 
-                detailsDomaine.setFactureAchat(domaine);  
+                DetailsFactureAchat detailsDomaine = DetailsFactureAchatFactory.detailsFactureAchatDTOToDetailsFactureAchat(detailsDto, new DetailsFactureAchat());
+                detailsDomaine.setFactureAchat(domaine);
                 detailsDomaine.setDateCreate(new Date());
                 detailsDomaine.setUsercreate(Helper.getUserAuthenticated());
                 detailsDomaine.setMontantHt(detailsDto.getMontantHt());
                 detailsDomaine.setMontantTTC(detailsDto.getMontantTTC());
                 detailsDomaine.setMontantTva(detailsDto.getMontantTva());
                 detailsDomaine.setQteReceptionner(detailsDto.getQteReceptionner());
-                detailsDomaine.setCaracterstique(detailsDto.getCaracterstique());  
+                detailsDomaine.setCaracterstique(detailsDto.getCaracterstique());
                 detailsDomaine.setPrixUnitaire(detailsDto.getPrixUnitaire());
-
 
                 detailsDomaine.setCodeArticle(detailsDto.getCodeArticle());
                 if (detailsDomaine.getCodeArticle() != null) {
@@ -202,13 +209,10 @@ public class FactureAchatService {
 
             }
 
-        }else
-        {
-             throw new IllegalArgumentException("error.DetailsFactureNotFound");
+        } else {
+            throw new IllegalArgumentException("error.DetailsFactureNotFound");
         }
-        
-        
-        
+
         FactureAchatDTO resultDTO = FactureAchatFactory.factureAchatToFactureAchatDTO(domaine);
         return resultDTO;
     }

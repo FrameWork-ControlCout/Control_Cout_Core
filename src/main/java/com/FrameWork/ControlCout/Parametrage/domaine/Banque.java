@@ -2,38 +2,65 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.FrameWork.ControlCout.Parametrage.dto;
+package com.FrameWork.ControlCout.Parametrage.domaine;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.Date;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 /**
  *
  * @author Administrator
  */
-public class UniteDTO {
+@Entity
+@Table(name = "Banque", schema = "param")
+@Audited
+@AuditTable("Banque_AUD")
+public class Banque {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Code")
     private Integer code;
 
+    @Size(max = 200)
+    @NotNull
+    @Column(name = "Code_Saisie", length = 200)
     private String codeSaisie;
 
-    private String designationAr; 
-    private String designationArUnite;
+    @Size(max = 200)
+    @Column(name = "Designation_Ar", length = 200, nullable = false, columnDefinition = "nvarchar(200)")
+    private String designationAr;
 
-
+    @Size(max = 200)
+    @Column(name = "Designation_Lt", length = 200, nullable = false, columnDefinition = "nvarchar(200)")
     private String designationLt;
 
+    @Size(max = 200)
+    @Column(name = "Rib", length = 200, nullable = false, columnDefinition = "nvarchar(200)")
+    private String rib;
+
+    @Column(name = "Actif", nullable = false)
     private boolean actif;
 
+    @Column(name = "User_Create", nullable = false, length = 255, columnDefinition = "nvarchar(200)")
     private String userCreate;
 
-    private Date dateCreate; 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "Date_Create", nullable = false,columnDefinition = "datetime default (getdate())")
+    private Date dateCreate;
 
-    public UniteDTO() {
+    public Banque() {
     }
 
     public Integer getCode() {
@@ -92,13 +119,12 @@ public class UniteDTO {
         this.dateCreate = dateCreate;
     }
 
-    public String getDesignationArUnite() {
-        return designationArUnite;
+    public String getRib() {
+        return rib;
     }
 
-    public void setDesignationArUnite(String designationArUnite) {
-        this.designationArUnite = designationArUnite;
+    public void setRib(String rib) {
+        this.rib = rib;
     }
- 
-    
+
 }
