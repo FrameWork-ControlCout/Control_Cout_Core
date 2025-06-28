@@ -6,6 +6,8 @@ package com.FrameWork.ControlCout.Achat.domaine;
 
 import com.FrameWork.ControlCout.Parametrage.domaine.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,6 +24,7 @@ import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.envers.AuditTable;
@@ -45,8 +48,8 @@ public class FactureAchat {
     @Size(max = 200)
     @NotNull
     @Column(name = "Code_Saisie", length = 200)
-    private String codeSaisie; 
- 
+    private String codeSaisie;
+
     @NotNull
     @Column(name = "User_Create", nullable = false, length = 255, columnDefinition = "nvarchar(200)")
     private String userCreate;
@@ -62,10 +65,8 @@ public class FactureAchat {
 
     @Column(name = "Etat_Facture", updatable = false, insertable = false, nullable = false)
     private Integer codeEtatFacture;
-    
-    
-   
-    @Column(name = "User_Approuve", nullable = false, length = 255, columnDefinition = "nvarchar(200)")
+
+    @Column(name = "User_Approuve", length = 255, columnDefinition = "nvarchar(200)")
     private String userApprove;
 
     @JoinColumn(name = "Fournisseur", referencedColumnName = "Code", nullable = false)
@@ -76,16 +77,28 @@ public class FactureAchat {
     @Column(name = "Fournisseur", updatable = false, insertable = false, nullable = false)
     private Integer codeFournisseur;
 
-    
-       @JoinColumn(name = "Cost_Centre", referencedColumnName = "Code", nullable = false)
+    @JoinColumn(name = "Cost_Centre", referencedColumnName = "Code", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JsonBackReference
     private CostProfitCentre costProfitCentre;
 
     @Column(name = "Cost_Centre", updatable = false, insertable = false, nullable = false)
     private Integer codeCodeProfitCentre;
-    
-    
+
+    @JoinColumn(name = "Mode_Reglement", referencedColumnName = "Code", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonBackReference
+    private ModeReglement modeReglement;
+
+    @Column(name = "Mode_Reglement", updatable = false, insertable = false, nullable = false)
+    private Integer codeModeReglement;
+
+    @Column(name = "Banque", columnDefinition = ("int"))
+    private Integer codeBanque;
+
+    @Column(name = "Num_Piece", columnDefinition = ("varchar(200)"))
+    private String numPiece;
+
     @Column(name = "Montant_Ht", nullable = false, columnDefinition = ("decimal(18,3)"))
     private BigDecimal montantHt;
 
@@ -95,12 +108,30 @@ public class FactureAchat {
     @Column(name = "Montant_TTC", nullable = false, columnDefinition = ("decimal(18,3)"))
     private BigDecimal montantTTC;
 
-    
-     @OneToMany(mappedBy = "codeFactureAchat", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "codeFactureAchat", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JsonBackReference("listFactureAchat") // Unique name
     private List<DetailsFactureAchat> detailsFactureAchats;
-     
-     
+
+    @Column(name = "Num_Fact_Frs", nullable = false, columnDefinition = ("varchar(200)"))
+    private String numFactFrs;
+
+    @Column(name = "Montant_Fact_Frs", nullable = false, columnDefinition = ("decimal(18,3)"))
+    private BigDecimal montantFactFrs;
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Date_Facture_Frs", nullable = false, columnDefinition = ("date"))
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dateFactFrs;
+
+    @JoinColumn(name = "Code_Devise", referencedColumnName = "Code", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Devise devise;
+
+    @Column(name = "Code_Devise", updatable = false, insertable = false, nullable = false)
+    private Integer codeDevise;
+
     public FactureAchat() {
     }
 
@@ -119,9 +150,6 @@ public class FactureAchat {
     public void setCodeSaisie(String codeSaisie) {
         this.codeSaisie = codeSaisie;
     }
-
-    
-  
 
     public String getUserCreate() {
         return userCreate;
@@ -226,9 +254,77 @@ public class FactureAchat {
     public void setCodeCodeProfitCentre(Integer codeCodeProfitCentre) {
         this.codeCodeProfitCentre = codeCodeProfitCentre;
     }
- 
-    
-    
-    
+
+    public ModeReglement getModeReglement() {
+        return modeReglement;
+    }
+
+    public void setModeReglement(ModeReglement modeReglement) {
+        this.modeReglement = modeReglement;
+    }
+
+    public Integer getCodeModeReglement() {
+        return codeModeReglement;
+    }
+
+    public void setCodeModeReglement(Integer codeModeReglement) {
+        this.codeModeReglement = codeModeReglement;
+    }
+
+    public Integer getCodeBanque() {
+        return codeBanque;
+    }
+
+    public void setCodeBanque(Integer codeBanque) {
+        this.codeBanque = codeBanque;
+    }
+
+    public String getNumPiece() {
+        return numPiece;
+    }
+
+    public void setNumPiece(String numPiece) {
+        this.numPiece = numPiece;
+    }
+
+    public String getNumFactFrs() {
+        return numFactFrs;
+    }
+
+    public void setNumFactFrs(String numFactFrs) {
+        this.numFactFrs = numFactFrs;
+    }
+
+    public BigDecimal getMontantFactFrs() {
+        return montantFactFrs;
+    }
+
+    public void setMontantFactFrs(BigDecimal montantFactFrs) {
+        this.montantFactFrs = montantFactFrs;
+    }
+
+    public LocalDate getDateFactFrs() {
+        return dateFactFrs;
+    }
+
+    public void setDateFactFrs(LocalDate dateFactFrs) {
+        this.dateFactFrs = dateFactFrs;
+    }
+
+    public Devise getDevise() {
+        return devise;
+    }
+
+    public void setDevise(Devise devise) {
+        this.devise = devise;
+    }
+
+    public Integer getCodeDevise() {
+        return codeDevise;
+    }
+
+    public void setCodeDevise(Integer codeDevise) {
+        this.codeDevise = codeDevise;
+    }
 
 }

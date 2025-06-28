@@ -12,19 +12,24 @@ import com.FrameWork.ControlCout.Achat.factory.DetailsFactureAchatFactory;
 import com.FrameWork.ControlCout.Achat.factory.FactureAchatFactory;
 import com.FrameWork.ControlCout.Achat.repository.DetailsFactureAchatRepo;
 import com.FrameWork.ControlCout.Achat.repository.FactureAchatRepo;
+import com.FrameWork.ControlCout.Parametrage.domaine.Banque;
 import com.FrameWork.ControlCout.Parametrage.domaine.Compteur;
 import com.FrameWork.ControlCout.Parametrage.factory.ArticleFactory;
+import com.FrameWork.ControlCout.Parametrage.factory.BanqueFactory;
 import com.FrameWork.ControlCout.Parametrage.factory.FournisseurFactory;
 import com.FrameWork.ControlCout.Parametrage.factory.UniteFactory;
+import com.FrameWork.ControlCout.Parametrage.repository.BanqueRepo;
 import com.FrameWork.ControlCout.Parametrage.service.CompteurService;
 import com.FrameWork.ControlCout.web.Util.Helper;
 
 import com.google.common.base.Preconditions;
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -43,47 +48,136 @@ public class FactureAchatService {
 
     private final FactureAchatRepo factureAchatRepo;
     private final DetailsFactureAchatRepo detailsFactureAchatRepo;
-
+    private final BanqueRepo banqueRepo;
     private final CompteurService compteurService;
 
-    public FactureAchatService(FactureAchatRepo factureAchatRepo, DetailsFactureAchatRepo detailsFactureAchatRepo, CompteurService compteurService) {
+    public FactureAchatService(FactureAchatRepo factureAchatRepo, DetailsFactureAchatRepo detailsFactureAchatRepo, BanqueRepo banqueRepo, CompteurService compteurService) {
         this.factureAchatRepo = factureAchatRepo;
         this.detailsFactureAchatRepo = detailsFactureAchatRepo;
+        this.banqueRepo = banqueRepo;
         this.compteurService = compteurService;
     }
 
     @Transactional(readOnly = true)
     public List<FactureAchatDTO> findAllFactureAchat() {
-        return FactureAchatFactory.listFactureAchatToFactureAchatDTOs(factureAchatRepo.findAll(Sort.by("code").descending()));
+
+        List<FactureAchat> domaine = factureAchatRepo.findAll(Sort.by("code").descending());
+        Map<Integer, Banque> banqueMap = new HashMap<>();
+        List<Banque> allbanques = banqueRepo.findAll();
+        for (Banque banque : allbanques) {
+            banqueMap.put(banque.getCode(), banque);
+        }
+        List<FactureAchatDTO> factureAchatDTOs = new ArrayList<>();
+        for (FactureAchat factureAchat : domaine) {
+            FactureAchatDTO factureAchatDTO = FactureAchatFactory.factureAchatToFactureAchatDTO(factureAchat);
+            if (factureAchat.getCodeBanque() != null) {
+                Banque banque = banqueMap.get(factureAchat.getCodeBanque());
+                if (banque != null) {
+                    factureAchatDTO.setBanqueDTO(BanqueFactory.banqueToBanqueDTO(banque));
+                }
+            }
+            factureAchatDTOs.add(factureAchatDTO);
+        }
+        return factureAchatDTOs;
 
     }
 
     @Transactional(readOnly = true)
     public List<FactureAchatDTO> findFactureAchatByEtatFacture(Integer codeEtatFacture) {
-        return FactureAchatFactory.listFactureAchatToFactureAchatDTOs(factureAchatRepo.findByCodeEtatFacture(codeEtatFacture));
-
+        List<FactureAchat> domaine = factureAchatRepo.findByCodeEtatFacture(codeEtatFacture);
+        Map<Integer, Banque> banqueMap = new HashMap<>();
+        List<Banque> allbanques = banqueRepo.findAll();
+        for (Banque banque : allbanques) {
+            banqueMap.put(banque.getCode(), banque);
+        }
+        List<FactureAchatDTO> factureAchatDTOs = new ArrayList<>();
+        for (FactureAchat factureAchat : domaine) {
+            FactureAchatDTO factureAchatDTO = FactureAchatFactory.factureAchatToFactureAchatDTO(factureAchat);
+            if (factureAchat.getCodeBanque() != null) {
+                Banque banque = banqueMap.get(factureAchat.getCodeBanque());
+                if (banque != null) {
+                    factureAchatDTO.setBanqueDTO(BanqueFactory.banqueToBanqueDTO(banque));
+                }
+            }
+            factureAchatDTOs.add(factureAchatDTO);
+        }
+        return factureAchatDTOs;
     }
 
     @Transactional(readOnly = true)
     public List<FactureAchatDTO> findFactureAchatByFournisseur(Integer codeFournisseur) {
-        return FactureAchatFactory.listFactureAchatToFactureAchatDTOs(factureAchatRepo.findByCodeFournisseur(codeFournisseur));
+        List<FactureAchat> domaine = factureAchatRepo.findByCodeFournisseur(codeFournisseur);
+        Map<Integer, Banque> banqueMap = new HashMap<>();
+        List<Banque> allbanques = banqueRepo.findAll();
+        for (Banque banque : allbanques) {
+            banqueMap.put(banque.getCode(), banque);
+        }
+        List<FactureAchatDTO> factureAchatDTOs = new ArrayList<>();
+        for (FactureAchat factureAchat : domaine) {
+            FactureAchatDTO factureAchatDTO = FactureAchatFactory.factureAchatToFactureAchatDTO(factureAchat);
+            if (factureAchat.getCodeBanque() != null) {
+                Banque banque = banqueMap.get(factureAchat.getCodeBanque());
+                if (banque != null) {
+                    factureAchatDTO.setBanqueDTO(BanqueFactory.banqueToBanqueDTO(banque));
+                }
+            }
+            factureAchatDTOs.add(factureAchatDTO);
+        }
+        return factureAchatDTOs;
 
     }
 
     @Transactional(readOnly = true)
     public List<FactureAchatDTO> findFactureAchatByFournisseurAndCodeEtatFacture(Integer codeFournisseur, Integer codeEtatFacture) {
-        return FactureAchatFactory.listFactureAchatToFactureAchatDTOs(factureAchatRepo.findByCodeFournisseurAndCodeEtatFacture(codeFournisseur, codeEtatFacture));
-
+        
+ 
+        List<FactureAchat> domaine = factureAchatRepo.findByCodeFournisseurAndCodeEtatFacture(codeFournisseur, codeEtatFacture); 
+        Map<Integer, Banque> banqueMap = new HashMap<>(); 
+        List<Banque> allbanques = banqueRepo.findAll(); 
+        for (Banque banque : allbanques) {
+            banqueMap.put(banque.getCode(), banque); 
+        } 
+        List<FactureAchatDTO> factureAchatDTOs = new ArrayList<>();
+        for (FactureAchat factureAchat : domaine) {
+            FactureAchatDTO factureAchatDTO = FactureAchatFactory.factureAchatToFactureAchatDTO(factureAchat);   
+            if (factureAchat.getCodeBanque()!= null) {  
+                Banque banque = banqueMap.get(factureAchat.getCodeBanque());
+                if (banque != null) {
+                    factureAchatDTO.setBanqueDTO(BanqueFactory.banqueToBanqueDTO(banque));  
+                }
+            }
+            factureAchatDTOs.add(factureAchatDTO);
+        } 
+        return factureAchatDTOs; 
+        
     }
 
     @Transactional(readOnly = true)
     public Collection<FactureAchatDTO> findFactureByDateCreateBetween(
             LocalDate dateDebut,
             LocalDate dateFin) {
-        return FactureAchatFactory.CollectionFactureAchatToFactureAchatDTOs(
-                factureAchatRepo.findAllByDateCreateBetween(dateDebut, dateFin)
-        );
+//        return FactureAchatFactory.CollectionFactureAchatToFactureAchatDTOs(
+//                factureAchatRepo.findAllByDateCreateBetween(dateDebut, dateFin)
+//        ); 
 
+        Collection<FactureAchat> domaine = factureAchatRepo.findAllByDateCreateBetween(dateDebut, dateFin); 
+        Map<Integer, Banque> banqueMap = new HashMap<>(); 
+        List<Banque> allbanques = banqueRepo.findAll(); 
+        for (Banque banque : allbanques) {
+            banqueMap.put(banque.getCode(), banque); 
+        } 
+        List<FactureAchatDTO> factureAchatDTOs = new ArrayList<>();
+        for (FactureAchat factureAchat : domaine) {
+            FactureAchatDTO factureAchatDTO = FactureAchatFactory.factureAchatToFactureAchatDTO(factureAchat);   
+            if (factureAchat.getCodeBanque()!= null) {  
+                Banque banque = banqueMap.get(factureAchat.getCodeBanque());
+                if (banque != null) {
+                    factureAchatDTO.setBanqueDTO(BanqueFactory.banqueToBanqueDTO(banque));  
+                }
+            }
+            factureAchatDTOs.add(factureAchatDTO);
+        } 
+        return factureAchatDTOs;
     }
 
     @Transactional(readOnly = true)
@@ -91,6 +185,8 @@ public class FactureAchatService {
         FactureAchat domaine = factureAchatRepo.findByCode(code);
         Preconditions.checkArgument(domaine.getCode() != null, "error.FactureAchatNotFound");
         return FactureAchatFactory.factureAchatToFactureAchatDTO(domaine);
+        
+        
     }
 
     public FactureAchatDTO save(FactureAchatDTO dto) {
@@ -123,6 +219,8 @@ public class FactureAchatService {
                 detailsDomaine.setFactureAchat(domaine);
                 detailsDomaine.setDateCreate(new Date());
                 detailsDomaine.setUsercreate(Helper.getUserAuthenticated());
+              
+                
                 detailsDomaine.setMontantHt(detailsDto.getMontantHt());
                 detailsDomaine.setMontantTTC(detailsDto.getMontantTTC());
                 detailsDomaine.setMontantTva(detailsDto.getMontantTva());

@@ -5,11 +5,24 @@
 package com.FrameWork.ControlCout.Achat.dto;
 
 import com.FrameWork.ControlCout.Parametrage.domaine.CostProfitCentre;
+import com.FrameWork.ControlCout.Parametrage.domaine.Devise;
+import com.FrameWork.ControlCout.Parametrage.domaine.ModeReglement;
+import com.FrameWork.ControlCout.Parametrage.dto.BanqueDTO;
 import com.FrameWork.ControlCout.Parametrage.dto.CostProfitCentreDTO;
+import com.FrameWork.ControlCout.Parametrage.dto.DeviseDTO;
 import com.FrameWork.ControlCout.Parametrage.dto.EtatFactureDTO;
 import com.FrameWork.ControlCout.Parametrage.dto.FournisseurDTO;
+import com.FrameWork.ControlCout.Parametrage.dto.ModeReglementDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -17,44 +30,65 @@ import java.util.List;
  *
  * @author Administrator
  */
- 
 public class FactureAchatDTO {
 
-     private Integer code;
+    private Integer code;
 
-     private String codeSaisie; 
- 
-     private String userCreate;
+    private String codeSaisie;
 
-     private Date dateCreate;
+    private String userCreate;
 
-     private EtatFactureDTO etatFactureDTO;
+    private Date dateCreate;
 
-     private Integer codeEtatFacture;
-    
-    
-   
-     private String userApprove;
+    private EtatFactureDTO etatFactureDTO;
+
+    private Integer codeEtatFacture;
+
+    private String userApprove;
 
     private FournisseurDTO fournisseurDTO;
 
-     private Integer codeFournisseur;
+    private Integer codeFournisseur;
 
-     private BigDecimal montantHt;
+    private BigDecimal montantHt;
 
     private BigDecimal montantTva;
 
-     private BigDecimal montantTTC;
+    private BigDecimal montantTTC;
 
-    
-     private List<DetailsFactureAchatDTO> detailsFactureAchatsAchatDTOs; 
-     
-        private CostProfitCentreDTO costProfitCentreDTO;
- 
+    private List<DetailsFactureAchatDTO> detailsFactureAchatsAchatDTOs;
+
+    private CostProfitCentreDTO costProfitCentreDTO;
+
     private Integer codeCodeProfitCentre;
-    
+
     private String type;
-     
+
+    private ModeReglementDTO modeReglementDTO;
+
+    private Integer codeModeReglement;
+
+    private BanqueDTO banqueDTO;
+    private Integer codeBanque;
+
+    private String numPiece;
+
+    private String numFactFrs;
+
+    private BigDecimal montantFactFrs;
+
+    @Basic(optional = false)
+    @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate dateFactFrs;
+    
+    
+       private DeviseDTO deviseDTO;
+
+     private Integer codeDevise;
+
     public FactureAchatDTO() {
     }
 
@@ -74,9 +108,6 @@ public class FactureAchatDTO {
         this.codeSaisie = codeSaisie;
     }
 
-    
-  
-
     public String getUserCreate() {
         return userCreate;
     }
@@ -93,7 +124,6 @@ public class FactureAchatDTO {
         this.dateCreate = dateCreate;
     }
 
-   
     public Integer getCodeEtatFacture() {
         return codeEtatFacture;
     }
@@ -110,7 +140,6 @@ public class FactureAchatDTO {
         this.userApprove = userApprove;
     }
 
-  
     public Integer getCodeFournisseur() {
         return codeFournisseur;
     }
@@ -191,9 +220,85 @@ public class FactureAchatDTO {
         this.type = type;
     }
 
-  
-    
-    
+    public ModeReglementDTO getModeReglementDTO() {
+        return modeReglementDTO;
+    }
+
+    public void setModeReglementDTO(ModeReglementDTO modeReglementDTO) {
+        this.modeReglementDTO = modeReglementDTO;
+    }
+
+    public Integer getCodeModeReglement() {
+        return codeModeReglement;
+    }
+
+    public void setCodeModeReglement(Integer codeModeReglement) {
+        this.codeModeReglement = codeModeReglement;
+    }
+
+    public Integer getCodeBanque() {
+        return codeBanque;
+    }
+
+    public void setCodeBanque(Integer codeBanque) {
+        this.codeBanque = codeBanque;
+    }
+
+    public String getNumPiece() {
+        return numPiece;
+    }
+
+    public void setNumPiece(String numPiece) {
+        this.numPiece = numPiece;
+    }
+
+    public String getNumFactFrs() {
+        return numFactFrs;
+    }
+
+    public void setNumFactFrs(String numFactFrs) {
+        this.numFactFrs = numFactFrs;
+    }
+
+    public BigDecimal getMontantFactFrs() {
+        return montantFactFrs;
+    }
+
+    public void setMontantFactFrs(BigDecimal montantFactFrs) {
+        this.montantFactFrs = montantFactFrs;
+    }
+
+    public LocalDate getDateFactFrs() {
+        return dateFactFrs;
+    }
+
+    public void setDateFactFrs(LocalDate dateFactFrs) {
+        this.dateFactFrs = dateFactFrs;
+    }
+
+    public BanqueDTO getBanqueDTO() {
+        return banqueDTO;
+    }
+
+    public void setBanqueDTO(BanqueDTO banqueDTO) {
+        this.banqueDTO = banqueDTO;
+    }
+
+    public DeviseDTO getDeviseDTO() {
+        return deviseDTO;
+    }
+
+    public void setDeviseDTO(DeviseDTO deviseDTO) {
+        this.deviseDTO = deviseDTO;
+    }
+
+    public Integer getCodeDevise() {
+        return codeDevise;
+    }
+
+    public void setCodeDevise(Integer codeDevise) {
+        this.codeDevise = codeDevise;
+    }
     
     
 

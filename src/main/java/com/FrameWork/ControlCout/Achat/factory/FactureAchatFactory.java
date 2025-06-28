@@ -7,8 +7,10 @@ package com.FrameWork.ControlCout.Achat.factory;
 import com.FrameWork.ControlCout.Achat.domaine.FactureAchat;
 import com.FrameWork.ControlCout.Achat.dto.FactureAchatDTO;
 import com.FrameWork.ControlCout.Parametrage.factory.CostProfitCentreFactory;
+import com.FrameWork.ControlCout.Parametrage.factory.DeviseFactory;
 import com.FrameWork.ControlCout.Parametrage.factory.EtatFactureFactory;
 import com.FrameWork.ControlCout.Parametrage.factory.FournisseurFactory;
+import com.FrameWork.ControlCout.Parametrage.factory.ModeReglementFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -37,23 +39,36 @@ public class FactureAchatFactory {
             if (domaine.getCodeEtatFacture() != null) {
                 domaine.setEtatFacture(EtatFactureFactory.createEtatFactureByCode(dto.getCodeEtatFacture()));
             }
-             domaine.setCodeFournisseur(dto.getCodeFournisseur());
+            domaine.setCodeFournisseur(dto.getCodeFournisseur());
             if (domaine.getCodeFournisseur() != null) {
                 domaine.setFournisseur(FournisseurFactory.createFournisseurByCode(dto.getCodeFournisseur()));
             }
 
-             domaine.setCodeCodeProfitCentre(dto.getCodeCodeProfitCentre());
+            domaine.setCodeCodeProfitCentre(dto.getCodeCodeProfitCentre());
             if (domaine.getCodeCodeProfitCentre() != null) {
                 domaine.setCostProfitCentre(CostProfitCentreFactory.createCostCentreByCode(dto.getCodeCodeProfitCentre()));
             }
 
-            
-            
+            domaine.setCodeModeReglement(dto.getCodeModeReglement());
+            if (domaine.getCodeModeReglement() != null) {
+                domaine.setModeReglement(ModeReglementFactory.createModeReglementByCode(dto.getCodeModeReglement()));
+            }
+
+            domaine.setCodeDevise(dto.getCodeDevise());
+            if (domaine.getCodeDevise() != null) {
+                domaine.setDevise(DeviseFactory.createDeviseByCode(dto.getCodeDevise()));
+            }
+
+            domaine.setCodeBanque(dto.getCodeBanque());
+            domaine.setNumPiece(dto.getNumPiece());
+            domaine.setNumFactFrs(dto.getNumFactFrs());
+            domaine.setDateFactFrs(dto.getDateFactFrs());
+            domaine.setMontantFactFrs(dto.getMontantFactFrs());
 
             domaine.setUserApprove(dto.getUserApprove());
-            domaine.setMontantHt(dto.getMontantHt());    
+            domaine.setMontantHt(dto.getMontantHt());
             domaine.setMontantTTC(dto.getMontantTTC());
-            domaine.setMontantTva(dto.getMontantTva()); 
+            domaine.setMontantTva(dto.getMontantTva());
 
             return domaine;
         } else {
@@ -68,26 +83,33 @@ public class FactureAchatFactory {
             dto.setCode(domaine.getCode());
             dto.setCodeSaisie(domaine.getCodeSaisie());
             dto.setDateCreate(domaine.getDateCreate());
-            dto.setUserCreate(domaine.getUserCreate());  
-            dto.setUserApprove(domaine.getUserApprove()); 
- 
-            
+            dto.setUserCreate(domaine.getUserCreate());
+            dto.setUserApprove(domaine.getUserApprove());
+
             dto.setMontantHt(domaine.getMontantHt());
             dto.setMontantTTC(domaine.getMontantTTC());
             dto.setMontantTva(domaine.getMontantTva());
 
-
             dto.setFournisseurDTO(FournisseurFactory.fournisseurToFournisseurDTO(domaine.getFournisseur()));
             dto.setCodeFournisseur(domaine.getCodeFournisseur());
 
-               dto.setCostProfitCentreDTO(CostProfitCentreFactory.costProfitCentreToCostProfitCentreDTO(domaine.getCostProfitCentre()));
+            dto.setCostProfitCentreDTO(CostProfitCentreFactory.costProfitCentreToCostProfitCentreDTOLazy(domaine.getCostProfitCentre()));
             dto.setCodeCodeProfitCentre(domaine.getCodeCodeProfitCentre());
 
-            
-            
-             dto.setEtatFactureDTO(EtatFactureFactory.etatFactureToEtatFactureDTO(domaine.getEtatFacture()));
+            dto.setEtatFactureDTO(EtatFactureFactory.etatFactureToEtatFactureDTO(domaine.getEtatFacture()));
             dto.setCodeEtatFacture(domaine.getCodeEtatFacture());
-            
+
+            dto.setModeReglementDTO(ModeReglementFactory.modeReglementToModeReglementDTO(domaine.getModeReglement()));
+            dto.setCodeModeReglement(domaine.getCodeModeReglement());
+
+            dto.setDeviseDTO(DeviseFactory.deviseToDeviseDTO(domaine.getDevise()));
+            dto.setCodeDevise(domaine.getCodeDevise());
+            dto.setDateFactFrs(domaine.getDateFactFrs()); 
+            dto.setMontantFactFrs(domaine.getMontantFactFrs());
+            dto.setNumPiece(domaine.getNumPiece());
+            dto.setNumFactFrs(domaine.getNumFactFrs());
+            dto.setCodeBanque(domaine.getCodeBanque());
+
             return dto;
         } else {
             return null;
@@ -101,8 +123,8 @@ public class FactureAchatFactory {
         }
         return list;
     }
-    
-     public static Collection<FactureAchatDTO> CollectionFactureAchatToFactureAchatDTOs(Collection<FactureAchat> factureAchats) {
+
+    public static Collection<FactureAchatDTO> CollectionFactureAchatToFactureAchatDTOs(Collection<FactureAchat> factureAchats) {
         Collection<FactureAchatDTO> collection = new ArrayList<>();
         for (FactureAchat factureAchat : factureAchats) {
             collection.add(factureAchatToFactureAchatDTO(factureAchat));

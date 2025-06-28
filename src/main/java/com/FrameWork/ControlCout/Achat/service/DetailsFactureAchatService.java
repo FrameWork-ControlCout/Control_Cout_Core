@@ -50,6 +50,17 @@ public class DetailsFactureAchatService {
         Preconditions.checkArgument(domaine != null, "error.DetailsFactureAchatNotFound");
         return DetailsFactureAchatFactory.DetailsFactureAchatToDetailsFactureAchatDTONew(domaine);
     }
+ 
+
+    
+    
+    @Transactional(readOnly = true)
+    public List<DetailsFactureAchatDTO> findByCodeFactureAchat(Integer codeFacture) {
+        List<DetailsFactureAchat> domaine = detailsFactureAchatRepo.findByCodeFactureAchat(codeFacture);
+        Preconditions.checkArgument(domaine != null, "error.DetailsFactureAchatNotFound");
+        return DetailsFactureAchatFactory.listDetailsFactureAchatToDetailsADmissionDTOs(domaine);
+    }
+ 
 
 //
     public DetailsFactureAchatDTO save(DetailsFactureAchatDTO dto) {

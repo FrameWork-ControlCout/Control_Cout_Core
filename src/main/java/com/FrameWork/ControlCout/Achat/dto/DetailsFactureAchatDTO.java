@@ -4,10 +4,6 @@
  */
 package com.FrameWork.ControlCout.Achat.dto;
 
-import com.FrameWork.ControlCout.Achat.domaine.*;
-import com.FrameWork.ControlCout.Parametrage.domaine.Article;
-import com.FrameWork.ControlCout.Parametrage.domaine.Fournisseur;
-import com.FrameWork.ControlCout.Parametrage.domaine.Unite;
 import com.FrameWork.ControlCout.Parametrage.dto.ArticleDTO;
 import com.FrameWork.ControlCout.Parametrage.dto.FournisseurDTO;
 import com.FrameWork.ControlCout.Parametrage.dto.UniteDTO;
@@ -18,43 +14,49 @@ import java.util.Date;
  *
  * @author Administrator
  */
- 
 public class DetailsFactureAchatDTO {
 
-    
     private Integer code;
 
     private FactureAchatDTO factureAchatDTO;
 
-     private Integer codeFactureAchat;
+    private Integer codeFactureAchat;
 
-      private ArticleDTO articleDTO;
+    private ArticleDTO articleDTO;
 
-     private Integer codeArticle;
+    private Integer codeArticle;
 
-     private UniteDTO uniteDTO;
+    private String codeSaisieArticle;
+    private String designationArArticle;
+    private String designationLtArticle;
+    private Integer packages;
 
-     private Integer codeUnite;
+    private UniteDTO uniteDTO;
 
-     private String usercreate;
+    private Integer codeUnite;
 
-     private String caracterstique;
+    private String usercreate;
 
-     private Date dateCreate;
+    private String caracterstique;
 
-     private FournisseurDTO fournisseurDTO;
+    private Date dateCreate;
+
+    private FournisseurDTO fournisseurDTO;
 
     private Integer codeFournisseur;
 
-     private BigDecimal prixUnitaire;
+    private BigDecimal prixUnitaire;  
+    private BigDecimal prixUni;
 
-     private BigDecimal montantHt;
+    
 
-     private BigDecimal montantTva;
+    private BigDecimal montantHt;
 
-     private BigDecimal montantTTC;
+    private BigDecimal montantTva;
 
-     private BigDecimal qteReceptionner;
+    private BigDecimal montantTTC;
+
+    private BigDecimal qteReceptionner;
 
     public DetailsFactureAchatDTO() {
     }
@@ -67,7 +69,6 @@ public class DetailsFactureAchatDTO {
         this.code = code;
     }
 
-  
     public Integer getCodeFactureAchat() {
         return codeFactureAchat;
     }
@@ -75,8 +76,6 @@ public class DetailsFactureAchatDTO {
     public void setCodeFactureAchat(Integer codeFactureAchat) {
         this.codeFactureAchat = codeFactureAchat;
     }
-
- 
 
     public Integer getCodeArticle() {
         return codeArticle;
@@ -110,7 +109,6 @@ public class DetailsFactureAchatDTO {
         this.dateCreate = dateCreate;
     }
 
- 
     public Integer getCodeFournisseur() {
         return codeFournisseur;
     }
@@ -143,7 +141,6 @@ public class DetailsFactureAchatDTO {
         this.montantTTC = montantTTC;
     }
 
-   
     public Integer getCodeUnite() {
         return codeUnite;
     }
@@ -198,6 +195,46 @@ public class DetailsFactureAchatDTO {
 
     public void setFournisseurDTO(FournisseurDTO fournisseurDTO) {
         this.fournisseurDTO = fournisseurDTO;
+    }
+
+    public String getCodeSaisieArticle() {
+        return codeSaisieArticle;
+    }
+
+    public void setCodeSaisieArticle(String codeSaisieArticle) {
+        this.codeSaisieArticle = codeSaisieArticle;
+    }
+
+    public String getDesignationArArticle() {
+        return designationArArticle;
+    }
+
+    public void setDesignationArArticle(String designationArArticle) {
+        this.designationArArticle = designationArArticle;
+    }
+
+    public String getDesignationLtArticle() {
+        return designationLtArticle;
+    }
+
+    public void setDesignationLtArticle(String designationLtArticle) {
+        this.designationLtArticle = designationLtArticle;
+    }
+
+    public Integer getPackages() {
+        return packages;
+    }
+
+    public void setPackages(Integer packages) {
+        this.packages = packages;
+    }
+
+    public BigDecimal getPrixUni() {
+        return prixUni;
+    }
+
+    public void setPrixUni(BigDecimal prixUni) {
+        this.prixUni = prixUni;
     }
     
 

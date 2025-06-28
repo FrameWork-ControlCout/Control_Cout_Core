@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -33,48 +34,43 @@ public class DetailsFactureAchatRessource {
         this.detailsFactureAchatService = detailsFactureAchatService;
     }
     
-     @GetMapping("details_facture/{code}")
+     @GetMapping("details_facture_achat/{code}")
     public ResponseEntity<DetailsFactureAchatDTO> getDetailsFactureAchatByCode(@PathVariable Integer code) {
         DetailsFactureAchatDTO dTO = detailsFactureAchatService.findOne(code);
         return ResponseEntity.ok().body(dTO);
     }
 
-    @GetMapping("details_facture/all")
+    
+       
+     @GetMapping("details_facture_achat/findByCodeFacture")
+    public ResponseEntity<List<DetailsFactureAchatDTO>> getDetailsFactureAchatByCodeFacture(@RequestParam Integer codeFacture) {
+        List<DetailsFactureAchatDTO> dTO = detailsFactureAchatService.findByCodeFactureAchat(codeFacture);
+        return ResponseEntity.ok().body(dTO);
+    }
+
+    @GetMapping("details_facture_achat/all")
     public ResponseEntity<List<DetailsFactureAchatDTO>> getAllDetailsFactureAchat() {
         return ResponseEntity.ok().body(detailsFactureAchatService.findAllDetailsFactureAchat());
     }
 
   
 
-   
-
-//    @PostMapping("details_facture")
-//    public ResponseEntity<DetailsFactureAchatDTO> postDetailsFactureAchat(@Valid @RequestBody DetailsFactureAchatDTO dTO, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {
-//        DetailsFactureAchatDTO result = detailsFactureAchatService.save(dTO);
-//        return ResponseEntity.created(new URI("/api/achat/" + result.getCode())).body(result);
-//    }
-    
-     @PostMapping("details_facture/List")
+ 
+     @PostMapping("details_facture_achat/List")
     public ResponseEntity<String> saveList(@RequestBody List<DetailsFactureAchatDTO> detailsFactureAchatDTOs) {
         List<DetailsFactureAchatDTO> result = detailsFactureAchatService.saveList(detailsFactureAchatDTOs);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
  
-    @PutMapping("details_facture/update")
+    @PutMapping("details_facture_achat/update")
     public ResponseEntity<DetailsFactureAchatDTO> updateDetailsFactureAchat(@Valid @RequestBody DetailsFactureAchatDTO dTO, BindingResult bindingResult) throws MethodArgumentNotValidException {
         DetailsFactureAchatDTO result = detailsFactureAchatService.update(dTO);
         return ResponseEntity.ok().body(result);
     }
 
   
-   
-
-//    @DeleteMapping("details_facture/delete/{code}")
-//    public ResponseEntity<DetailsFactureAchat> deleteDetailsFactureAchat(@PathVariable("Code") Integer code) {
-//        detailsFactureAchatService.deleteDetailsFactureAchat(code);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    
     
     
 }

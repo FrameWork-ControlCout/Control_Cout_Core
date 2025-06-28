@@ -42,10 +42,17 @@ public class DetailsFactureAchatFactory {
 
             dto.setQteReceptionner(domaine.getQteReceptionner());
 
-            dto.setPrixUnitaire(domaine.getPrixUnitaire());
+            dto.setPrixUnitaire(domaine.getPrixUnitaire());   
+            dto.setPrixUni(domaine.getPrixUnitaire());
+
 
             dto.setCodeArticle(domaine.getCodeArticle());
             dto.setArticleDTO(ArticleFactory.articleToArticleDTO(domaine.getArticle()));
+
+            dto.setPackages(domaine.getArticle().getPackages());
+            dto.setCodeSaisieArticle(domaine.getArticle().getCodeSaisie());
+            dto.setDesignationArArticle(domaine.getArticle().getDesignationAr());
+            dto.setDesignationLtArticle(domaine.getArticle().getDesignationLt());
 
             dto.setCodeFactureAchat(domaine.getCodeFactureAchat());
             dto.setFactureAchatDTO(FactureAchatFactory.factureAchatToFactureAchatDTO(domaine.getFactureAchat()));
@@ -74,8 +81,6 @@ public class DetailsFactureAchatFactory {
             domaine.setQteReceptionner(dto.getQteReceptionner());
             domaine.setPrixUnitaire(dto.getPrixUnitaire());
 
-       
-
             domaine.setCodeArticle(dto.getCodeArticle());
             if (domaine.getCodeArticle() != null) {
                 domaine.setArticle(ArticleFactory.createArticleByCode(dto.getCodeArticle()));
@@ -85,12 +90,12 @@ public class DetailsFactureAchatFactory {
             if (domaine.getCodeFactureAchat() != null) {
                 domaine.setFactureAchat(FactureAchatFactory.createFactureAchatByCode(dto.getCodeFactureAchat()));
             }
-            
-             domaine.setCodeFournisseur(dto.getCodeFournisseur());
+
+            domaine.setCodeFournisseur(dto.getCodeFournisseur());
             if (domaine.getCodeFournisseur() != null) {
                 domaine.setFournisseur(FournisseurFactory.createFournisseurByCode(dto.getCodeFournisseur()));
             }
-             domaine.setCodeUnite(dto.getCodeUnite());
+            domaine.setCodeUnite(dto.getCodeUnite());
             if (domaine.getCodeUnite() != null) {
                 domaine.setUnite(UniteFactory.createUniteByCode(dto.getCodeUnite()));
             }

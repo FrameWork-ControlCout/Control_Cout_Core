@@ -16,9 +16,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DetailsFactureAchatRepo extends JpaRepository<DetailsFactureAchat, Integer> {
 
-    DetailsFactureAchat findByCode(Integer code);
+   DetailsFactureAchat findByCode(Integer code);
 
-    DetailsFactureAchat findByCodeFactureAchat(Integer codeFactureAchat);
+     List<DetailsFactureAchat> findByCodeFactureAchat(Integer codeFactureAchat);
 
     List<DetailsFactureAchat> findByCodeFournisseur(Integer codeFournisseur);
 

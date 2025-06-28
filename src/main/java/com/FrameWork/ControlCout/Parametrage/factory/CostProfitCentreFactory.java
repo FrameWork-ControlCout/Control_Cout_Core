@@ -194,28 +194,10 @@ public class CostProfitCentreFactory {
 
             dto.setProfitCentre(domaine.getProfitCentre());
             dto.setDetail(domaine.getDetail());
-
-//            dto.setClassement(domaine.getClassement());
-
+ 
             dto.setTypeCostCentreDTO(TypeCostCentreFactory.TypeCostCentreTOTypeCostCentreDTO(domaine.getTypeCostCentre()));
             dto.setCodeTypeCostCentre(domaine.getCodeTypeCostCentre());
-
-//            if (domaine.getCodePere() != null && domaine.getCodePere().getCode() != null) {
-//                // Get the parent CostProfitCentreDTO using the repository
-//                CostProfitCentre parent = costProfitCentreRepository.findById(domaine.getCodePere().getCode())
-//                        .orElse(null); // Return null if parent is not found
-//                if (parent != null) {
-//                    dto.setParent(costProfitCentreToCostProfitCentreDTOLazy(parent));
-//                }
-//            } else {
-//                // Set parent to null if no parent code is available
-////                dto.setParent(null);
-//
-//                CostProfitCentreDTO emptyParentDTO = new CostProfitCentreDTO();
-////                emptyParentDTO.setCode("");
-//                emptyParentDTO.setDesignationAr("");
-//                dto.setParent(emptyParentDTO);
-//            }
+ 
             return dto;
         } else {
             return null;
@@ -245,11 +227,7 @@ public class CostProfitCentreFactory {
             dto.setProfitCentre(domaine.getProfitCentre());
             dto.setDetail(domaine.getDetail());
 
-//            dto.setClassement(domaine.getClassement());
-
-//            dto.setTypeCostCentreDTO(TypeCostCentreFactory.TypeCostCentreTOTypeCostCentreDTO(domaine.getTypeCostCentre()));
-//            dto.setCodeTypeCostCentre(domaine.getCodeTypeCostCentre());
-
+ 
             return dto;
         } else {
             return null;
