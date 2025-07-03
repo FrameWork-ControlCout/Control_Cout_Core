@@ -28,7 +28,8 @@ import org.hibernate.envers.Audited;
 @Audited
 @AuditTable("Unite_AUD")
 public class Unite {
-     @Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Code")
     private Integer code;
@@ -55,9 +56,12 @@ public class Unite {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "Date_Create", nullable = false, columnDefinition = "datetime default (getdate())")
     private Date dateCreate;
-
-   
-     
+ 
+    
+    @Column(name = "Secondaire", nullable = false)
+    private boolean secondaire;
+    
+    
     public Unite() {
     }
 
@@ -118,7 +122,14 @@ public class Unite {
     }
 
   
+    public boolean isSecondaire() {
+        return secondaire;
+    }
+
+    public void setSecondaire(boolean secondaire) {
+        this.secondaire = secondaire;
+    }
     
     
-    
+
 }

@@ -81,9 +81,39 @@ public class Article {
     @Column(name = "Code_Unite", updatable = false, insertable = false, nullable = false)
     private Integer codeUnite;
 
-    @Column(name = "Packge", nullable = false, length = 255, columnDefinition = "int")
+    @Column(name = "Package", nullable = false, length = 255, columnDefinition = "int")
     private Integer packages;
 
+    
+    
+    
+        @JoinColumn(name = "Code_Unite_Secondaire", referencedColumnName = "Code", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Unite uniteSecondaire;
+
+    @Column(name = "Code_Unite_Secondaire", updatable = false, insertable = false, nullable = false)
+    private Integer codeUniteSecondaire;
+
+    
+    
+       
+        @JoinColumn(name = "Code_Unite_Depense", referencedColumnName = "Code", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Unite uniteDepense;
+
+    @Column(name = "Code_Unite_Depense", updatable = false, insertable = false, nullable = false)
+    private Integer codeUniteDepense;
+    @Column(name = "Conversion_Rate", nullable = false, length = 255, columnDefinition = "int")
+    private Integer conversionRate;
+    
+        @Column(name = "Last_Prix_Achat" , columnDefinition = ("decimal(18,3)"))
+    private BigDecimal lastPrixAchat;
+
+        
+        
+        
     public Article() {
     }
 
@@ -189,6 +219,54 @@ public class Article {
 
     public void setPackages(Integer packages) {
         this.packages = packages;
+    }
+
+    public BigDecimal getLastPrixAchat() {
+        return lastPrixAchat;
+    }
+
+    public void setLastPrixAchat(BigDecimal lastPrixAchat) {
+        this.lastPrixAchat = lastPrixAchat;
+    }
+
+    public Unite getUniteSecondaire() {
+        return uniteSecondaire;
+    }
+
+    public void setUniteSecondaire(Unite uniteSecondaire) {
+        this.uniteSecondaire = uniteSecondaire;
+    }
+
+    public Integer getCodeUniteSecondaire() {
+        return codeUniteSecondaire;
+    }
+
+    public void setCodeUniteSecondaire(Integer codeUniteSecondaire) {
+        this.codeUniteSecondaire = codeUniteSecondaire;
+    }
+
+    public Integer getConversionRate() {
+        return conversionRate;
+    }
+
+    public void setConversionRate(Integer conversionRate) {
+        this.conversionRate = conversionRate;
+    }
+
+    public Unite getUniteDepense() {
+        return uniteDepense;
+    }
+
+    public void setUniteDepense(Unite uniteDepense) {
+        this.uniteDepense = uniteDepense;
+    }
+
+    public Integer getCodeUniteDepense() {
+        return codeUniteDepense;
+    }
+
+    public void setCodeUniteDepense(Integer codeUniteDepense) {
+        this.codeUniteDepense = codeUniteDepense;
     }
 
     

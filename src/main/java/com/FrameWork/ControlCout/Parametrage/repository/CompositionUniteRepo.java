@@ -4,7 +4,8 @@
  */
 package com.FrameWork.ControlCout.Parametrage.repository;
 
-import com.FrameWork.ControlCout.Parametrage.domaine.Unite;
+import com.FrameWork.ControlCout.Parametrage.domaine.Banque;
+import com.FrameWork.ControlCout.Parametrage.domaine.CompositionUnite;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -14,12 +15,11 @@ import org.springframework.stereotype.Repository;
  * @author Administrator
  */
 @Repository
-public interface UniteRepo extends JpaRepository<Unite, Integer>{
-        Unite findByCode(Integer code);
-        
-    List<Unite> findByActif(Boolean actif);
-     
-    List<Unite> findByActifAndSecondaire(Boolean actif,Boolean secondaire);   
-
-
+public interface CompositionUniteRepo extends JpaRepository<CompositionUnite, Integer>{
+      CompositionUnite findByCode(Integer code);
+      
+       CompositionUnite  findByCodeUnitePrinc (Integer codeUnitePrinc);
+      
+       
+    public void deleteByCodeUnitePrinc(Integer codeUnitePrinc);
 }

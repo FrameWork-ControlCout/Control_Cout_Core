@@ -11,6 +11,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -21,17 +22,14 @@ public class ArticleDTO {
 
     private Integer code;
 
-    private String codeSaisie;   
+    private String codeSaisie;
     private String codeSaisieArticle;
 
-
-    private String designationAr;   
+    private String designationAr;
     private String designationArArticle;
 
-
     private String designationLt;
-        private String designationLtArticle;
-
+    private String designationLtArticle;
 
     private boolean actif;
 
@@ -43,11 +41,22 @@ public class ArticleDTO {
     private FamilleArticleDTO familleArticleDTO;
 
     private Integer codeFamille;
-    
-        private UniteDTO uniteDTO;
-  private Integer codeUnite;
-  
-     private Integer packages;
+
+    private UniteDTO uniteDTO;
+    private Integer codeUnite;
+
+    private Integer packages;
+
+    private BigDecimal lastPrixAchat;
+
+    private UniteDTO uniteSecondaireDTO;
+
+    private Integer codeUniteSecondaire;
+
+    private Integer conversionRate;
+
+    private UniteDTO uniteDepenseDTO;
+    private Integer codeUniteDepense;
 
     public ArticleDTO() {
     }
@@ -180,7 +189,52 @@ public class ArticleDTO {
         this.designationLtArticle = designationLtArticle;
     }
 
-    
-    
-    
+    public BigDecimal getLastPrixAchat() {
+        return lastPrixAchat;
+    }
+
+    public void setLastPrixAchat(BigDecimal lastPrixAchat) {
+        this.lastPrixAchat = lastPrixAchat;
+    }
+
+    public UniteDTO getUniteSecondaireDTO() {
+        return uniteSecondaireDTO;
+    }
+
+    public void setUniteSecondaireDTO(UniteDTO uniteSecondaireDTO) {
+        this.uniteSecondaireDTO = uniteSecondaireDTO;
+    }
+
+    public Integer getCodeUniteSecondaire() {
+        return codeUniteSecondaire;
+    }
+
+    public void setCodeUniteSecondaire(Integer codeUniteSecondaire) {
+        this.codeUniteSecondaire = codeUniteSecondaire;
+    }
+
+    public Integer getConversionRate() {
+        return conversionRate;
+    }
+
+    public void setConversionRate(Integer conversionRate) {
+        this.conversionRate = conversionRate;
+    }
+
+    public UniteDTO getUniteDepenseDTO() {
+        return uniteDepenseDTO;
+    }
+
+    public void setUniteDepenseDTO(UniteDTO uniteDepenseDTO) {
+        this.uniteDepenseDTO = uniteDepenseDTO;
+    }
+
+    public Integer getCodeUniteDepense() {
+        return codeUniteDepense;
+    }
+
+    public void setCodeUniteDepense(Integer codeUniteDepense) {
+        this.codeUniteDepense = codeUniteDepense;
+    }
+
 }

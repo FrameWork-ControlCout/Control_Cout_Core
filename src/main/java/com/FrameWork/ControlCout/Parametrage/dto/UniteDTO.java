@@ -10,6 +10,7 @@ import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -28,11 +29,12 @@ public class UniteDTO {
     private String designationLt;
 
     private boolean actif;
-
+     
     private String userCreate;
 
-    private Date dateCreate; 
+    private Date dateCreate;  
 
+      private boolean secondaire;
     public UniteDTO() {
     }
 
@@ -99,6 +101,17 @@ public class UniteDTO {
     public void setDesignationArUnite(String designationArUnite) {
         this.designationArUnite = designationArUnite;
     }
+
+   
+    public boolean isSecondaire() {
+        return secondaire;
+    }
+
+    public void setSecondaire(boolean secondaire) {
+        this.secondaire = secondaire;
+    }
+
  
+    
     
 }

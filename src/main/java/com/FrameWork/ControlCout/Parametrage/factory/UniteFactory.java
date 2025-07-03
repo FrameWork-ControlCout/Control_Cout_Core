@@ -30,7 +30,8 @@ public class UniteFactory {
             domaine.setDesignationAr(dto.getDesignationAr());
             domaine.setActif(dto.isActif());   
 
-         
+                     domaine.setSecondaire(dto.isSecondaire());   
+
 
             return domaine;
         } else {
@@ -53,7 +54,8 @@ public class UniteFactory {
             dto.setActif(domaine.isActif());
             dto.setDateCreate(domaine.getDateCreate());
             dto.setUserCreate(domaine.getUserCreate());  
- 
+             dto.setSecondaire(domaine.isSecondaire());  
+
 
 
             return dto;

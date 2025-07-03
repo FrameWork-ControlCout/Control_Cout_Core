@@ -20,7 +20,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
-
+import java.net.*;
+import java.io.*;
 
 
 @SpringBootApplication
@@ -40,6 +41,9 @@ public class ControlCoutApplication {
     public static String jwtSecret = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJleUpoYkdjaU9pSklVekkxTmlKOS5leUp6ZFdJaU9pSnpiM1ZtYVdWdUlpd2lhV0YwSWpveE56UXlNRGN6TkRNekxDSmxlSEFpT2pFM05ESXdOemN3TXpOOS5JNUlMMlZoZkNFbGhDeDVnZlNXa1ZZV3EtYVNldlo2Zy1zdVNiSGlLd3UwIiwiaWF0IjoxNzQyMDczNDMzLCJleHAiOjE3NDIwNzcwMzN9.Ngo_oiUp68rJ_-345Ex6hamxZrP5a_CFWXFYki4jDBk";
 
     public static void main(String[] args) throws UnknownHostException, InterruptedException {
+        
+   
+        
 //ConfigurableApplicationContext context = SpringApplication.run(MedLiteCoreApplication.class, args);
         SpringApplication app = new SpringApplication(ControlCoutApplication.class);
         ConfigurableApplicationContext ctx = app.run(args);

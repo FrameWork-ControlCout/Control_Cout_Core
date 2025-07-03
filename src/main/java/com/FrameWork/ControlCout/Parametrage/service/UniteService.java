@@ -12,8 +12,7 @@ import com.FrameWork.ControlCout.web.Util.Helper;
 import com.google.common.base.Preconditions;
 import java.util.Date;
 import java.util.List;
-import org.springframework.data.domain.Sort;
-import static org.springframework.data.redis.serializer.RedisSerializationContext.java;
+import org.springframework.data.domain.Sort; 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.FrameWork.ControlCout.Parametrage.repository.UniteRepo;
@@ -52,8 +51,12 @@ public class UniteService {
         return UniteFactory.listUniteToUniteDTOs(uniteRepo.findByActif(actif));
 
     }
- 
+  
+  @Transactional(readOnly = true)
+    public List<UniteDTO> findAllUniteByActifAndSecondaire(Boolean actif,Boolean secondaire) {
+        return UniteFactory.listUniteToUniteDTOs(uniteRepo.findByActifAndSecondaire(actif,secondaire));
 
+    }
     public UniteDTO save(UniteDTO dto) {
         Unite domaine = UniteFactory.uniteDTOToUnite(dto, new Unite());
 
@@ -66,6 +69,7 @@ public class UniteService {
         compteurService.incrementeSuffixe(CompteurCodeSaisie);
 
         domaine = uniteRepo.save(domaine);
+    
 
         return UniteFactory.uniteToUniteDTO(domaine);
     }

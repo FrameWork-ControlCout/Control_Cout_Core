@@ -8,7 +8,6 @@ import com.FrameWork.ControlCout.Parametrage.domaine.Article;
 import com.FrameWork.ControlCout.Parametrage.dto.ArticleDTO;
 import java.util.ArrayList;
 import java.util.List;
-import static org.springframework.data.redis.serializer.RedisSerializationContext.java;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,6 +32,8 @@ public class ArticleFactory {
             domaine.setActif(dto.isActif());
             domaine.setType(dto.getType());
             domaine.setPackages(dto.getPackages());
+            domaine.setLastPrixAchat(dto.getLastPrixAchat());
+            domaine.setConversionRate(dto.getConversionRate());
 
             domaine.setCodeFamille(dto.getCodeFamille());
             if (domaine.getCodeFamille() != null) {
@@ -43,6 +44,18 @@ public class ArticleFactory {
             domaine.setCodeUnite(dto.getCodeUnite());
             if (domaine.getCodeUnite() != null) {
                 domaine.setUnite(UniteFactory.createUniteByCode(dto.getCodeUnite()));
+
+            }
+
+            domaine.setCodeUniteSecondaire(dto.getCodeUniteSecondaire());
+            if (domaine.getCodeUniteSecondaire() != null) {
+                domaine.setUniteSecondaire(UniteFactory.createUniteByCode(dto.getCodeUniteSecondaire()));
+
+            }
+
+            domaine.setCodeUniteDepense(dto.getCodeUniteDepense());
+            if (domaine.getCodeUniteDepense() != null) {
+                domaine.setUniteDepense(UniteFactory.createUniteByCode(dto.getCodeUniteDepense()));
 
             }
 
@@ -70,9 +83,18 @@ public class ArticleFactory {
             dto.setUniteDTO(UniteFactory.uniteToUniteDTO(domaine.getUnite()));
             dto.setCodeUnite(domaine.getCodeUnite());
 
+            dto.setUniteSecondaireDTO(UniteFactory.uniteToUniteDTO(domaine.getUniteSecondaire()));
+            dto.setCodeUniteSecondaire(domaine.getCodeUniteSecondaire());
+
+            dto.setConversionRate(domaine.getConversionRate());
+
+            dto.setUniteDepenseDTO(UniteFactory.uniteToUniteDTO(domaine.getUniteDepense()));
+            dto.setCodeUniteDepense(domaine.getCodeUniteDepense());
+
             dto.setType(domaine.getType());
 
             dto.setPackages(domaine.getPackages());
+            dto.setLastPrixAchat(domaine.getLastPrixAchat());
 
             dto.setCodeSaisieArticle(domaine.getCodeSaisie());
             dto.setDesignationArArticle(domaine.getDesignationAr());

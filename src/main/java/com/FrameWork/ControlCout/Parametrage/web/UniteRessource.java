@@ -55,6 +55,15 @@ public class UniteRessource {
         return ResponseEntity.ok().body(uniteService.findAllUniteByActif(actif));
     }
     
+      
+   @GetMapping("unite/findByActifAndSecondaire")
+    public ResponseEntity<List<UniteDTO>> getUniteByActifAndSecondaire(@RequestParam Boolean actif,@RequestParam Boolean secondaire) {
+        return ResponseEntity.ok().body(uniteService.findAllUniteByActifAndSecondaire(actif,secondaire));
+    }
+    
+    
+    
+    
   
     @PostMapping("unite")
     public ResponseEntity<UniteDTO> postUnite(@Valid @RequestBody UniteDTO dto, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {
