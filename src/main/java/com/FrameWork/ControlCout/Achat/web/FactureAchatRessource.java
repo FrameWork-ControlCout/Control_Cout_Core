@@ -76,7 +76,7 @@ public class FactureAchatRessource {
     @PostMapping("facture_achat")
     public ResponseEntity<FactureAchatDTO> postFactureAchat(@Valid @RequestBody FactureAchatDTO dTO, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {
         FactureAchatDTO result = factureAchatService.save(dTO);
-        return ResponseEntity.created(new URI("/api/parametrage/" + result.getCode())).body(result);
+        return ResponseEntity.created(new URI("/api/achat/" + result.getCode())).body(result);
     }
 
     @PutMapping("facture_achat/update")

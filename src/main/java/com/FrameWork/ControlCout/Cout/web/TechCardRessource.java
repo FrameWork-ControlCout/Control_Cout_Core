@@ -58,7 +58,7 @@ public class TechCardRessource {
     @PostMapping("tech_card")
     public ResponseEntity<TechCardDTO> postTechCard(@Valid @RequestBody TechCardDTO dTO, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {
         TechCardDTO result = factureAchatService.save(dTO);
-        return ResponseEntity.created(new URI("/api/parametrage/" + result.getCode())).body(result);
+        return ResponseEntity.created(new URI("/api/cout/" + result.getCode())).body(result);
     }
     
     @PutMapping("tech_card/update")

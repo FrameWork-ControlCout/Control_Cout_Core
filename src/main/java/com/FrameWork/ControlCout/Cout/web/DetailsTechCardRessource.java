@@ -41,9 +41,9 @@ public class DetailsTechCardRessource {
         return ResponseEntity.ok().body(dTO);
     }
 
-    @GetMapping("details_tech_card/findByCodeFacture")
-    public ResponseEntity<List<DetailsTechCardDTO>> getDetailsTechCardByCodeFacture(@RequestParam Integer codeFacture) {
-        List<DetailsTechCardDTO> dTO = detailsTechCardService.findByCodeTechCard(codeFacture);
+    @GetMapping("details_tech_card/findByCodeTechCard")
+    public ResponseEntity<List<DetailsTechCardDTO>> getDetailsTechCardByCodeFacture(@RequestParam Integer codeTechCard) {
+        List<DetailsTechCardDTO> dTO = detailsTechCardService.findByCodeTechCard(codeTechCard);
         return ResponseEntity.ok().body(dTO);
     }
 
