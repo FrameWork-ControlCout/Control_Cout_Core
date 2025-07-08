@@ -4,8 +4,8 @@
  */
 package com.FrameWork.ControlCout.Cout.factory;
 
-import com.FrameWork.ControlCout.Cout.domaine.DetailsTechCard;
-import com.FrameWork.ControlCout.Cout.dto.DetailsTechCardDTO;
+import com.FrameWork.ControlCout.Cout.domaine.DetailsCalculeConsommation;
+import com.FrameWork.ControlCout.Cout.dto.DetailsCalculeConsommationDTO;
 import com.FrameWork.ControlCout.Parametrage.factory.ArticleFactory;
 import com.FrameWork.ControlCout.Parametrage.factory.UniteFactory;
 import java.util.ArrayList;
@@ -17,17 +17,17 @@ import org.springframework.stereotype.Component;
  * @author Administrator
  */
 @Component
-public class DetailsTechCardFactory {
+public class DetailsCalculeConsommationFactory {
 
-    public static DetailsTechCard createDetailsTechCardByCode(int code) {
-        DetailsTechCard domaine = new DetailsTechCard();
+    public static DetailsCalculeConsommation createDetailsCalculeConsommationByCode(int code) {
+        DetailsCalculeConsommation domaine = new DetailsCalculeConsommation();
         domaine.setCode(code);
         return domaine;
     }
 
-    public static DetailsTechCardDTO DetailsTechCardToDetailsTechCardDTONew(DetailsTechCard domaine) {
+    public static DetailsCalculeConsommationDTO DetailsCalculeConsommationToDetailsCalculeConsommationDTONew(DetailsCalculeConsommation domaine) {
         if (domaine != null) {
-            DetailsTechCardDTO dto = new DetailsTechCardDTO();
+            DetailsCalculeConsommationDTO dto = new DetailsCalculeConsommationDTO();
             dto.setCode(domaine.getCode());
 
             dto.setUserCreate(domaine.getUserCreate());
@@ -41,11 +41,11 @@ public class DetailsTechCardFactory {
             dto.setCodeArticle(domaine.getCodeArticle());
             dto.setArticleDTO(ArticleFactory.articleToArticleDTO(domaine.getArticle()));
 
-            dto.setCodeTechCard(domaine.getCodeTechCard());
-            dto.setTechCardDTO(TechCardFactory.techCardToTechCardDTO(domaine.getTechCard()));
+            dto.setCodeCalculeConsommation(domaine.getCodeCalculeConsommation());
+            dto.setCalculeConsommationDTO(CalculeConsommationFactory.calculeConsommationToCalculeConsommationDTO(domaine.getCalculeConsommation()));
 
-            dto.setCodeUnite(domaine.getCodeUnite());
-            dto.setUniteDTO(UniteFactory.uniteToUniteDTO(domaine.getUnite()));
+            dto.setCodeUniteConso(domaine.getCodeUniteConso());
+            dto.setUniteConsoDTO(UniteFactory.uniteToUniteDTO(domaine.getUniteConso()));
 
               dto.setCodeUniteSecondaire(domaine.getCodeUniteSecondaire());
             dto.setUniteSecondaireDTO(UniteFactory.uniteToUniteDTO(domaine.getUniteSecondaire()));
@@ -56,7 +56,7 @@ public class DetailsTechCardFactory {
         }
     }
 
-    public static DetailsTechCard detailsTechCardDTOToDetailsTechCard(DetailsTechCardDTO dto, DetailsTechCard domaine) {
+    public static DetailsCalculeConsommation detailsCalculeConsommationDTOToDetailsCalculeConsommation(DetailsCalculeConsommationDTO dto, DetailsCalculeConsommation domaine) {
         if (dto != null) {
             domaine.setCode(dto.getCode());
             domaine.setConsTotal(dto.getConsTotal());
@@ -67,13 +67,13 @@ public class DetailsTechCardFactory {
             if (domaine.getCodeArticle() != null) {
                 domaine.setArticle(ArticleFactory.createArticleByCode(dto.getCodeArticle()));
             }
-            domaine.setCodeTechCard(dto.getCodeTechCard());
-            if (domaine.getCodeTechCard() != null) {
-                domaine.setTechCard(TechCardFactory.createTechCardByCode(dto.getCodeTechCard()));
+            domaine.setCodeCalculeConsommation(dto.getCodeCalculeConsommation());
+            if (domaine.getCodeCalculeConsommation() != null) {
+                domaine.setCalculeConsommation(CalculeConsommationFactory.createCalculeConsommationByCode(dto.getCodeCalculeConsommation()));
             }
-            domaine.setCodeUnite(dto.getCodeUnite());
-            if (domaine.getCodeUnite() != null) {
-                domaine.setUnite(UniteFactory.createUniteByCode(dto.getCodeUnite()));
+            domaine.setCodeUniteConso(dto.getCodeUniteConso());
+            if (domaine.getCodeUniteConso()!= null) {
+                domaine.setUniteConso(UniteFactory.createUniteByCode(dto.getCodeUniteConso()));
             }
             
              domaine.setCodeUniteSecondaire(dto.getCodeUniteSecondaire());
@@ -88,10 +88,10 @@ public class DetailsTechCardFactory {
 
     }
 
-    public static List<DetailsTechCardDTO> listDetailsTechCardToDetailsADmissionDTOs(List<DetailsTechCard> detailsTechCards) {
-        List<DetailsTechCardDTO> list = new ArrayList<>();
-        for (DetailsTechCard detailsTechCard : detailsTechCards) {
-            list.add(DetailsTechCardToDetailsTechCardDTONew(detailsTechCard));
+    public static List<DetailsCalculeConsommationDTO> listDetailsCalculeConsommationToDetailsADmissionDTOs(List<DetailsCalculeConsommation> detailsCalculeConsommations) {
+        List<DetailsCalculeConsommationDTO> list = new ArrayList<>();
+        for (DetailsCalculeConsommation detailsCalculeConsommation : detailsCalculeConsommations) {
+            list.add(DetailsCalculeConsommationToDetailsCalculeConsommationDTONew(detailsCalculeConsommation));
         }
         return list;
     }

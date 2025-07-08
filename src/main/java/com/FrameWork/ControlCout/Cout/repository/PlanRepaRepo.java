@@ -19,6 +19,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PlanRepaRepo  extends JpaRepository<PlanRepa, Integer>{ 
     PlanRepa findByCode (Integer code);
+    
+        List<PlanRepa> findByCodeTechCard (Integer codeTechCard);
+
     @Query("SELECT p FROM PlanRepa p WHERE p.datePlan >= :startDate AND p.datePlan < :endDate")
     List<PlanRepa> findAllInDateRange(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

@@ -67,7 +67,7 @@ public class TechCardRessource {
         return ResponseEntity.ok().body(result);
     }
     
-    @DeleteMapping("tech_card/delete/{code}")
+    @DeleteMapping("tech_card/delete/{Code}")
     public ResponseEntity<TechCard> deleteTechCard(@PathVariable("Code") Integer code) {
         factureAchatService.deleteTechCard(code);
         return new ResponseEntity<>(HttpStatus.OK);

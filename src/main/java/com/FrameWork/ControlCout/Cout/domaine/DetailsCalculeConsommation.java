@@ -36,10 +36,10 @@ import org.hibernate.envers.Audited;
  * @author Administrator
  */
 @Entity
-@Table(name = "Details_Technique_Card", schema = "cout")
+@Table(name = "Details_Calcul_Consommation", schema = "cout")
 @Audited
-@AuditTable("Details_Technique_Card_AUD")
-public class DetailsTechCard {
+@AuditTable("Details_Calcul_Consommation_AUD")
+public class DetailsCalculeConsommation {
 
      @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,13 +47,13 @@ public class DetailsTechCard {
     private Integer code;
 
      
-      @JoinColumn(name = "Code_Tech_Card", referencedColumnName = "Code", nullable = false)
+      @JoinColumn(name = "Code_Calcul_Consommation", referencedColumnName = "Code", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JsonBackReference
-    private TechCard techCard;
+    private CalculeConsommation calculeConsommation;
 
-    @Column(name = "Code_Tech_Card", updatable = false, insertable = false, nullable = false)
-    private Integer codeTechCard;
+    @Column(name = "Code_Calcul_Consommation", updatable = false, insertable = false, nullable = false)
+    private Integer codeCalculeConsommation;
     
    
     @NotNull
@@ -74,16 +74,7 @@ public class DetailsTechCard {
     @Column(name = "Code_Article", updatable = false, insertable = false, nullable = false)
     private Integer codeArticle;
 
-    @JoinColumn(name = "Code_Unite_Conso", referencedColumnName = "Code", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JsonBackReference
-    private Unite unite;
-
-    @Column(name = "Code_Unite_Conso", updatable = false, insertable = false, nullable = false)
-    private Integer codeUnite;
- 
-    
-        @JoinColumn(name = "Code_Unite_Secondaire", referencedColumnName = "Code", nullable = false)
+    @JoinColumn(name = "Code_Unite_Secondaire", referencedColumnName = "Code", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JsonBackReference
     private Unite uniteSecondaire;
@@ -91,7 +82,16 @@ public class DetailsTechCard {
     @Column(name = "Code_Unite_Secondaire", updatable = false, insertable = false, nullable = false)
     private Integer codeUniteSecondaire;
     
+       @JoinColumn(name = "Code_Unite_Conso", referencedColumnName = "Code", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Unite uniteConso;
+
+    @Column(name = "Code_Unite_Conso", updatable = false, insertable = false, nullable = false)
+    private Integer codeUniteConso;
     
+    
+ 
    @Column(name = "Qte_Besoin_Unitaire" )
     private Integer consUni;
     @Column(name = "Qte_Besoin_Total", nullable = false, columnDefinition = ("decimal(18,3)"))
@@ -105,7 +105,7 @@ public class DetailsTechCard {
  
  
     
-    public DetailsTechCard() {
+    public DetailsCalculeConsommation() {
     }
 
     public Integer getCode() {
@@ -116,20 +116,20 @@ public class DetailsTechCard {
         this.code = code;
     }
 
-    public TechCard getTechCard() {
-        return techCard;
+    public CalculeConsommation getCalculeConsommation() {
+        return calculeConsommation;
     }
 
-    public void setTechCard(TechCard techCard) {
-        this.techCard = techCard;
+    public void setCalculeConsommation(CalculeConsommation calculeConsommation) {
+        this.calculeConsommation = calculeConsommation;
     }
 
-    public Integer getCodeTechCard() {
-        return codeTechCard;
+    public Integer getCodeCalculeConsommation() {
+        return codeCalculeConsommation;
     }
 
-    public void setCodeTechCard(Integer codeTechCard) {
-        this.codeTechCard = codeTechCard;
+    public void setCodeCalculeConsommation(Integer codeCalculeConsommation) {
+        this.codeCalculeConsommation = codeCalculeConsommation;
     }
 
     public String getUserCreate() {
@@ -164,20 +164,36 @@ public class DetailsTechCard {
         this.codeArticle = codeArticle;
     }
 
-    public Unite getUnite() {
-        return unite;
+    public Unite getUniteSecondaire() {
+        return uniteSecondaire;
     }
 
-    public void setUnite(Unite unite) {
-        this.unite = unite;
+    public void setUniteSecondaire(Unite uniteSecondaire) {
+        this.uniteSecondaire = uniteSecondaire;
     }
 
-    public Integer getCodeUnite() {
-        return codeUnite;
+    public Integer getCodeUniteSecondaire() {
+        return codeUniteSecondaire;
     }
 
-    public void setCodeUnite(Integer codeUnite) {
-        this.codeUnite = codeUnite;
+    public void setCodeUniteSecondaire(Integer codeUniteSecondaire) {
+        this.codeUniteSecondaire = codeUniteSecondaire;
+    }
+
+    public Unite getUniteConso() {
+        return uniteConso;
+    }
+
+    public void setUniteConso(Unite uniteConso) {
+        this.uniteConso = uniteConso;
+    }
+
+    public Integer getCodeUniteConso() {
+        return codeUniteConso;
+    }
+
+    public void setCodeUniteConso(Integer codeUniteConso) {
+        this.codeUniteConso = codeUniteConso;
     }
 
     public Integer getConsUni() {
@@ -211,22 +227,7 @@ public class DetailsTechCard {
     public void setPrixTotal(BigDecimal prixTotal) {
         this.prixTotal = prixTotal;
     }
-
-    public Unite getUniteSecondaire() {
-        return uniteSecondaire;
-    }
-
-    public void setUniteSecondaire(Unite uniteSecondaire) {
-        this.uniteSecondaire = uniteSecondaire;
-    }
-
-    public Integer getCodeUniteSecondaire() {
-        return codeUniteSecondaire;
-    }
-
-    public void setCodeUniteSecondaire(Integer codeUniteSecondaire) {
-        this.codeUniteSecondaire = codeUniteSecondaire;
-    }
+ 
  
     
     

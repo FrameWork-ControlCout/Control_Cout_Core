@@ -78,7 +78,7 @@ public class PlanRepaRessource {
         return ResponseEntity.ok().body(result);
     }
 
-    @DeleteMapping("plan_repa/delete/{code}")
+    @DeleteMapping("plan_repa/delete/{Code}")
     public ResponseEntity<PlanRepa> deletePlanRepa(@PathVariable("Code") Integer code) {
         factureAchatService.deletePlanRepa(code);
         return new ResponseEntity<>(HttpStatus.OK);

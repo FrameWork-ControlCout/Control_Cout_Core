@@ -4,10 +4,9 @@
  */
 package com.FrameWork.ControlCout.Cout.dto;
 
-import com.FrameWork.ControlCout.Parametrage.domaine.Unite;
+import com.FrameWork.ControlCout.Cout.domaine.*;
 import com.FrameWork.ControlCout.Parametrage.dto.ArticleDTO;
 import com.FrameWork.ControlCout.Parametrage.dto.UniteDTO;
-import jakarta.persistence.Column;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -15,39 +14,47 @@ import java.util.Date;
  *
  * @author Administrator
  */
-public class DetailsTechCardDTO {
+ 
+public class DetailsCalculeConsommationDTO {
 
     private Integer code;
 
-    private TechCardDTO techCardDTO;
+     
+  private CalculeConsommationDTO calculeConsommationDTO;
 
-    private Integer codeTechCard;
-
-    private String userCreate;
-
-    private Date dateCreate;
-
-    private ArticleDTO articleDTO;
-
-    private Integer codeArticle;
+     private Integer codeCalculeConsommation;
     
-    private UniteDTO uniteDTO;
+   
+     private String userCreate;
 
-    private Integer codeUnite;
+    private Date dateCreate; 
 
+ 
+
+     private ArticleDTO articleDTO;
+
+     private Integer codeArticle;
+
+    private UniteDTO uniteSecondaireDTO;
+
+    private Integer codeUniteSecondaire;
+    
+   private UniteDTO uniteConsoDTO;
+
+     private Integer codeUniteConso;
+    
+    
+ 
     private Integer consUni;
-    
     private BigDecimal consTotal;
 
     private BigDecimal prixUni;
 
     private BigDecimal prixTotal;
+ 
+ 
     
-        private UniteDTO uniteSecondaireDTO;
-
-     private Integer codeUniteSecondaire;
-
-    public DetailsTechCardDTO() {
+    public DetailsCalculeConsommationDTO() {
     }
 
     public Integer getCode() {
@@ -58,20 +65,22 @@ public class DetailsTechCardDTO {
         this.code = code;
     }
 
-    public TechCardDTO getTechCardDTO() {
-        return techCardDTO;
+    public CalculeConsommationDTO getCalculeConsommationDTO() {
+        return calculeConsommationDTO;
     }
 
-    public void setTechCardDTO(TechCardDTO techCardDTO) {
-        this.techCardDTO = techCardDTO;
+    public void setCalculeConsommationDTO(CalculeConsommationDTO calculeConsommationDTO) {
+        this.calculeConsommationDTO = calculeConsommationDTO;
     }
 
-    public Integer getCodeTechCard() {
-        return codeTechCard;
+    
+
+    public Integer getCodeCalculeConsommation() {
+        return codeCalculeConsommation;
     }
 
-    public void setCodeTechCard(Integer codeTechCard) {
-        this.codeTechCard = codeTechCard;
+    public void setCodeCalculeConsommation(Integer codeCalculeConsommation) {
+        this.codeCalculeConsommation = codeCalculeConsommation;
     }
 
     public String getUserCreate() {
@@ -106,20 +115,36 @@ public class DetailsTechCardDTO {
         this.codeArticle = codeArticle;
     }
 
-    public UniteDTO getUniteDTO() {
-        return uniteDTO;
+    public UniteDTO getUniteSecondaireDTO() {
+        return uniteSecondaireDTO;
     }
 
-    public void setUniteDTO(UniteDTO uniteDTO) {
-        this.uniteDTO = uniteDTO;
+    public void setUniteSecondaireDTO(UniteDTO uniteSecondaireDTO) {
+        this.uniteSecondaireDTO = uniteSecondaireDTO;
     }
 
-    public Integer getCodeUnite() {
-        return codeUnite;
+    public Integer getCodeUniteSecondaire() {
+        return codeUniteSecondaire;
     }
 
-    public void setCodeUnite(Integer codeUnite) {
-        this.codeUnite = codeUnite;
+    public void setCodeUniteSecondaire(Integer codeUniteSecondaire) {
+        this.codeUniteSecondaire = codeUniteSecondaire;
+    }
+
+    public UniteDTO getUniteConsoDTO() {
+        return uniteConsoDTO;
+    }
+
+    public void setUniteConsoDTO(UniteDTO uniteConsoDTO) {
+        this.uniteConsoDTO = uniteConsoDTO;
+    }
+
+    public Integer getCodeUniteConso() {
+        return codeUniteConso;
+    }
+
+    public void setCodeUniteConso(Integer codeUniteConso) {
+        this.codeUniteConso = codeUniteConso;
     }
 
     public Integer getConsUni() {
@@ -153,22 +178,8 @@ public class DetailsTechCardDTO {
     public void setPrixTotal(BigDecimal prixTotal) {
         this.prixTotal = prixTotal;
     }
-
-    public UniteDTO getUniteSecondaireDTO() {
-        return uniteSecondaireDTO;
-    }
-
-    public void setUniteSecondaireDTO(UniteDTO uniteSecondaireDTO) {
-        this.uniteSecondaireDTO = uniteSecondaireDTO;
-    }
-
-    public Integer getCodeUniteSecondaire() {
-        return codeUniteSecondaire;
-    }
-
-    public void setCodeUniteSecondaire(Integer codeUniteSecondaire) {
-        this.codeUniteSecondaire = codeUniteSecondaire;
-    }
-
+ 
+ 
+    
     
 }
