@@ -24,9 +24,9 @@ public class PlanRepaDTO {
 
     private Integer codeTypeRepa;
 
-    private TechCardDTO techCardDTO;
+    private FicheTechDTO techCardDTO;
 
-    private Integer codeTechCard;
+    private Integer codeFicheTechnique;
 
     public PlanRepaDTO() {
     }
@@ -79,20 +79,20 @@ public class PlanRepaDTO {
         this.codeTypeRepa = codeTypeRepa;
     }
 
-    public TechCardDTO getTechCardDTO() {
+    public FicheTechDTO getFicheTechniqueDTO() {
         return techCardDTO;
     }
 
-    public void setTechCardDTO(TechCardDTO techCardDTO) {
+    public void setFicheTechniqueDTO(FicheTechDTO techCardDTO) {
         this.techCardDTO = techCardDTO;
     }
 
-    public Integer getCodeTechCard() {
-        return codeTechCard;
+    public Integer getCodeFicheTechnique() {
+        return codeFicheTechnique;
     }
 
-    public void setCodeTechCard(Integer codeTechCard) {
-        this.codeTechCard = codeTechCard;
+    public void setCodeFicheTechnique(Integer codeFicheTechnique) {
+        this.codeFicheTechnique = codeFicheTechnique;
     }
 
 }

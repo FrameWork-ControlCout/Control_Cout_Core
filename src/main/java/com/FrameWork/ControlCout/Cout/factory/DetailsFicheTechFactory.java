@@ -4,8 +4,8 @@
  */
 package com.FrameWork.ControlCout.Cout.factory;
 
-import com.FrameWork.ControlCout.Cout.domaine.DetailsTechCard;
-import com.FrameWork.ControlCout.Cout.dto.DetailsTechCardDTO;
+import com.FrameWork.ControlCout.Cout.domaine.DetailsFicheTech;
+import com.FrameWork.ControlCout.Cout.dto.DetailsFicheTechDTO;
 import com.FrameWork.ControlCout.Parametrage.factory.ArticleFactory;
 import com.FrameWork.ControlCout.Parametrage.factory.UniteFactory;
 import java.util.ArrayList;
@@ -17,17 +17,17 @@ import org.springframework.stereotype.Component;
  * @author Administrator
  */
 @Component
-public class DetailsTechCardFactory {
+public class DetailsFicheTechFactory {
 
-    public static DetailsTechCard createDetailsTechCardByCode(int code) {
-        DetailsTechCard domaine = new DetailsTechCard();
+    public static DetailsFicheTech createDetailsFicheTechniqueByCode(int code) {
+        DetailsFicheTech domaine = new DetailsFicheTech();
         domaine.setCode(code);
         return domaine;
     }
 
-    public static DetailsTechCardDTO DetailsTechCardToDetailsTechCardDTONew(DetailsTechCard domaine) {
+    public static DetailsFicheTechDTO DetailsFicheTechniqueToDetailsFicheTechniqueDTONew(DetailsFicheTech domaine) {
         if (domaine != null) {
-            DetailsTechCardDTO dto = new DetailsTechCardDTO();
+            DetailsFicheTechDTO dto = new DetailsFicheTechDTO();
             dto.setCode(domaine.getCode());
 
             dto.setUserCreate(domaine.getUserCreate());
@@ -41,8 +41,8 @@ public class DetailsTechCardFactory {
             dto.setCodeArticle(domaine.getCodeArticle());
             dto.setArticleDTO(ArticleFactory.articleToArticleDTO(domaine.getArticle()));
 
-            dto.setCodeTechCard(domaine.getCodeTechCard());
-            dto.setTechCardDTO(TechCardFactory.techCardToTechCardDTO(domaine.getTechCard()));
+            dto.setCodeFicheTechnique(domaine.getCodeFicheTechnique());
+            dto.setFicheTechniqueDTO(FicheTechFactory.ficheTechniqueToFicheTechniqueDTO(domaine.getFicheTechnique()));
 
             dto.setCodeUnite(domaine.getCodeUnite());
             dto.setUniteDTO(UniteFactory.uniteToUniteDTO(domaine.getUnite()));
@@ -56,7 +56,7 @@ public class DetailsTechCardFactory {
         }
     }
 
-    public static DetailsTechCard detailsTechCardDTOToDetailsTechCard(DetailsTechCardDTO dto, DetailsTechCard domaine) {
+    public static DetailsFicheTech detailsFicheTechniqueDTOToDetailsFicheTechnique(DetailsFicheTechDTO dto, DetailsFicheTech domaine) {
         if (dto != null) {
             domaine.setCode(dto.getCode());
             domaine.setConsTotal(dto.getConsTotal());
@@ -67,9 +67,9 @@ public class DetailsTechCardFactory {
             if (domaine.getCodeArticle() != null) {
                 domaine.setArticle(ArticleFactory.createArticleByCode(dto.getCodeArticle()));
             }
-            domaine.setCodeTechCard(dto.getCodeTechCard());
-            if (domaine.getCodeTechCard() != null) {
-                domaine.setTechCard(TechCardFactory.createTechCardByCode(dto.getCodeTechCard()));
+            domaine.setCodeFicheTechnique(dto.getCodeFicheTechnique());
+            if (domaine.getCodeFicheTechnique() != null) {
+                domaine.setFicheTechnique(FicheTechFactory.createFicheTechniqueByCode(dto.getCodeFicheTechnique()));
             }
             domaine.setCodeUnite(dto.getCodeUnite());
             if (domaine.getCodeUnite() != null) {
@@ -88,10 +88,10 @@ public class DetailsTechCardFactory {
 
     }
 
-    public static List<DetailsTechCardDTO> listDetailsTechCardToDetailsADmissionDTOs(List<DetailsTechCard> detailsTechCards) {
-        List<DetailsTechCardDTO> list = new ArrayList<>();
-        for (DetailsTechCard detailsTechCard : detailsTechCards) {
-            list.add(DetailsTechCardToDetailsTechCardDTONew(detailsTechCard));
+    public static List<DetailsFicheTechDTO> listDetailsFicheTechniqueToDetailsADmissionDTOs(List<DetailsFicheTech> detailsFicheTechniques) {
+        List<DetailsFicheTechDTO> list = new ArrayList<>();
+        for (DetailsFicheTech detailsFicheTechnique : detailsFicheTechniques) {
+            list.add(DetailsFicheTechniqueToDetailsFicheTechniqueDTONew(detailsFicheTechnique));
         }
         return list;
     }

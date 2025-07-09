@@ -15,13 +15,13 @@ import java.util.Date;
  *
  * @author Administrator
  */
-public class DetailsTechCardDTO {
+public class DetailsFicheTechDTO {
 
     private Integer code;
 
-    private TechCardDTO techCardDTO;
+    private FicheTechDTO techCardDTO;
 
-    private Integer codeTechCard;
+    private Integer codeFicheTechnique;
 
     private String userCreate;
 
@@ -47,7 +47,7 @@ public class DetailsTechCardDTO {
 
      private Integer codeUniteSecondaire;
 
-    public DetailsTechCardDTO() {
+    public DetailsFicheTechDTO() {
     }
 
     public Integer getCode() {
@@ -58,20 +58,20 @@ public class DetailsTechCardDTO {
         this.code = code;
     }
 
-    public TechCardDTO getTechCardDTO() {
+    public FicheTechDTO getFicheTechniqueDTO() {
         return techCardDTO;
     }
 
-    public void setTechCardDTO(TechCardDTO techCardDTO) {
+    public void setFicheTechniqueDTO(FicheTechDTO techCardDTO) {
         this.techCardDTO = techCardDTO;
     }
 
-    public Integer getCodeTechCard() {
-        return codeTechCard;
+    public Integer getCodeFicheTechnique() {
+        return codeFicheTechnique;
     }
 
-    public void setCodeTechCard(Integer codeTechCard) {
-        this.codeTechCard = codeTechCard;
+    public void setCodeFicheTechnique(Integer codeFicheTechnique) {
+        this.codeFicheTechnique = codeFicheTechnique;
     }
 
     public String getUserCreate() {

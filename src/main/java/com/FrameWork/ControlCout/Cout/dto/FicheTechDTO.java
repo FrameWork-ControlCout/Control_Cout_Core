@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Administrator
  */
-public class TechCardDTO {
+public class FicheTechDTO {
 
     private Integer code;
 
@@ -27,13 +27,13 @@ public class TechCardDTO {
 
     private BigDecimal prixTotal;
     
-    private List<DetailsTechCardDTO> detailsTechCardsCardDTOs;
+    private List<DetailsFicheTechDTO> detailsFicheTechniquesCardDTOs;
 
       private boolean actif;
           private BigDecimal coutUnitaire;
       
       
-    public TechCardDTO() {
+    public FicheTechDTO() {
     }
 
     public Integer getCode() {
@@ -76,12 +76,12 @@ public class TechCardDTO {
         this.prixTotal = prixTotal;
     }
 
-    public List<DetailsTechCardDTO> getDetailsTechCardsCardDTOs() {
-        return detailsTechCardsCardDTOs;
+    public List<DetailsFicheTechDTO> getDetailsFicheTechniquesCardDTOs() {
+        return detailsFicheTechniquesCardDTOs;
     }
 
-    public void setDetailsTechCardsCardDTOs(List<DetailsTechCardDTO> detailsTechCardsCardDTOs) {
-        this.detailsTechCardsCardDTOs = detailsTechCardsCardDTOs;
+    public void setDetailsFicheTechniquesCardDTOs(List<DetailsFicheTechDTO> detailsFicheTechniquesCardDTOs) {
+        this.detailsFicheTechniquesCardDTOs = detailsFicheTechniquesCardDTOs;
     }
 
     public boolean isActif() {

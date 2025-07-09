@@ -36,10 +36,10 @@ import org.hibernate.envers.Audited;
  * @author Administrator
  */
 @Entity
-@Table(name = "Technique_Card", schema = "cout")
+@Table(name = "Fiche_Technique", schema = "cout")
 @Audited
-@AuditTable("Technique_Card_AUD")
-public class TechCard {
+@AuditTable("Fiche_Technique_AUD")
+public class FicheTech {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,9 +71,9 @@ public class TechCard {
       @Column(name = "Cout_Unitaire", nullable = false, columnDefinition = ("decimal(18,3)"))
     private BigDecimal coutUnitaire;
       
-    @OneToMany(mappedBy = "codeTechCard", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
-    @JsonBackReference("listTechCard") // Unique name
-    private List<DetailsTechCard> detailsTechCards;
+    @OneToMany(mappedBy = "codeFicheTechnique", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @JsonBackReference("listFicheTechnique") // Unique name
+    private List<DetailsFicheTech> detailsFicheTechniques;
 
     
         @Column(name = "Actif", nullable = false)
@@ -81,7 +81,7 @@ public class TechCard {
         
         
         
-    public TechCard() {
+    public FicheTech() {
     }
 
     public Integer getCode() {
@@ -124,12 +124,12 @@ public class TechCard {
         this.prixTotal = prixTotal;
     }
 
-    public List<DetailsTechCard> getDetailsTechCards() {
-        return detailsTechCards;
+    public List<DetailsFicheTech> getDetailsFicheTechniques() {
+        return detailsFicheTechniques;
     }
 
-    public void setDetailsTechCards(List<DetailsTechCard> detailsTechCards) {
-        this.detailsTechCards = detailsTechCards;
+    public void setDetailsFicheTechniques(List<DetailsFicheTech> detailsFicheTechniques) {
+        this.detailsFicheTechniques = detailsFicheTechniques;
     }
 
     public boolean isActif() {

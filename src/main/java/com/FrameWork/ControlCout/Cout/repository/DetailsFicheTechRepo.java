@@ -4,7 +4,7 @@
  */
 package com.FrameWork.ControlCout.Cout.repository;
 
-import com.FrameWork.ControlCout.Cout.domaine.DetailsTechCard;
+import com.FrameWork.ControlCout.Cout.domaine.DetailsFicheTech;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -14,10 +14,10 @@ import org.springframework.stereotype.Repository;
  * @author Administrator
  */
 @Repository
-public interface DetailsTechCardRepo extends JpaRepository<DetailsTechCard, Integer>{
-    List<DetailsTechCard> findByCodeTechCard (Integer codeTechCard);
-    public void deleteByCodeTechCard(Integer codeTechCard);
+public interface DetailsFicheTechRepo extends JpaRepository<DetailsFicheTech, Integer>{
+    List<DetailsFicheTech> findByCodeFicheTechnique (Integer codeFicheTechnique);
+    public void deleteByCodeFicheTechnique(Integer codeFicheTechnique);
     
-   DetailsTechCard findByCode (Integer code);
+   DetailsFicheTech findByCode (Integer code);
     
 }

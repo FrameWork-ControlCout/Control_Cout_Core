@@ -36,10 +36,10 @@ import org.hibernate.envers.Audited;
  * @author Administrator
  */
 @Entity
-@Table(name = "Details_Technique_Card", schema = "cout")
+@Table(name = "Details_Fiche_Technique", schema = "cout")
 @Audited
-@AuditTable("Details_Technique_Card_AUD")
-public class DetailsTechCard {
+@AuditTable("Details_Fiche_Technique_AUD")
+public class DetailsFicheTech {
 
      @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,13 +47,13 @@ public class DetailsTechCard {
     private Integer code;
 
      
-      @JoinColumn(name = "Code_Tech_Card", referencedColumnName = "Code", nullable = false)
+      @JoinColumn(name = "Code_Fiche_technique", referencedColumnName = "Code", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JsonBackReference
-    private TechCard techCard;
+    private FicheTech ficheTechnique;
 
-    @Column(name = "Code_Tech_Card", updatable = false, insertable = false, nullable = false)
-    private Integer codeTechCard;
+    @Column(name = "Code_Fiche_technique", updatable = false, insertable = false, nullable = false)
+    private Integer codeFicheTechnique;
     
    
     @NotNull
@@ -105,7 +105,7 @@ public class DetailsTechCard {
  
  
     
-    public DetailsTechCard() {
+    public DetailsFicheTech() {
     }
 
     public Integer getCode() {
@@ -116,20 +116,20 @@ public class DetailsTechCard {
         this.code = code;
     }
 
-    public TechCard getTechCard() {
-        return techCard;
+    public FicheTech getFicheTechnique() {
+        return ficheTechnique;
     }
 
-    public void setTechCard(TechCard techCard) {
-        this.techCard = techCard;
+    public void setFicheTechnique(FicheTech ficheTechnique) {
+        this.ficheTechnique = ficheTechnique;
     }
 
-    public Integer getCodeTechCard() {
-        return codeTechCard;
+    public Integer getCodeFicheTechnique() {
+        return codeFicheTechnique;
     }
 
-    public void setCodeTechCard(Integer codeTechCard) {
-        this.codeTechCard = codeTechCard;
+    public void setCodeFicheTechnique(Integer codeFicheTechnique) {
+        this.codeFicheTechnique = codeFicheTechnique;
     }
 
     public String getUserCreate() {

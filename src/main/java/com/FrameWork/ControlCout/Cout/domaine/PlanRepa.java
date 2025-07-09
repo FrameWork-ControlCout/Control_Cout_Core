@@ -75,10 +75,10 @@ public class PlanRepa {
     @JoinColumn(name = "Code_Repa", referencedColumnName = "Code", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JsonBackReference
-    private TechCard techCard;
+    private FicheTech techCard;
 
     @Column(name = "Code_Repa", updatable = false, insertable = false, nullable = false)
-    private Integer codeTechCard;
+    private Integer codeFicheTechnique;
 
     public PlanRepa() {
     }
@@ -131,20 +131,20 @@ public class PlanRepa {
         this.codeTypeRepa = codeTypeRepa;
     }
 
-    public TechCard getTechCard() {
+    public FicheTech getFicheTechnique() {
         return techCard;
     }
 
-    public void setTechCard(TechCard techCard) {
+    public void setFicheTechnique(FicheTech techCard) {
         this.techCard = techCard;
     }
 
-    public Integer getCodeTechCard() {
-        return codeTechCard;
+    public Integer getCodeFicheTechnique() {
+        return codeFicheTechnique;
     }
 
-    public void setCodeTechCard(Integer codeTechCard) {
-        this.codeTechCard = codeTechCard;
+    public void setCodeFicheTechnique(Integer codeFicheTechnique) {
+        this.codeFicheTechnique = codeFicheTechnique;
     }
 
 }

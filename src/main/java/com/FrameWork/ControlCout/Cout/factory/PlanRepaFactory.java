@@ -30,11 +30,11 @@ public class PlanRepaFactory {
             domaine.setCode(dto.getCode());
             domaine.setDatePlan(dto.getDatePlan());
 
-            domaine.setCodeTechCard(dto.getCodeTechCard());
-            if (domaine.getCodeTechCard() != null) {
-                domaine.setTechCard(TechCardFactory.createTechCardByCode(dto.getCodeTechCard()));
+            domaine.setCodeFicheTechnique(dto.getCodeFicheTechnique());
+            if (domaine.getCodeFicheTechnique() != null) {
+                domaine.setFicheTechnique(FicheTechFactory.createFicheTechniqueByCode(dto.getCodeFicheTechnique()));
             }
-            
+
             domaine.setCodeTypeRepa(dto.getCodeTypeRepa());
             if (domaine.getCodeTypeRepa() != null) {
                 domaine.setTypeRepa(TypeRepaFactory.createTypeRepaByCode(dto.getCodeTypeRepa()));
@@ -49,16 +49,17 @@ public class PlanRepaFactory {
 
         if (domaine != null) {
             PlanRepaDTO dto = new PlanRepaDTO();
-            dto.setCode(domaine.getCode());
+            dto.setCode(domaine.getCode()); 
             dto.setDatePlan(domaine.getDatePlan());
             dto.setDateCreate(domaine.getDateCreate());
             dto.setUserCreate(domaine.getUserCreate());
 
-            dto.setCodeTechCard(domaine.getCodeTechCard());
-            dto.setTechCardDTO(TechCardFactory.techCardToTechCardDTO(domaine.getTechCard()));
+            dto.setCodeFicheTechnique(domaine.getCodeFicheTechnique());
+            dto.setFicheTechniqueDTO(FicheTechFactory.ficheTechniqueToFicheTechniqueDTO(domaine.getFicheTechnique()));
 
-                dto.setCodeTypeRepa(domaine.getCodeTypeRepa());
+            dto.setCodeTypeRepa(domaine.getCodeTypeRepa());
             dto.setTypeRepaDTO(TypeRepaFactory.typeRepaToTypeRepaDTO(domaine.getTypeRepa()));
+            
 
             return dto;
         } else {
