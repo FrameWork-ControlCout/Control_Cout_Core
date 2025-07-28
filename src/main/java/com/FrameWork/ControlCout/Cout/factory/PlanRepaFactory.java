@@ -6,6 +6,7 @@ package com.FrameWork.ControlCout.Cout.factory;
 
 import com.FrameWork.ControlCout.Cout.domaine.PlanRepa;
 import com.FrameWork.ControlCout.Cout.dto.PlanRepaDTO;
+import com.FrameWork.ControlCout.Parametrage.factory.SocieteFactory;
 import com.FrameWork.ControlCout.Parametrage.factory.TypeRepaFactory;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,15 +30,22 @@ public class PlanRepaFactory {
         if (dto != null) {
             domaine.setCode(dto.getCode());
             domaine.setDatePlan(dto.getDatePlan());
+            domaine.setTraiter(dto.isTraiter());
+            domaine.setNbrePerson(dto.getNbrePerson());
 
             domaine.setCodeFicheTechnique(dto.getCodeFicheTechnique());
             if (domaine.getCodeFicheTechnique() != null) {
-                domaine.setFicheTechnique(FicheTechFactory.createFicheTechniqueByCode(dto.getCodeFicheTechnique()));
+                domaine.setFicheTech(FicheTechFactory.createFicheTechniqueByCode(dto.getCodeFicheTechnique()));
             }
 
             domaine.setCodeTypeRepa(dto.getCodeTypeRepa());
             if (domaine.getCodeTypeRepa() != null) {
                 domaine.setTypeRepa(TypeRepaFactory.createTypeRepaByCode(dto.getCodeTypeRepa()));
+            }
+
+            domaine.setCodeSociete(dto.getCodeSociete());
+            if (domaine.getCodeSociete() != null) {
+                domaine.setSociete(SocieteFactory.createSocieteByCode(dto.getCodeSociete()));
             }
             return domaine;
         } else {
@@ -49,17 +57,21 @@ public class PlanRepaFactory {
 
         if (domaine != null) {
             PlanRepaDTO dto = new PlanRepaDTO();
-            dto.setCode(domaine.getCode()); 
+            dto.setCode(domaine.getCode());
             dto.setDatePlan(domaine.getDatePlan());
             dto.setDateCreate(domaine.getDateCreate());
             dto.setUserCreate(domaine.getUserCreate());
+            dto.setTraiter(domaine.isTraiter());
+
+            dto.setNbrePerson(domaine.getNbrePerson());
 
             dto.setCodeFicheTechnique(domaine.getCodeFicheTechnique());
-            dto.setFicheTechniqueDTO(FicheTechFactory.ficheTechniqueToFicheTechniqueDTO(domaine.getFicheTechnique()));
+            dto.setFicheTechDTO(FicheTechFactory.ficheTechniqueToFicheTechniqueDTO(domaine.getFicheTech()));
 
             dto.setCodeTypeRepa(domaine.getCodeTypeRepa());
             dto.setTypeRepaDTO(TypeRepaFactory.typeRepaToTypeRepaDTO(domaine.getTypeRepa()));
-            
+            dto.setCodeSociete(domaine.getCodeSociete());
+            dto.setSocieteDTO(SocieteFactory.societeToSocieteDTO(domaine.getSociete()));
 
             return dto;
         } else {

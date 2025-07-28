@@ -8,7 +8,7 @@ import com.FrameWork.ControlCout.Achat.domaine.FactureAchat;
 import com.FrameWork.ControlCout.Achat.dto.FactureAchatDTO;
 import com.FrameWork.ControlCout.Parametrage.factory.CostProfitCentreFactory;
 import com.FrameWork.ControlCout.Parametrage.factory.DeviseFactory;
-import com.FrameWork.ControlCout.Parametrage.factory.EtatFactureFactory;
+import com.FrameWork.ControlCout.Parametrage.factory.EtatFactory;
 import com.FrameWork.ControlCout.Parametrage.factory.FournisseurFactory;
 import com.FrameWork.ControlCout.Parametrage.factory.ModeReglementFactory;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class FactureAchatFactory {
 
             domaine.setCodeEtatFacture(dto.getCodeEtatFacture());
             if (domaine.getCodeEtatFacture() != null) {
-                domaine.setEtatFacture(EtatFactureFactory.createEtatFactureByCode(dto.getCodeEtatFacture()));
+                domaine.setEtatFacture(EtatFactory.createEtatFactureByCode(dto.getCodeEtatFacture()));
             }
             domaine.setCodeFournisseur(dto.getCodeFournisseur());
             if (domaine.getCodeFournisseur() != null) {
@@ -96,7 +96,7 @@ public class FactureAchatFactory {
             dto.setCostProfitCentreDTO(CostProfitCentreFactory.costProfitCentreToCostProfitCentreDTOLazy(domaine.getCostProfitCentre()));
             dto.setCodeCodeProfitCentre(domaine.getCodeCodeProfitCentre());
 
-            dto.setEtatFactureDTO(EtatFactureFactory.etatFactureToEtatFactureDTO(domaine.getEtatFacture()));
+            dto.setEtatFactureDTO(EtatFactory.etatFactureToEtatFactureDTO(domaine.getEtatFacture()));
             dto.setCodeEtatFacture(domaine.getCodeEtatFacture());
 
             dto.setModeReglementDTO(ModeReglementFactory.modeReglementToModeReglementDTO(domaine.getModeReglement()));

@@ -102,7 +102,7 @@ public class DetailsFicheTechService {
 
     public DetailsFicheTechDTO update(DetailsFicheTechDTO dto) {
         DetailsFicheTech domaine = detailsFicheTechniqueRepo.findByCode(dto.getCode());
-        Preconditions.checkArgument(domaine != null, "error.AlimentationCaisseNotFound");
+        Preconditions.checkArgument(domaine != null, "error.DetailsFicheTechniqueNotFound");
         domaine = DetailsFicheTechFactory.detailsFicheTechniqueDTOToDetailsFicheTechnique(dto, domaine);
         domaine = detailsFicheTechniqueRepo.save(domaine);
         DetailsFicheTechDTO resultDTO = DetailsFicheTechFactory.DetailsFicheTechniqueToDetailsFicheTechniqueDTONew(domaine);

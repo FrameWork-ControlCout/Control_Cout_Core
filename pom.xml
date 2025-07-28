@@ -59,12 +59,13 @@
             <version>2.8.10</version>
             <type>jar</type>
         </dependency>
-        <dependency>
+        
+        <!--        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>6.0</version>
             <type>jar</type>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
@@ -213,12 +214,12 @@
             <type>jar</type>
         </dependency>
          
-        <dependency>
+        <!--        <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>persistence-api</artifactId>
             <version>1.0</version>
             <type>jar</type>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
@@ -253,6 +254,181 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency> 
+        
+        
+        <!--///crystal report--> 
+        
+        <dependency>
+            <groupId>com.sap.crystalReports</groupId>
+            <artifactId>CrystalReportRuntime</artifactId>
+            <version>1.0.0-RT</version>
+            <classifier>RT</classifier>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>logging</groupId>
+                    <artifactId>logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.sap.crystalReports</groupId>
+            <artifactId>webreporting</artifactId>
+            <version>1.0.0-RT</version>
+            <classifier>RT</classifier>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>logging</groupId>
+                    <artifactId>logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.sap.crystalReports</groupId>
+            <artifactId>CrystalCommon2</artifactId>
+            <version>1.0.0-RT</version>
+            <classifier>RT</classifier>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>logging</groupId>
+                    <artifactId>logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency> 
+        <dependency>
+            <groupId>DatabaseConnectors</groupId>
+            <artifactId>DatabaseConnectors</artifactId>
+            <version>1.5.0-RT</version>
+            <classifier>RT</classifier>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>logging</groupId>
+                    <artifactId>logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency> 
+        <dependency>
+            <groupId>JDBInterface</groupId>
+            <artifactId>JDBInterface</artifactId>
+            <version>1.5.0-RT</version>
+            <classifier>RT</classifier>
+        </dependency>
+        
+        <dependency>
+            <groupId>logging</groupId>
+            <artifactId>logging</artifactId>
+            <version>1.4.2-RT</version>
+            <classifier>RT</classifier>
+        </dependency>
+        <dependency>
+            <groupId>keycodeDecoder</groupId>
+            <artifactId>keycodeDecoder</artifactId>
+            <version>1.5.0-RT</version>
+            <classifier>RT</classifier>
+        </dependency>
+        <dependency>
+            <groupId>icu4j</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>4.2.1-RT</version>
+            <classifier>RT</classifier>
+        </dependency>
+        
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.10</version> <!-- Or newer version if available -->
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>logging</groupId>
+                    <artifactId>logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>logging</groupId>
+                    <artifactId>logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>logging</groupId>
+                    <artifactId>logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!--        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.2</version>
+        </dependency>-->
+        <!--//// fin crystal report--> 
      
     </dependencies>
 
@@ -265,4 +441,12 @@
         </plugins>
     </build>
 
+    
+    
+    <repositories>
+        <repository>
+            <id>thirdparty</id>
+            <url>file:///C:/maven-repo</url>
+        </repository>
+    </repositories>
 </project>

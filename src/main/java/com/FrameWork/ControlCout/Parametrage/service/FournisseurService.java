@@ -12,8 +12,7 @@ import com.FrameWork.ControlCout.web.Util.Helper;
 import com.google.common.base.Preconditions;
 import java.util.Date;
 import java.util.List;
-import org.springframework.data.domain.Sort;
-import static org.springframework.data.redis.serializer.RedisSerializationContext.java;
+import org.springframework.data.domain.Sort; 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.FrameWork.ControlCout.Parametrage.repository.FournisseurRepo;
@@ -53,6 +52,11 @@ public class FournisseurService {
 
     }
  
+    @Transactional(readOnly = true)
+    public List<FournisseurDTO> findAllFournisseurByActifAndGros(Boolean actif,Boolean gros) {
+        return FournisseurFactory.listFournisseurToFournisseurDTOs(fournisseurRepo.findByActifAndGros(actif,gros));
+
+    }
 
     public FournisseurDTO save(FournisseurDTO dto) {
         Fournisseur domaine = FournisseurFactory.fournisseurDTOToFournisseur(dto, new Fournisseur());

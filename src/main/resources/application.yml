@@ -107,7 +107,7 @@ server:
  
 environnement : local 
   
-  
+ 
   
 IpServer: http://localhost:6060
 

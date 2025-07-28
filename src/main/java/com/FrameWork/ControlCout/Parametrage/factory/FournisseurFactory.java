@@ -32,6 +32,8 @@ public class FournisseurFactory {
             domaine.setActif(dto.isActif());
             domaine.setAdress(dto.getAdress());
             domaine.setNumTel(dto.getNumTel());
+            
+            domaine.setGros(dto.isGros());
 
             return domaine;
         } else {
@@ -51,7 +53,9 @@ public class FournisseurFactory {
             dto.setDateCreate(domaine.getDateCreate());
             dto.setUserCreate(domaine.getUserCreate());
             dto.setAdress(domaine.getAdress());
-            dto.setNumTel(domaine.getNumTel());
+            dto.setNumTel(domaine.getNumTel()); 
+            dto.setGros(domaine.isGros());
+
 
             return dto;
         } else {

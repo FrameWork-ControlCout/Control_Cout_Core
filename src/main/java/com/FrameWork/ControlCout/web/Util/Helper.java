@@ -191,9 +191,9 @@ public class Helper {
                     }
                 }
             } catch (IllegalArgumentException ex) {
-                java.util.logging.Logger.getLogger(Helper.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(Helper.class.getName()).log(Level.WARNING, null, ex);
             } catch (IllegalAccessException ex) {
-                java.util.logging.Logger.getLogger(Helper.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(Helper.class.getName()).log(Level.WARNING, null, ex);
             }
         });
         return whatChange;

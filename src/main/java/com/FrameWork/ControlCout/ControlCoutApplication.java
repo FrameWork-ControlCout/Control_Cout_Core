@@ -23,16 +23,13 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import java.net.*;
 import java.io.*;
 
-
 @SpringBootApplication
 @EnableAutoConfiguration
 @EnableJpaAuditing
 public class ControlCoutApplication {
 
-@Value("${IpServer}")
+    @Value("${IpServer}")
     private String appIpServer;
-    
-  
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -41,10 +38,11 @@ public class ControlCoutApplication {
     public static String jwtSecret = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJleUpoYkdjaU9pSklVekkxTmlKOS5leUp6ZFdJaU9pSnpiM1ZtYVdWdUlpd2lhV0YwSWpveE56UXlNRGN6TkRNekxDSmxlSEFpT2pFM05ESXdOemN3TXpOOS5JNUlMMlZoZkNFbGhDeDVnZlNXa1ZZV3EtYVNldlo2Zy1zdVNiSGlLd3UwIiwiaWF0IjoxNzQyMDczNDMzLCJleHAiOjE3NDIwNzcwMzN9.Ngo_oiUp68rJ_-345Ex6hamxZrP5a_CFWXFYki4jDBk";
 
     public static void main(String[] args) throws UnknownHostException, InterruptedException {
-        
-   
-        
-//ConfigurableApplicationContext context = SpringApplication.run(MedLiteCoreApplication.class, args);
+
+        System.setProperty("java.awt.headless", "true");   
+        System.setProperty("PDFFontEmbedding", "false");
+
+
         SpringApplication app = new SpringApplication(ControlCoutApplication.class);
         ConfigurableApplicationContext ctx = app.run(args);
         Environment env = ctx.getEnvironment();
@@ -73,8 +71,7 @@ public class ControlCoutApplication {
                 env.getProperty("server.port"),
                 env.getProperty("server.contextPath"),
                 env.getActiveProfiles());
-        
-         
+
     }
 
     @Bean
@@ -86,7 +83,7 @@ public class ControlCoutApplication {
     public CorsFilter corsFilter() {
         CorsConfiguration crosConfiguration = new CorsConfiguration();
         crosConfiguration.setAllowCredentials(true);
-        crosConfiguration.setAllowedOrigins(Arrays.asList(  "http://localhost:8086", appIpServer));
+        crosConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8086", appIpServer));
         crosConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type", "Accept", "Authorization", "Origin, Accept", "X-Requested-With", "Access-Control-Request-Method", "Access-Control-Request-Headers", "cache-control", "")); // Added cache-control
         crosConfiguration.setExposedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
         crosConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));

@@ -14,10 +14,12 @@ import org.springframework.stereotype.Repository;
  * @author Administrator
  */
 @Repository
-public interface FournisseurRepo extends JpaRepository<Fournisseur, Integer>{
-        Fournisseur findByCode(Integer code);
-        
+public interface FournisseurRepo extends JpaRepository<Fournisseur, Integer> {
+
+    Fournisseur findByCode(Integer code);
+
     List<Fournisseur> findByActif(Boolean actif);
-     
+
+    List<Fournisseur> findByActifAndGros(Boolean actif, Boolean gros);
 
 }

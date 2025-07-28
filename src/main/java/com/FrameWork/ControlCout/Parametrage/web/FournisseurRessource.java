@@ -54,7 +54,11 @@ public class FournisseurRessource {
     public ResponseEntity<List<FournisseurDTO>> getFournisseurByActif(@RequestParam Boolean actif) {
         return ResponseEntity.ok().body(fournisseurService.findAllFournisseurByActif(actif));
     }
-    
+      
+   @GetMapping("fournisseur/findByActifAndGros")
+    public ResponseEntity<List<FournisseurDTO>> getFournisseurByActifAndGros(@RequestParam Boolean actif,@RequestParam Boolean gros) {
+        return ResponseEntity.ok().body(fournisseurService.findAllFournisseurByActifAndGros(actif,gros));
+    }
   
     @PostMapping("fournisseur")
     public ResponseEntity<FournisseurDTO> postFournisseur(@Valid @RequestBody FournisseurDTO dto, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {

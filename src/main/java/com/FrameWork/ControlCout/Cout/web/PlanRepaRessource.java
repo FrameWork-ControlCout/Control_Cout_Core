@@ -36,51 +36,67 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/cout/")
 public class PlanRepaRessource {
 
-    private final PlanRepaService factureAchatService;
+    private final PlanRepaService planRepaService;
 
-    public PlanRepaRessource(PlanRepaService factureAchatService) {
-        this.factureAchatService = factureAchatService;
+    public PlanRepaRessource(PlanRepaService planRepaService) {
+        this.planRepaService = planRepaService;
     }
 
     @GetMapping("plan_repa/{code}")
     public ResponseEntity<PlanRepaDTO> getPlanRepaByCode(@PathVariable Integer code) {
-        PlanRepaDTO dTO = factureAchatService.findOne(code);
+        PlanRepaDTO dTO = planRepaService.findOne(code);
         return ResponseEntity.ok().body(dTO);
     }
 
     @GetMapping("plan_repa/all")
     public ResponseEntity<List<PlanRepaDTO>> getAllPlanRepa() {
-        return ResponseEntity.ok().body(factureAchatService.findAllPlanRepa());
+        return ResponseEntity.ok().body(planRepaService.findAllPlanRepa());
     }
 
-//    @GetMapping("plan_repa/findByDatePlan")
-//    public ResponseEntity<List<PlanRepaDTO>> getAllPlanRepaByDatePlan(@RequestParam Date datePlan) {
-//        return ResponseEntity.ok().body(factureAchatService.findAllPlanRepaByDatePlan(datePlan));
-//    }
-    @GetMapping("/plan_repa/findByDateRange")
+    @GetMapping("/plan_repa/findByDateRangeAndCodeSociete")
     public ResponseEntity<List<PlanRepaDTO>> findByDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate ,
+            @RequestParam List<Integer> codeSociete) {
 
-        List<PlanRepaDTO> results = factureAchatService.findAllPlanRepaByDateRange(startDate, endDate);
+        List<PlanRepaDTO> results = planRepaService.findAllPlanRepaByDateRange(startDate, endDate,codeSociete);
+        return ResponseEntity.ok(results);
+    }
+    @GetMapping("/plan_repa/findByDateRangeAndCodeSocieteAndTraiter")
+    public ResponseEntity<List<PlanRepaDTO>> findByDateRange(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate ,
+            @RequestParam Integer codeSociete , @RequestParam Boolean traiter) {
+
+        List<PlanRepaDTO> results = planRepaService.findAllPlanRepaByDateRangeAndTraiter(startDate, endDate,codeSociete,traiter);
         return ResponseEntity.ok(results);
     }
 
-    @PostMapping("plan_repa")
-    public ResponseEntity<PlanRepaDTO> postPlanRepa(@Valid @RequestBody PlanRepaDTO dTO, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {
-        PlanRepaDTO result = factureAchatService.save(dTO);
-        return ResponseEntity.created(new URI("/api/cout/" + result.getCode())).body(result);
+//    @PostMapping("plan_repa")
+//    public ResponseEntity<PlanRepaDTO> postPlanRepa(@Valid @RequestBody PlanRepaDTO dTO, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {
+//        PlanRepaDTO result = planRepaService.save(dTO);
+//        return ResponseEntity.created(new URI("/api/cout/" + result.getCode())).body(result);
+//    }
+    
+     // <-- ADD THIS NEW BULK ENDPOINT -->
+    @PostMapping("plan_repa/batch")
+    public ResponseEntity<List<PlanRepaDTO>> postPlanRepaBatch(@Valid @RequestBody List<PlanRepaDTO> dtos) {
+        if (dtos == null || dtos.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        List<PlanRepaDTO> result = planRepaService.saveBatch(dtos);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @PutMapping("plan_repa/update")
     public ResponseEntity<PlanRepaDTO> updatePlanRepa(@Valid @RequestBody PlanRepaDTO dTO, BindingResult bindingResult) throws MethodArgumentNotValidException {
-        PlanRepaDTO result = factureAchatService.update(dTO);
+        PlanRepaDTO result = planRepaService.update(dTO);
         return ResponseEntity.ok().body(result);
     }
 
     @DeleteMapping("plan_repa/delete/{Code}")
     public ResponseEntity<PlanRepa> deletePlanRepa(@PathVariable("Code") Integer code) {
-        factureAchatService.deletePlanRepa(code);
+        planRepaService.deletePlanRepa(code);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

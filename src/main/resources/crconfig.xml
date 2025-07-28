@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CrystalReports>
+    <ReportEngine>
+        <!-- This is the most important setting. -->
+        <Verbosity>None</Verbosity>
+    </ReportEngine>
+    <ExternalFunctionLibraryClassNames/>
+	<JavaReportingComponent>
+		<CRLogonLevel>100</CRLogonLevel>
+	</JavaReportingComponent>
+</CrystalReports>

@@ -6,8 +6,12 @@ package com.FrameWork.ControlCout.Parametrage.factory;
 
 import com.FrameWork.ControlCout.Parametrage.domaine.Article;
 import com.FrameWork.ControlCout.Parametrage.dto.ArticleDTO;
+import com.FrameWork.ControlCout.Parametrage.dto.ArticleEdition;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -34,6 +38,7 @@ public class ArticleFactory {
             domaine.setPackages(dto.getPackages());
             domaine.setLastPrixAchat(dto.getLastPrixAchat());
             domaine.setConversionRate(dto.getConversionRate());
+            domaine.setLastPrixGros(dto.getLastPrixGros());
 
             domaine.setCodeFamille(dto.getCodeFamille());
             if (domaine.getCodeFamille() != null) {
@@ -92,6 +97,7 @@ public class ArticleFactory {
             dto.setCodeUniteDepense(domaine.getCodeUniteDepense());
 
             dto.setType(domaine.getType());
+            dto.setLastPrixGros(domaine.getLastPrixGros());
 
             dto.setPackages(domaine.getPackages());
             dto.setLastPrixAchat(domaine.getLastPrixAchat());
@@ -110,6 +116,32 @@ public class ArticleFactory {
         List<ArticleDTO> list = new ArrayList<>();
         for (Article article : articles) {
             list.add(articleToArticleDTO(article));
+        }
+        return list;
+    }
+
+    public static ArticleEdition articleTOArticleIntervenant(Article domaine) {
+        if (domaine == null) {
+            return null;
+        }
+
+        ArticleEdition domaineEdition = new ArticleEdition();
+  
+        domaineEdition.setCodeSaisie(domaine.getCodeSaisie());
+        domaineEdition.setDesignationAr(domaine.getDesignationAr());
+        domaineEdition.setDesignationArUnite(domaine.getUnite().getDesignationAr());
+        domaineEdition.setPackages(domaine.getPackages());
+
+        return domaineEdition;
+    }
+
+    public static Collection<ArticleEdition> listArticleTOEditionArticle(List<Article> articles) {
+        if (articles == null) {
+            return null;
+        }
+        List<ArticleEdition> list = new ArrayList<>();
+        for (Article article : articles) {
+            list.add(articleTOArticleIntervenant(article));
         }
         return list;
     }

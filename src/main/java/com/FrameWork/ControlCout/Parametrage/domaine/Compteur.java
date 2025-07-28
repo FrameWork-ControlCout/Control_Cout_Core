@@ -24,7 +24,7 @@ public class Compteur {
     @Column(name = "Code")
     private Integer code;
 
-    @Column(name = "Prefixe", columnDefinition = ("varchar(3)"))
+    @Column(name = "Prefixe", columnDefinition = ("varchar(5)"))
     private String prefixe;
 
     @Column(name = "Suffixe", columnDefinition = ("varchar(10)"))

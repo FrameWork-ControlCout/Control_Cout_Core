@@ -96,13 +96,13 @@ public class JwtService {
     public boolean isTokenValid(String token, UserDetails userDetails) {
         try {
             final String username = extractUsername(token); // Your extractUsername method
-            log.debug("Extracted username from token: " + username);
+//            log.debug("Extracted username from token: " + username);
 
             boolean isUsernameMatch = username.equals(userDetails.getUsername());
-            log.debug("Username match: " + isUsernameMatch);
+//            log.debug("Username match: " + isUsernameMatch);
 
             boolean isTokenExpired = isTokenExpired(token); // Your isTokenExpired method
-            log.debug("Token expired: " + isTokenExpired);
+//            log.debug("Token expired: " + isTokenExpired);
 
             // ... any other validation checks you might have (e.g., checking claims)
             return isUsernameMatch && !isTokenExpired /* && other conditions */;

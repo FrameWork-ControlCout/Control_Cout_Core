@@ -10,11 +10,14 @@ import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.Date;
+import lombok.*;
 
 /**
  *
  * @author Administrator
  */
+@Getter
+@Setter
 public class FournisseurDTO {
 
     private Integer code;
@@ -35,79 +38,8 @@ public class FournisseurDTO {
        
   private String numTel;
   
+      private boolean gros;
     public FournisseurDTO() {
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public String getCodeSaisie() {
-        return codeSaisie;
-    }
-
-    public void setCodeSaisie(String codeSaisie) {
-        this.codeSaisie = codeSaisie;
-    }
-
-    public String getDesignationAr() {
-        return designationAr;
-    }
-
-    public void setDesignationAr(String designationAr) {
-        this.designationAr = designationAr;
-    }
-
-    public String getDesignationLt() {
-        return designationLt;
-    }
-
-    public void setDesignationLt(String designationLt) {
-        this.designationLt = designationLt;
-    }
-
-    public boolean isActif() {
-        return actif;
-    }
-
-    public void setActif(boolean actif) {
-        this.actif = actif;
-    }
-
-    public String getUserCreate() {
-        return userCreate;
-    }
-
-    public void setUserCreate(String userCreate) {
-        this.userCreate = userCreate;
-    }
-
-    public Date getDateCreate() {
-        return dateCreate;
-    }
-
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-    public String getAdress() {
-        return adress;
-    }
-
-    public void setAdress(String adress) {
-        this.adress = adress;
-    }
-
-    public String getNumTel() {
-        return numTel;
-    }
-
-    public void setNumTel(String numTel) {
-        this.numTel = numTel;
     }
  
     

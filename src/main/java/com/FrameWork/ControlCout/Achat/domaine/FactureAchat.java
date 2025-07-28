@@ -61,7 +61,7 @@ public class FactureAchat {
     @JoinColumn(name = "Etat_Facture", referencedColumnName = "Code", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JsonBackReference
-    private EtatFacture etatFacture;
+    private Etat etatFacture;
 
     @Column(name = "Etat_Facture", updatable = false, insertable = false, nullable = false)
     private Integer codeEtatFacture;
@@ -167,11 +167,11 @@ public class FactureAchat {
         this.dateCreate = dateCreate;
     }
 
-    public EtatFacture getEtatFacture() {
+    public Etat getEtatFacture() {
         return etatFacture;
     }
 
-    public void setEtatFacture(EtatFacture etatFacture) {
+    public void setEtatFacture(Etat etatFacture) {
         this.etatFacture = etatFacture;
     }
 

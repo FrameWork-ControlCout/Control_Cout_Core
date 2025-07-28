@@ -10,7 +10,7 @@ import com.FrameWork.ControlCout.Parametrage.domaine.ModeReglement;
 import com.FrameWork.ControlCout.Parametrage.dto.BanqueDTO;
 import com.FrameWork.ControlCout.Parametrage.dto.CostProfitCentreDTO;
 import com.FrameWork.ControlCout.Parametrage.dto.DeviseDTO;
-import com.FrameWork.ControlCout.Parametrage.dto.EtatFactureDTO;
+import com.FrameWork.ControlCout.Parametrage.dto.EtatDTO;
 import com.FrameWork.ControlCout.Parametrage.dto.FournisseurDTO;
 import com.FrameWork.ControlCout.Parametrage.dto.ModeReglementDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -40,7 +40,7 @@ public class FactureAchatDTO {
 
     private Date dateCreate;
 
-    private EtatFactureDTO etatFactureDTO;
+    private EtatDTO etatFactureDTO;
 
     private Integer codeEtatFacture;
 
@@ -172,11 +172,11 @@ public class FactureAchatDTO {
         this.montantTTC = montantTTC;
     }
 
-    public EtatFactureDTO getEtatFactureDTO() {
+    public EtatDTO getEtatFactureDTO() {
         return etatFactureDTO;
     }
 
-    public void setEtatFactureDTO(EtatFactureDTO etatFactureDTO) {
+    public void setEtatFactureDTO(EtatDTO etatFactureDTO) {
         this.etatFactureDTO = etatFactureDTO;
     }
 

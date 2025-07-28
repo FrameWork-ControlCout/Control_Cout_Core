@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns="http://ch.qos.logback/xml/ns/logback"
+               scan="true">
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    
+    <springProfile name="dev">
+        <!-- Crystal Reports/BusinessObjects logging suppression -->
+        <logger name="com.crystaldecisions" level="OFF" additivity="false"/>
+        <logger name="com.businessobjects" level="OFF" additivity="false"/>
+        <logger name="c.c" level="OFF" additivity="false"/>
+        <logger name="c.b" level="OFF" additivity="false"/>
+        
+        <!-- Specific Crystal Reports packages -->
+        <logger name="c.c.reports" level="OFF" additivity="false"/>
+        <logger name="c.crystaldecisions" level="OFF" additivity="false"/>
+        <logger name="com.businessobjects.reports" level="OFF" additivity="false"/>
+        
+        <!-- Additional logging libraries -->
+        <logger name="icu4j" level="OFF"/>
+        <logger name="logging" level="OFF"/>
+        <logger name="commons-logging" level="OFF"/>
+        
+        <!-- Your application logging -->
+        <logger name="com.FrameWork.ControlCout" level="DEBUG"/>
+        
+        <!-- Third-party logging -->
+        <logger name="org.apache" level="WARN"/>
+        <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
+        <logger name="org.bson" level="WARN"/>
+        <logger name="org.hibernate" level="OFF"/>
+        <logger name="org.springframework" level="OFF"/>
+        <logger name="sun.net" level="OFF"/>
+        
+        <!-- Specific loggers you might want to keep -->
+        <logger name="org.hibernate.type.descriptor.sql" level="TRACE"/>
+        
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="prod">
+        <logger name="com.FrameWork.ControlCout.ControlCoutApplication" level="INFO"/> 
+        <root level="ERROR">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+</configuration>

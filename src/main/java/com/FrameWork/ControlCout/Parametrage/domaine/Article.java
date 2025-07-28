@@ -20,6 +20,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Date;
+import lombok.*;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
@@ -31,6 +32,8 @@ import org.hibernate.envers.Audited;
 @Table(name = "Article", schema = "param_achat")
 @Audited
 @AuditTable("Article_AUD")
+@Getter
+@Setter
 public class Article {
 
     @Id
@@ -105,169 +108,19 @@ public class Article {
 
     @Column(name = "Code_Unite_Depense", updatable = false, insertable = false, nullable = false)
     private Integer codeUniteDepense;
-    @Column(name = "Conversion_Rate", nullable = false, length = 255, columnDefinition = "int")
-    private Integer conversionRate;
+    @Column(name = "Conversion_Rate", nullable = false, length = 255, columnDefinition = "decimal(18,3)")
+    private BigDecimal conversionRate;
     
         @Column(name = "Last_Prix_Achat" , columnDefinition = ("decimal(18,3)"))
     private BigDecimal lastPrixAchat;
 
         
-        
+               @Column(name = "Last_Prix_Gros" , columnDefinition = ("decimal(18,3)"))
+    private BigDecimal lastPrixGros;
+
         
     public Article() {
     }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public String getCodeSaisie() {
-        return codeSaisie;
-    }
-
-    public void setCodeSaisie(String codeSaisie) {
-        this.codeSaisie = codeSaisie;
-    }
-
-    public String getDesignationAr() {
-        return designationAr;
-    }
-
-    public void setDesignationAr(String designationAr) {
-        this.designationAr = designationAr;
-    }
-
-    public String getDesignationLt() {
-        return designationLt;
-    }
-
-    public void setDesignationLt(String designationLt) {
-        this.designationLt = designationLt;
-    }
-
-    public boolean isActif() {
-        return actif;
-    }
-
-    public void setActif(boolean actif) {
-        this.actif = actif;
-    }
-
-    public String getUserCreate() {
-        return userCreate;
-    }
-
-    public void setUserCreate(String userCreate) {
-        this.userCreate = userCreate;
-    }
-
-    public Date getDateCreate() {
-        return dateCreate;
-    }
-
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-    public FamilleArticle getFamilleArticle() {
-        return familleArticle;
-    }
-
-    public void setFamilleArticle(FamilleArticle familleArticle) {
-        this.familleArticle = familleArticle;
-    }
-
-    public Integer getCodeFamille() {
-        return codeFamille;
-    }
-
-    public void setCodeFamille(Integer codeFamille) {
-        this.codeFamille = codeFamille;
-    }
-
-    public Unite getUnite() {
-        return unite;
-    }
-
-    public void setUnite(Unite unite) {
-        this.unite = unite;
-    }
-
-    public Integer getCodeUnite() {
-        return codeUnite;
-    }
-
-    public void setCodeUnite(Integer codeUnite) {
-        this.codeUnite = codeUnite;
-    }
-
-    public Integer getPackages() {
-        return packages;
-    }
-
-    public void setPackages(Integer packages) {
-        this.packages = packages;
-    }
-
-    public BigDecimal getLastPrixAchat() {
-        return lastPrixAchat;
-    }
-
-    public void setLastPrixAchat(BigDecimal lastPrixAchat) {
-        this.lastPrixAchat = lastPrixAchat;
-    }
-
-    public Unite getUniteSecondaire() {
-        return uniteSecondaire;
-    }
-
-    public void setUniteSecondaire(Unite uniteSecondaire) {
-        this.uniteSecondaire = uniteSecondaire;
-    }
-
-    public Integer getCodeUniteSecondaire() {
-        return codeUniteSecondaire;
-    }
-
-    public void setCodeUniteSecondaire(Integer codeUniteSecondaire) {
-        this.codeUniteSecondaire = codeUniteSecondaire;
-    }
-
-    public Integer getConversionRate() {
-        return conversionRate;
-    }
-
-    public void setConversionRate(Integer conversionRate) {
-        this.conversionRate = conversionRate;
-    }
-
-    public Unite getUniteDepense() {
-        return uniteDepense;
-    }
-
-    public void setUniteDepense(Unite uniteDepense) {
-        this.uniteDepense = uniteDepense;
-    }
-
-    public Integer getCodeUniteDepense() {
-        return codeUniteDepense;
-    }
-
-    public void setCodeUniteDepense(Integer codeUniteDepense) {
-        this.codeUniteDepense = codeUniteDepense;
-    }
-
+ 
     
 }

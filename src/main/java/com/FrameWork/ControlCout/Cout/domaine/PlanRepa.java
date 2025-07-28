@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import lombok.*;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
@@ -39,6 +40,8 @@ import org.hibernate.envers.Audited;
 @Table(name = "Plan_Repa", schema = "cout")
 @Audited
 @AuditTable("Plan_Repa_AUD")
+@Getter
+@Setter
 public class PlanRepa {
 
     @Id
@@ -66,85 +69,30 @@ public class PlanRepa {
     @NotNull
     @Column(name = "Code_Type_Repa", updatable = false, insertable = false, nullable = false)
     private Integer codeTypeRepa;
-    
-    
- 
-    
-    
 
     @JoinColumn(name = "Code_Repa", referencedColumnName = "Code", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JsonBackReference
-    private FicheTech techCard;
+    private FicheTech ficheTech;
 
     @Column(name = "Code_Repa", updatable = false, insertable = false, nullable = false)
     private Integer codeFicheTechnique;
 
+    @JoinColumn(name = "Code_Societe", referencedColumnName = "Code", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Societe societe;
+
+    @Column(name = "Code_Societe", updatable = false, insertable = false, nullable = false)
+    private Integer codeSociete;
+
+    @Column(name = "Traiter", nullable = false)
+    private boolean traiter;
+
+    @Column(name = "Nbre_Person", nullable = false)
+    private Integer nbrePerson;
+
     public PlanRepa() {
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public Date getDatePlan() {
-        return datePlan;
-    }
-
-    public void setDatePlan(Date datePlan) {
-        this.datePlan = datePlan;
-    }
-
-    public String getUserCreate() {
-        return userCreate;
-    }
-
-    public void setUserCreate(String userCreate) {
-        this.userCreate = userCreate;
-    }
-
-    public Date getDateCreate() {
-        return dateCreate;
-    }
-
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-    public TypeRepa getTypeRepa() {
-        return typeRepa;
-    }
-
-    public void setTypeRepa(TypeRepa typeRepa) {
-        this.typeRepa = typeRepa;
-    }
-
-    public Integer getCodeTypeRepa() {
-        return codeTypeRepa;
-    }
-
-    public void setCodeTypeRepa(Integer codeTypeRepa) {
-        this.codeTypeRepa = codeTypeRepa;
-    }
-
-    public FicheTech getFicheTechnique() {
-        return techCard;
-    }
-
-    public void setFicheTechnique(FicheTech techCard) {
-        this.techCard = techCard;
-    }
-
-    public Integer getCodeFicheTechnique() {
-        return codeFicheTechnique;
-    }
-
-    public void setCodeFicheTechnique(Integer codeFicheTechnique) {
-        this.codeFicheTechnique = codeFicheTechnique;
     }
 
 }

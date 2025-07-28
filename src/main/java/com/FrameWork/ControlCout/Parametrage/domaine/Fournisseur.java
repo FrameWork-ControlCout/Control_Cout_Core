@@ -16,6 +16,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Date;
+import lombok.*;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
@@ -27,8 +28,11 @@ import org.hibernate.envers.Audited;
 @Table(name = "Fournisseur", schema = "param_achat")
 @Audited
 @AuditTable("Fournisseur_AUD")
+@Getter
+@Setter
 public class Fournisseur {
-     @Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Code")
     private Integer code;
@@ -49,6 +53,8 @@ public class Fournisseur {
     @Column(name = "Actif", nullable = false)
     private boolean actif;
 
+    @Column(name = "Is_Gros", nullable = false)
+    private boolean gros;
     @Column(name = "User_Create", nullable = false, length = 255, columnDefinition = "nvarchar(200)")
     private String userCreate;
 
@@ -56,92 +62,16 @@ public class Fournisseur {
     @Column(name = "Date_Create", nullable = false, columnDefinition = "datetime default (getdate())")
     private Date dateCreate;
 
-   
-       @Size(max = 200)
+    @Size(max = 200)
     @Column(name = "Adress", length = 200, nullable = false, columnDefinition = "nvarchar(200)")
     private String adress;
-       
-            @Size(max = 200)
+
+    @Size(max = 200)
     @Column(name = "Num_Tel", length = 200, nullable = false, columnDefinition = "nvarchar(200)")
     private String numTel;
-     
+
     public Fournisseur() {
     }
+ 
 
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public String getCodeSaisie() {
-        return codeSaisie;
-    }
-
-    public void setCodeSaisie(String codeSaisie) {
-        this.codeSaisie = codeSaisie;
-    }
-
-    public String getDesignationAr() {
-        return designationAr;
-    }
-
-    public void setDesignationAr(String designationAr) {
-        this.designationAr = designationAr;
-    }
-
-    public String getDesignationLt() {
-        return designationLt;
-    }
-
-    public void setDesignationLt(String designationLt) {
-        this.designationLt = designationLt;
-    }
-
-    public boolean isActif() {
-        return actif;
-    }
-
-    public void setActif(boolean actif) {
-        this.actif = actif;
-    }
-
-    public String getUserCreate() {
-        return userCreate;
-    }
-
-    public void setUserCreate(String userCreate) {
-        this.userCreate = userCreate;
-    }
-
-    public Date getDateCreate() {
-        return dateCreate;
-    }
-
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-    public String getAdress() {
-        return adress;
-    }
-
-    public void setAdress(String adress) {
-        this.adress = adress;
-    }
-
-    public String getNumTel() {
-        return numTel;
-    }
-
-    public void setNumTel(String numTel) {
-        this.numTel = numTel;
-    }
-
-  
-    
-    
-    
 }

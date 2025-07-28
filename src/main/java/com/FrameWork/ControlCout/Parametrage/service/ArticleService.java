@@ -58,6 +58,22 @@ public class ArticleService {
 
     }
 
+//       @Transactional(readOnly = true)
+//    public List<ArticleDTO> findAllArticleByTypeAndActifEdition(String type, Boolean actif) {
+//        return ArticleFactory.listArticleToArticleDTOs(articleRepo.findByTypeAndActif(type, actif));
+//
+//    }
+    
+      @Transactional(readOnly = true)
+    public List<Article> findAllArticleByTypeAndActifEdition(String type, Boolean actif) {
+//        log.debug("Request to get Intervenant by actif : {}", actif);
+        List<Article> interv = articleRepo.findAllArticleByTypeAndActif(type, actif);
+        return interv;
+    }
+    
+    
+    
+    
     @Transactional(readOnly = true)
     public List<ArticleDTO> findAllArticleByType(String type) {
         return ArticleFactory.listArticleToArticleDTOs(articleRepo.findByType(type));

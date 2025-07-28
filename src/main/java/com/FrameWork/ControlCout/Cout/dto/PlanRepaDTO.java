@@ -4,13 +4,19 @@
  */
 package com.FrameWork.ControlCout.Cout.dto;
 
+import com.FrameWork.ControlCout.Parametrage.domaine.Societe;
+import com.FrameWork.ControlCout.Parametrage.dto.SocieteDTO;
 import com.FrameWork.ControlCout.Parametrage.dto.TypeRepaDTO;
+import jakarta.persistence.Column;
 import java.util.Date;
+import lombok.*;
 
 /**
  *
  * @author Administrator
  */
+@Getter
+@Setter
 public class PlanRepaDTO {
 
     private Integer code;
@@ -24,75 +30,17 @@ public class PlanRepaDTO {
 
     private Integer codeTypeRepa;
 
-    private FicheTechDTO techCardDTO;
+    private FicheTechDTO ficheTechDTO;
 
     private Integer codeFicheTechnique;
 
+    private SocieteDTO societeDTO;
+
+    private Integer codeSociete;
+    private boolean traiter;
+    private Integer nbrePerson;
+
     public PlanRepaDTO() {
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public Date getDatePlan() {
-        return datePlan;
-    }
-
-    public void setDatePlan(Date datePlan) {
-        this.datePlan = datePlan;
-    }
-
-    public String getUserCreate() {
-        return userCreate;
-    }
-
-    public void setUserCreate(String userCreate) {
-        this.userCreate = userCreate;
-    }
-
-    public Date getDateCreate() {
-        return dateCreate;
-    }
-
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-    public TypeRepaDTO getTypeRepaDTO() {
-        return typeRepaDTO;
-    }
-
-    public void setTypeRepaDTO(TypeRepaDTO typeRepaDTO) {
-        this.typeRepaDTO = typeRepaDTO;
-    }
-
-    public Integer getCodeTypeRepa() {
-        return codeTypeRepa;
-    }
-
-    public void setCodeTypeRepa(Integer codeTypeRepa) {
-        this.codeTypeRepa = codeTypeRepa;
-    }
-
-    public FicheTechDTO getFicheTechniqueDTO() {
-        return techCardDTO;
-    }
-
-    public void setFicheTechniqueDTO(FicheTechDTO techCardDTO) {
-        this.techCardDTO = techCardDTO;
-    }
-
-    public Integer getCodeFicheTechnique() {
-        return codeFicheTechnique;
-    }
-
-    public void setCodeFicheTechnique(Integer codeFicheTechnique) {
-        this.codeFicheTechnique = codeFicheTechnique;
     }
 
 }
