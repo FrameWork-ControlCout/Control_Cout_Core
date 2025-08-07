@@ -158,7 +158,7 @@ public class FactureGrosService {
 
                 detailsFactureGrosRepo.save(detailsDomaine);
             }
-            System.out.println("com.FrameWork.ControlCout.Achat.service.FactureGrosService.save()");
+//            System.out.println("com.FrameWork.ControlCout.Achat.service.FactureGrosService.save()");
         }
         return FactureGrosFactory.factureGrosToFactureGrosDTOLazy(domaine);
     }

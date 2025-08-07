@@ -61,12 +61,12 @@ public class FactureGros {
     @Column(name = "Code_Fournisseur", updatable = false, insertable = false, nullable = false)
     private Integer codeFournisseur;
 
-    @JoinColumn(name = "Code_Order_Achat", referencedColumnName = "Code")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "Code_Order_Achat", referencedColumnName = "Code" ,nullable = false)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JsonBackReference
     private OrderAchat orderAchat;
 
-    @Column(name = "Code_Order_Achat", updatable = false, insertable = false)
+    @Column(name = "Code_Order_Achat", updatable = false, insertable = false )
     private Integer codeOrderAchat;
 
     @Column(name = "Prix_Total", nullable = false, columnDefinition = ("decimal(18,3)"))

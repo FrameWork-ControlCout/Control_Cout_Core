@@ -70,8 +70,10 @@ public class Fournisseur {
     @Column(name = "Num_Tel", length = 200, nullable = false, columnDefinition = "nvarchar(200)")
     private String numTel;
 
+    @Column(name = "Observation_Receving", length = 255, columnDefinition = "nvarchar(max)")
+    private String observationReceving;
+
     public Fournisseur() {
     }
- 
 
 }

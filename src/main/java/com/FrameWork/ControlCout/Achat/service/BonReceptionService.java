@@ -19,9 +19,15 @@ import com.FrameWork.ControlCout.Achat.repository.BonReceptionRepo;
 import com.FrameWork.ControlCout.Achat.repository.DetailsOrderAchatRepo;
 import com.FrameWork.ControlCout.Achat.repository.FactureBonReceptionRepo;
 import com.FrameWork.ControlCout.Achat.repository.OrderAchatRepo;
+import com.FrameWork.ControlCout.Cout.domaine.DetailsFicheTech;
+import com.FrameWork.ControlCout.Cout.domaine.FicheTech;
+import com.FrameWork.ControlCout.Cout.repository.DetailsFicheTechRepo;
+import com.FrameWork.ControlCout.Cout.repository.FicheTechRepo;
 import com.FrameWork.ControlCout.Parametrage.domaine.Article;
 import com.FrameWork.ControlCout.Parametrage.domaine.Compteur;
 import com.FrameWork.ControlCout.Parametrage.factory.EtatReceptionFactory;
+import com.FrameWork.ControlCout.Parametrage.repository.ArticleRepo;
+import com.FrameWork.ControlCout.Parametrage.service.ArticleService;
 import com.FrameWork.ControlCout.Parametrage.service.CompteurService;
 import com.FrameWork.ControlCout.Stock.service.GestionStockService;
 import com.FrameWork.ControlCout.Stock.service.MouvementStockService;
@@ -29,6 +35,7 @@ import com.FrameWork.ControlCout.web.Util.Helper;
 
 import com.google.common.base.Preconditions;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -61,9 +68,13 @@ public class BonReceptionService {
     private final OrderAchatRepo orderAchatRepo;
     private final FactureBonReceptionRepo factureBonReceptionRepo;
     private final SocService cliniqueService;
+    private final ArticleRepo articleRepo;
     private final GestionStockService gestionStockService;
+    private final DetailsFicheTechRepo detailsFicheTechRepo;
+    private final FicheTechRepo ficheTechRepo;
+    private static final BigDecimal BIG_DECIMAL_100 = new BigDecimal("100");
 
-    public BonReceptionService(BonReceptionRepo bonReceptionRepo, DetailsBonReceptionRepo detailsBonReceptionRepo, CompteurService compteurService, DetailsOrderAchatRepo detailsOrderAchatRepo, OrderAchatRepo orderAchatRepo, FactureBonReceptionRepo factureBonReceptionRepo, SocService cliniqueService, GestionStockService gestionStockService) {
+    public BonReceptionService(BonReceptionRepo bonReceptionRepo, DetailsBonReceptionRepo detailsBonReceptionRepo, CompteurService compteurService, DetailsOrderAchatRepo detailsOrderAchatRepo, OrderAchatRepo orderAchatRepo, FactureBonReceptionRepo factureBonReceptionRepo, SocService cliniqueService, ArticleRepo articleRepo, GestionStockService gestionStockService, DetailsFicheTechRepo detailsFicheTechRepo, FicheTechRepo ficheTechRepo) {
         this.bonReceptionRepo = bonReceptionRepo;
         this.detailsBonReceptionRepo = detailsBonReceptionRepo;
         this.compteurService = compteurService;
@@ -71,7 +82,10 @@ public class BonReceptionService {
         this.orderAchatRepo = orderAchatRepo;
         this.factureBonReceptionRepo = factureBonReceptionRepo;
         this.cliniqueService = cliniqueService;
+        this.articleRepo = articleRepo;
         this.gestionStockService = gestionStockService;
+        this.detailsFicheTechRepo = detailsFicheTechRepo;
+        this.ficheTechRepo = ficheTechRepo;
     }
 
     //<editor-fold defaultstate="collapsed" desc="Read-Only Methods">
@@ -131,6 +145,8 @@ public class BonReceptionService {
 
         // 2. CREATE BON RECEPTION DETAILS
         List<DetailsBonReception> newDetailsList = new ArrayList<>();
+        List<Article> articles = new ArrayList<>();
+
         for (DetailsBonReceptionDTO detailsDto : dto.getDetailsBonReceptionDTOs()) {
             DetailsBonReception detailsDomaine = DetailsBonReceptionFactory.detailsbonReceptionDTOTodetailsBonReception(detailsDto, new DetailsBonReception());
             detailsDomaine.setBonReception(domaine);
@@ -138,78 +154,60 @@ public class BonReceptionService {
             detailsDomaine.setUserCreate(Helper.getUserAuthenticated());
 
             newDetailsList.add(detailsDomaine);
+
+            Article article = articleRepo.findByCode(detailsDomaine.getCodeArticle());
+            article.setLastPrixAchat(detailsDomaine.getPrixUni());
+            articles.add(article);
+
         }
         detailsBonReceptionRepo.saveAll(newDetailsList);
+        articleRepo.saveAll(articles);
 
-        // 3. UPDATE ORIGINAL ORDERS & STOCK
+        updateFicheTechniqueCosts(articles);
+
         updateRelatedOrdersAndStock(domaine, dto.getDetailsBonReceptionDTOs());
-
         List<DetailsBonReception> savedDetails = detailsBonReceptionRepo.saveAll(newDetailsList);
-
         gestionStockService.createEntreesFromBonReception(savedDetails);
-//            gestionStockService.createMouvementFrsFromFactureBonReception(domaine);
-
         return BonReceptionFactory.bonReceptionToBonReceptionDTO(domaine);
     }
 
     @Transactional
     public BonReceptionDTO update(BonReceptionDTO dto) {
-        // 1. --- FETCH EXISTING ENTITY ---
         Preconditions.checkArgument(dto.getCode() != null, "error.BonReceptionCodeRequiredForUpdate");
         BonReception domaine = bonReceptionRepo.findById(dto.getCode())
                 .orElseThrow(() -> new IllegalArgumentException("error.BonReceptionNotFound"));
 
-        
-        
-        if( Objects.equals(domaine.getHaveFBR(), Boolean.TRUE)){
-              throw new IllegalArgumentException("error.BonReceptionHaveFBR");
+        if (Objects.equals(domaine.getHaveFBR(), Boolean.TRUE)) {
+            throw new IllegalArgumentException("error.BonReceptionHaveFBR");
         }
-        
-        
-        // Store the original list of affected order codes BEFORE we overwrite the domain object
-        List<Integer> originalOrderAchatCodes = parseCodeStringToList(domaine.getCodeOrderAchat());
-
-        // 2. --- REVERSE OLD STATE ---
-        // A. Reverse the effects on the original OrderAchat records
         reverseOrderAchatUpdates(domaine.getCode());
-
-        // B. Delete the old stock movements
-//        mouvementStockService.deleteMouvementsForBonReception(domaine.getCode());
         gestionStockService.deleteMouvementsForBonReception(domaine.getCode());
-        // C. Delete the old reception detail lines
         detailsBonReceptionRepo.deleteByCodeBonReception(domaine.getCode());
-
-        // 3. --- APPLY NEW STATE TO HEADER ---
-        // Map updated fields from DTO to the existing 'domaine' entity
         domaine = BonReceptionFactory.bonReceptionDTOToBonReception(dto, domaine);
-        // It's good practice to track updates
-        // domaine.setUserUpdate(Helper.getUserAuthenticated());
-        // domaine.setDateUpdate(new Date());
         domaine = bonReceptionRepo.save(domaine);
 
-        // If the update resulted in no details, our work is done.
-        // The original orders have already been reversed to their previous state.
         if (dto.getDetailsBonReceptionDTOs() == null || dto.getDetailsBonReceptionDTOs().isEmpty()) {
             return BonReceptionFactory.bonReceptionToBonReceptionDTO(domaine);
         }
-
-        // 4. --- RE-CREATE DETAILS WITH NEW DATA ---
         List<DetailsBonReception> newDetailsList = new ArrayList<>();
+        List<Article> articles = new ArrayList<>();
         for (DetailsBonReceptionDTO detailsDto : dto.getDetailsBonReceptionDTOs()) {
             DetailsBonReception detailsDomaine = DetailsBonReceptionFactory.detailsbonReceptionDTOTodetailsBonReception(detailsDto, new DetailsBonReception());
             detailsDomaine.setBonReception(domaine);
-            // Set user/date create for the new detail records
             detailsDomaine.setUserCreate(Helper.getUserAuthenticated());
             detailsDomaine.setDateCreate(new Date());
             newDetailsList.add(detailsDomaine);
+
+            Article article = articleRepo.findByCode(detailsDomaine.getCodeArticle());
+            article.setLastPrixAchat(detailsDomaine.getPrixUni());
+
+            articles.add(article);
+
         }
         List<DetailsBonReception> savedDetails = detailsBonReceptionRepo.saveAll(newDetailsList);
-
-        // 5. --- RE-APPLY UPDATES TO ORDERS AFFECTED BY THE NEW STATE ---
+        articleRepo.saveAll(articles);
         updateRelatedOrdersAndStock(domaine, dto.getDetailsBonReceptionDTOs());
-
-        // 6. --- CREATE NEW STOCK MOVEMENTS ---
-//        mouvementStockService.createEntreesFromBonReception(savedDetails);
+        updateFicheTechniqueCosts(articles);
         gestionStockService.createEntreesFromBonReception(savedDetails);
         return BonReceptionFactory.bonReceptionToBonReceptionDTO(domaine);
     }
@@ -219,15 +217,98 @@ public class BonReceptionService {
         String orderCodeAsString = code.toString();
         boolean isUsedInFactureBr = factureBonReceptionRepo.existsByCodeBonReceptionContaining(orderCodeAsString);
         Preconditions.checkArgument(!isUsedInFactureBr, "error.BonReceptionUsedInFactureBR");
-
-        // 1. REVERSE ALL RELATED UPDATES
         reverseOrderAchatUpdates(code);
-//        mouvementStockService.deleteMouvementsForBonReception(code);
         gestionStockService.deleteMouvementsForBonReception(code);
-        // 2. DELETE THE BON RECEPTION ITSELF
-        // Cascade should handle details, but being explicit is safer
         detailsBonReceptionRepo.deleteByCodeBonReception(code);
         bonReceptionRepo.deleteById(code);
+    }
+
+    private void updateFicheTechniqueCosts(List<Article> updatedArticles) {
+        if (updatedArticles == null || updatedArticles.isEmpty()) {
+            return;
+        }
+
+        // Create a map of Article Code -> New Price for efficient lookup.
+        Map<Integer, BigDecimal> articlePriceMap = updatedArticles.stream()
+                .collect(Collectors.toMap(Article::getCode, Article::getLastPrixAchat));
+
+        List<Integer> articleCodes = new ArrayList<>(articlePriceMap.keySet());
+
+        // Find all Fiche Technique details that use any of the updated articles.
+        // Assumes DetailsFicheTechRepo has a method findByCodeArticleIn
+        List<DetailsFicheTech> detailsToUpdate = detailsFicheTechRepo.findByCodeArticleIn(articleCodes);
+
+        if (detailsToUpdate.isEmpty()) {
+            log.info("No Fiche Technique details found for the updated articles.");
+            return;
+        }
+
+        log.info("Found {} Fiche Technique details to update with new costs.", detailsToUpdate.size());
+
+        // Update price and total cost for each affected detail.
+        for (DetailsFicheTech detail : detailsToUpdate) {
+            BigDecimal newPrice = articlePriceMap.get(detail.getCodeArticle());
+
+            if (detail.getPrixUni().compareTo(newPrice) > 0) {
+                detail.setModifPrice("REM");
+            } else {
+                detail.setModifPrice("AUG");
+            }
+//            
+            if (newPrice != null) {
+                detail.setPrixUni(newPrice);
+                // Recalculate the total price for the component.
+                if (detail.getConsTotal() != null) {
+                    detail.setPrixTotal(detail.getConsTotal().multiply(newPrice));
+                }
+            }
+        }
+
+        // Persist all changes to the database.
+        detailsFicheTechRepo.saveAll(detailsToUpdate);
+        log.info("Successfully updated costs for {} Fiche Technique details.", detailsToUpdate.size());
+
+        Set<FicheTech> fichesToRecalculate = detailsToUpdate.stream()
+                .map(DetailsFicheTech::getFicheTechnique)
+                .collect(Collectors.toSet());
+
+        // Step 4: Iterate through each unique recipe and recalculate its total cost.
+        for (FicheTech fiche : fichesToRecalculate) {
+
+            // For each recipe, sum the cost of all its ingredients.
+            // Cost of one ingredient = (quantity in recipe) * (latest purchase price of article)
+            // Using BigDecimal for precision in financial calculations.
+            BigDecimal newTotalCost = fiche.getDetailsFicheTechniques().stream()
+                    .map(detail -> {
+                        // We need the article's price from its entity.
+                        Article ingredientArticle = detail.getArticle();
+                        BigDecimal quantity = detail.getConsTotal();
+                        BigDecimal price = ingredientArticle.getLastPrixAchat();
+                        return quantity.multiply(price);
+                    })
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+ 
+            BigDecimal pourcentAutreAcharge = fiche.getPourcentAutreAcharge(); 
+            if (pourcentAutreAcharge == null || pourcentAutreAcharge.compareTo(BigDecimal.ZERO) == 0) {
+                fiche.setAutreCout(BigDecimal.ZERO); 
+                fiche.setPrixTotal(newTotalCost);
+            } else { 
+                BigDecimal pourcentageFacteur = pourcentAutreAcharge.divide(BIG_DECIMAL_100, 4, RoundingMode.HALF_UP); 
+                BigDecimal autreCout = newTotalCost.multiply(pourcentageFacteur);
+                fiche.setAutreCout(autreCout); 
+                BigDecimal mntTTC = newTotalCost.add(autreCout);
+                BigDecimal coutUni = mntTTC.divide(BigDecimal.valueOf(fiche.getNbrePersRef()));
+
+                fiche.setCoutUnitaire(coutUni);
+                fiche.setPrixTotal(mntTTC);
+            }
+
+        }
+
+        ficheTechRepo.saveAll(fichesToRecalculate);
+
+        // Note: After updating details, you might need a mechanism to recalculate 
+        // the total cost of the parent FicheTechnique entities if that is not handled automatically.
     }
 
     /**

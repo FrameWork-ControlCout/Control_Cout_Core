@@ -121,6 +121,7 @@ public class DepenseService {
             detailsDomaine.setDepense(domaine);
             detailsDomaine.setDateCreate(new Date());  // Set in domaine
             detailsDomaine.setUserCreate(Helper.getUserAuthenticated());
+            detailsDomaine.setConsStandard(detailsDto.isConsStandard());
 
             newDetailsList.add(detailsDomaine);
         }
@@ -134,37 +135,37 @@ public class DepenseService {
         gestionStockService.createEntreeFromDepenseDestination(savedDetails);
 
         /// Update QteDispenser DetailsConsoStandard
-        ConsoStandard consoStandard = consoStandardRepo.findByCode(dto.getCodeConsoStandard());
+        
+        
+        if(dto.getCodeConsoStandard() != null){
+             ConsoStandard consoStandard = consoStandardRepo.findByCode(dto.getCodeConsoStandard());
 
-        for (DetailsDepenseDTO detailDto : dto.getDetailsDepensesDTOs()) { 
-          
+        for (DetailsDepenseDTO detailDto : dto.getDetailsDepensesDTOs()) {
+
             if (detailDto.getQteDispenser() == null || detailDto.getQteDispenser().compareTo(BigDecimal.ZERO) <= 0) {
                 continue;
             }
 
-            DetailsConsoStandard detailToUpdate = consoStandard.getDetailsConsoStandards().stream()
-                    .filter(d -> d.getCode().equals(detailDto.getCodeDetailsConsoStandard()))
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("DetailsConsoStandard line not found with code: " + detailDto.getCodeDetailsConsoStandard()));
+            if (!consoStandard.getDetailsConsoStandards().isEmpty()) {
+                DetailsConsoStandard detailToUpdate = consoStandard.getDetailsConsoStandards().stream()
+                        .filter(d -> d.getCode().equals(detailDto.getCodeDetailsConsoStandard()))
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalArgumentException("DetailsConsoStandard line not found with code: " + detailDto.getCodeDetailsConsoStandard()));
 
-//            BigDecimal qteRequise = detailToUpdate.getConsTotal();
-            BigDecimal qteDejaDispensee = detailToUpdate.getQteDispensee() != null ? detailToUpdate.getQteDispensee() : BigDecimal.ZERO;
-//            BigDecimal qteRestante = qteRequise.subtract(qteDejaDispensee);
-//            System.out.println("qteRestante " + qteRestante);          
-//            System.out.println("qteDejaDispensee " + qteDejaDispensee);
-//            
-//
-//            if (detailDto.getQteDispenser().compareTo(qteRestante) > 0) {
-//                throw new IllegalStateException("Cannot dispense quantity (" + detailDto.getQteDispenser() + ") greater than remaining quantity (" + qteRestante + ") for article: " + detailToUpdate.getArticle().getCodeSaisie());
-//            }
+                BigDecimal qteDejaDispensee = detailToUpdate.getQteDispensee() != null ? detailToUpdate.getQteDispensee() : BigDecimal.ZERO;
 
-            detailToUpdate.setQteDispensee(qteDejaDispensee.add(detailDto.getQteDispenser()));
- 
+                detailToUpdate.setQteDispensee(qteDejaDispensee.add(detailDto.getQteDispenser()));
+            }
+
         }
- 
 
         consoStandardRepo.save(consoStandard);
         log.info("Dispensation process completed successfully for ConsoStandard code: {}", dto.getCodeConsoStandard());
+            
+        }
+        
+        
+       
         return DepenseFactory.depenseToDepenseDTO(domaine);
     }
 

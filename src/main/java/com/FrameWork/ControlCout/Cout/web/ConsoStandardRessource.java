@@ -60,7 +60,7 @@ public class ConsoStandardRessource {
     private final ConsoStandardService consoStandardService;
     private final SocService socService;
     private final DetailsConsoStandardService detailsConsoStandardService;
-        private final DetailsConsoStandardPerDayService detailsConsoStandardPerDayService;
+    private final DetailsConsoStandardPerDayService detailsConsoStandardPerDayService;
 
     public ConsoStandardRessource(ConsoStandardService consoStandardService, SocService socService, DetailsConsoStandardService detailsConsoStandardService, DetailsConsoStandardPerDayService detailsConsoStandardPerDayService) {
         this.consoStandardService = consoStandardService;
@@ -68,9 +68,6 @@ public class ConsoStandardRessource {
         this.detailsConsoStandardService = detailsConsoStandardService;
         this.detailsConsoStandardPerDayService = detailsConsoStandardPerDayService;
     }
-
-
-    
 
     @GetMapping("consommation_standard/{code}")
     public ResponseEntity<ConsoStandardDTO> getConsoStandardByCode(@PathVariable Integer code) {
@@ -91,6 +88,11 @@ public class ConsoStandardRessource {
     @GetMapping("consommation_standard/findByActifAndCodeDepot")
     public ResponseEntity<List<ConsoStandardDTO>> getAllConsoStandardByActifAndCodeDepot(@RequestParam Boolean actif, @RequestParam Integer codeDepot) {
         return ResponseEntity.ok().body(consoStandardService.findAllConsoStandardByActifAndCodeDepot(actif, codeDepot));
+    }
+
+    @GetMapping("consommation_standard/findByCodeSociete")
+    public ResponseEntity<ConsoStandardDTO> getAllConsoStandardBySociete(@RequestParam Integer codeSociete) {
+        return ResponseEntity.ok().body(consoStandardService.findAllConsoStandardBySociete(codeSociete));
     }
 
     @PostMapping("consommation_standard")
@@ -147,13 +149,13 @@ public class ConsoStandardRessource {
         return ResponseEntity.ok().headers(headers).body(Helper.read(byteArrayInputStream));
     }
 
-   // NEW ENDPOINT 1
+    // NEW ENDPOINT 1
     @GetMapping("consommation_standard/{codeConsoStandard}/details")
     public ResponseEntity<List<DetailsConsoStandardDTO>> getDetailsByConsoStandard(@PathVariable List<Integer> codeConsoStandard) {
         List<DetailsConsoStandardDTO> details = detailsConsoStandardService.findByCodeConsoStandard(codeConsoStandard);
         return ResponseEntity.ok(details);
     }
-    
+
     // NEW ENDPOINT 2
     @GetMapping("consommation_standard/{codeConsoStandard}/details_per_day")
     public ResponseEntity<List<DetailsConsoStandardPerDayDTO>> getDetailsPerDayByConsoStandard(@PathVariable Integer codeConsoStandard) {
@@ -161,5 +163,4 @@ public class ConsoStandardRessource {
         return ResponseEntity.ok(details);
     }
 
-    
 }

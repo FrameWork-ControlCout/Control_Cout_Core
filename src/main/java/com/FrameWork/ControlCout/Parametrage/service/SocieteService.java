@@ -4,33 +4,21 @@
  */
 package com.FrameWork.ControlCout.Parametrage.service;
 
-import com.FrameWork.ControlCout.Cout.domaine.ConsoStandard;
-import com.FrameWork.ControlCout.Cout.domaine.DetailsConsoStandard;
 import com.FrameWork.ControlCout.Cout.domaine.PlanRepa;
-import com.FrameWork.ControlCout.Cout.dto.ConsoStandardDTO;
-import com.FrameWork.ControlCout.Cout.factory.ConsoStandardFactory;
-import com.FrameWork.ControlCout.Cout.repository.ConsoStandardRepo;
 import com.FrameWork.ControlCout.Cout.repository.PlanRepaRepo;
 import com.FrameWork.ControlCout.Cout.service.ConsoStandardService;
-import com.FrameWork.ControlCout.Parametrage.domaine.Article;
 import com.FrameWork.ControlCout.Parametrage.domaine.Compteur;
 import com.FrameWork.ControlCout.Parametrage.domaine.Societe;
 import com.FrameWork.ControlCout.Parametrage.domaine.TraceSociete;
 import com.FrameWork.ControlCout.Parametrage.dto.SocieteDTO;
-import com.FrameWork.ControlCout.Parametrage.dto.TraceSocieteDTO;
-import com.FrameWork.ControlCout.Parametrage.factory.FamilleArticleFactory;
 import com.FrameWork.ControlCout.Parametrage.factory.SocieteFactory;
 import com.FrameWork.ControlCout.Parametrage.repository.SocieteRepo;
 import com.FrameWork.ControlCout.Parametrage.repository.TraceSocieteRepo;
 import com.FrameWork.ControlCout.web.Util.Helper;
 import com.google.common.base.Preconditions;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -130,11 +118,6 @@ public class SocieteService {
         Preconditions.checkArgument(domaine != null, "error.SocieteNotFound");
         dto.setCode(domaine.getCode());
 
-//         LocalDateTime todayAtMidnight = LocalDate.now().atStartOfDay(); 
-//       DateTimeFormatter isoFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"); 
-//        List<PlanRepa> planRepas  = planRepaRepo.findAllDateAndCodeSocieteIn(todayAtMidnight.format(isoFormatter), domaine.getCode());
-//        
-//        
         Date today = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         consoStandardService.recalculateFutureDailyConsumption(
@@ -142,8 +125,8 @@ public class SocieteService {
                 dto.getNbrePerson(),
                 today
         );
-        
-        consoStandardService.UpdatedNbrePerson(dto.getCode(),dto.getNbrePerson());
+
+        consoStandardService.UpdatedNbrePerson(dto.getCode(), dto.getNbrePerson());
 
 // 2. Convert the LocalDateTime to a legacy java.util.Date
 // You must specify a time zone for an accurate conversion.
@@ -183,6 +166,12 @@ public class SocieteService {
 
     public void deleteSociete(Integer code) {
         Preconditions.checkArgument(societeRepo.existsById(code), "error.SocieteNotFound");
+        traceSocieteRepo.deleteByCodeSociete(code);
+
+        List<PlanRepa> plList = planRepaRepo.findByCodeSociete(code);
+
+        Preconditions.checkArgument(plList.isEmpty(), "error.SocieteHavePlanRepa");
+
         societeRepo.deleteById(code);
     }
 

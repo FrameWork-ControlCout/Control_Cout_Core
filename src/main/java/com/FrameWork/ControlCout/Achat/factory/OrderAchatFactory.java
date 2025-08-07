@@ -96,11 +96,9 @@ public class OrderAchatFactory {
 
             dto.setEtatReceptionDTO(EtatReceptionFactory.etapReceptionToEtapReceptionDTO(domaine.getEtatReception()));
             dto.setCodeEtatReception(domaine.getCodeEtatReception());
-            
-            
-                        dto.setFournisseurDesignationAr(FournisseurFactory.fournisseurToFournisseurDTO(domaine.getFournisseur()).getDesignationAr());
-            dto.setDepotDesignationAr(DepotFactory.depotToDepotDTO(domaine.getDepot()).getDesignationAr());
 
+            dto.setFournisseurDesignationAr(FournisseurFactory.fournisseurToFournisseurDTO(domaine.getFournisseur()).getDesignationAr());
+            dto.setDepotDesignationAr(DepotFactory.depotToDepotDTO(domaine.getDepot()).getDesignationAr());
 
             return dto;
         } else {
@@ -124,7 +122,6 @@ public class OrderAchatFactory {
         return collection;
     }
 
-    
     public static Collection<OrderAchatEdition> flattenOrderAchatForEdition(List<OrderAchat> orderAchats) {
         if (orderAchats == null) {
             return new ArrayList<>();
@@ -135,9 +132,10 @@ public class OrderAchatFactory {
         for (OrderAchat br : orderAchats) {
             // Since getDetailsBonReceptions() is lazy-loaded, ensure you are in a transactional context when calling this.
             // Your service method already is, so this is safe.
-            if (br.getDetailsOrderAchats()!= null) {
+            OrderAchatEdition dto = new OrderAchatEdition();
+            dto.setObservationFrs(br.getFournisseur().getObservationReceving());
+            if (br.getDetailsOrderAchats() != null) {
                 for (DetailsOrderAchat detail : br.getDetailsOrderAchats()) {
-                    OrderAchatEdition dto = new OrderAchatEdition();
 
                     // --- Populate from the parent BonReception ---
                     dto.setCodeSaisie(br.getCodeSaisie());
@@ -151,12 +149,8 @@ public class OrderAchatFactory {
                     dto.setQteBesoin(detail.getQteBesoin());
                     if (detail.getArticle() != null) {
                         dto.setCodeSaisieArticle(detail.getArticle().getCodeSaisie());
-                        dto.setDesignationArticle(detail.getArticle().getDesignationAr());       
-                      
+                        dto.setDesignationArticle(detail.getArticle().getDesignationAr());
 
-                        
-                         
-                        
                         // Assuming Article has a relationship to a Unite entity
                         if (detail.getArticle().getUnite() != null) {
                             dto.setUnite(detail.getArticle().getUnite().getDesignationAr());

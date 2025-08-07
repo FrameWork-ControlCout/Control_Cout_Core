@@ -4,6 +4,8 @@
  */
 package com.FrameWork.ControlCout.Parametrage.service;
 
+import com.FrameWork.ControlCout.Achat.domaine.BonReception;
+import com.FrameWork.ControlCout.Achat.repository.BonReceptionRepo;
 import com.FrameWork.ControlCout.Parametrage.domaine.Depot;
 import com.FrameWork.ControlCout.Parametrage.domaine.Compteur;
 import com.FrameWork.ControlCout.Parametrage.dto.DepotDTO;
@@ -29,12 +31,15 @@ public class DepotService {
 
     private final DepotRepo depotRepo;
     private final CompteurService compteurService;
+    private final BonReceptionRepo bonReceptionRepo;
 
-    public DepotService(DepotRepo depotRepo, CompteurService compteurService) {
+    public DepotService(DepotRepo depotRepo, CompteurService compteurService, BonReceptionRepo bonReceptionRepo) {
         this.depotRepo = depotRepo;
         this.compteurService = compteurService;
+        this.bonReceptionRepo = bonReceptionRepo;
     }
 
+    
     @Transactional(readOnly = true)
     public List<DepotDTO> findAllDepot() {
         return DepotFactory.listDepotToDepotDTOs(depotRepo.findAll(Sort.by("code").descending()));
@@ -85,6 +90,9 @@ public class DepotService {
 
     public void deleteDepot(Integer code) {
         Preconditions.checkArgument(depotRepo.existsById(code), "error.DepotNotFound");
+        
+        List<BonReception> br = bonReceptionRepo.findByCodeDepot(code); 
+        Preconditions.checkArgument(br.isEmpty() ,"error.DepotHaveBonReception");
         depotRepo.deleteById(code);
     }
 }

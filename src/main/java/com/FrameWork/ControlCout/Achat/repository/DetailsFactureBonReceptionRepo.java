@@ -22,7 +22,7 @@ public interface DetailsFactureBonReceptionRepo extends JpaRepository<DetailsFac
 
     List<DetailsFactureBonReception> findByCodeFournisseur(Integer codeFournisseur);
 
-    List<DetailsFactureBonReception> findByCodeDetailsOrderAchat(Integer codeDetailsOrderAchat);
+//    List<DetailsFactureBonReception> findByCodeDetailsOrderAchat(Integer codeDetailsOrderAchat);
 
     public void deleteByCodeFactureBonReception(Integer codeFactureBonReception);
 }

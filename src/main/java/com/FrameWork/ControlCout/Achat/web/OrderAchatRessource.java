@@ -29,8 +29,11 @@ import java.net.URISyntaxException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.sql.rowset.serial.SerialBlob;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -82,6 +85,26 @@ public class OrderAchatRessource {
     public ResponseEntity<List<OrderAchatDTO>> getAllOrderAchatByCodeEtatFacture(@RequestParam Integer codeEtatFacture) {
         return ResponseEntity.ok().body(orderAchatService.findOrderAchatByEtatFacture(codeEtatFacture));
     }
+    
+    
+@GetMapping("order_achat/findByEtatFactureAndEtatRecept")
+public ResponseEntity<List<OrderAchatDTO>> getAllOrderAchatByCodeEtatFacture(
+        @RequestParam Integer codeEtatFacture, 
+        @RequestParam String codeEtatRececption) {
+    
+    List<Integer> receptionCodesList; 
+    if (codeEtatRececption != null && !codeEtatRececption.isEmpty()) { 
+        receptionCodesList = Arrays.stream(codeEtatRececption.split(",")) // "1,2" -> ["1", "2"]
+                                   .map(String::trim)                     // Trim whitespace just in case
+                                   .map(Integer::parseInt)                // ["1", "2"] -> [1, 2]
+                                   .collect(Collectors.toList());         // Collect into a List
+    } else { 
+        receptionCodesList = Collections.emptyList();
+    } 
+    List<OrderAchatDTO> result = orderAchatService.findOrderAchatByEtatFactureAndCodeEtatRepecet(codeEtatFacture, receptionCodesList);
+    
+    return ResponseEntity.ok().body(result);
+}
     
     
      @GetMapping("order_achat/findByFournisseur")

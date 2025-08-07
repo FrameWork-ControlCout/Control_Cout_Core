@@ -25,9 +25,9 @@ import org.hibernate.envers.Audited;
  * @author Administrator
  */
 @Entity
-@Table(name = "Etape_Reception", schema = "param")
+@Table(name = "Etat_Reception", schema = "param")
 @Audited
-@AuditTable("Etape_Reception_AUD")
+@AuditTable("Etat_Reception_AUD")
 @Getter
 @Setter
 public class EtatReception {

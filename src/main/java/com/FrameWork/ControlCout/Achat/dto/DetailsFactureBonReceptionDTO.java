@@ -30,17 +30,17 @@ public class DetailsFactureBonReceptionDTO {
 
     private BigDecimal qteReceptionner;
 
-    private DepotDTO depotDTO;
-
-    private Integer codeDepot;
+//    private DepotDTO depotDTO;
+//
+//    private Integer codeDepot;
 
     private FournisseurDTO fournisseurDTO;
 
     private Integer codeFournisseur;
 
-    private DetailsOrderAchatDTO detailsOrderAchatDTO;
-
-    private Integer codeDetailsOrderAchat;
+//    private DetailsOrderAchatDTO detailsOrderAchatDTO;
+//
+//    private Integer codeDetailsOrderAchat;
     private String userCreate;
 
     private Date dateCreate;

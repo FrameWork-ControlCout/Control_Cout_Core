@@ -5,10 +5,12 @@
 package com.FrameWork.ControlCout.Parametrage.repository;
 
 import com.FrameWork.ControlCout.Parametrage.domaine.TraceSociete;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -18,6 +20,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TraceSocieteRepo extends JpaRepository<TraceSociete, Integer> {
 
-    List<TraceSociete> findByCodeSociete(Integer codeSociete, Sort sort );
+    List<TraceSociete> findByCodeSociete(Integer codeSociete, Sort sort);
+
     Optional<TraceSociete> findTopByCodeSocieteOrderByDateCreateDesc(Integer codeSociete);
+
+    TraceSociete findTopByCodeSocieteAndDateUpdateLessThanEqualOrderByDateUpdateDesc(Integer codeSociete, Date date);
+
+    @Modifying
+    void deleteByCodeSociete(Integer codeSociete);
+
 }

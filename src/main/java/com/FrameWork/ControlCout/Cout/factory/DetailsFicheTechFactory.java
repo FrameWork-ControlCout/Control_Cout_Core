@@ -38,16 +38,18 @@ public class DetailsFicheTechFactory {
             dto.setPrixTotal(domaine.getPrixTotal());
             dto.setPrixUni(domaine.getPrixUni());
 
+            dto.setModifPrice(domaine.getModifPrice());
+
             dto.setCodeArticle(domaine.getCodeArticle());
             dto.setArticleDTO(ArticleFactory.articleToArticleDTO(domaine.getArticle()));
 
             dto.setCodeFicheTechnique(domaine.getCodeFicheTechnique());
-            dto.setFicheTechniqueDTO(FicheTechFactory.ficheTechniqueToFicheTechniqueDTO(domaine.getFicheTechnique()));
+            dto.setFicheTechDTO(FicheTechFactory.ficheTechniqueToFicheTechniqueDTO(domaine.getFicheTechnique()));
 
             dto.setCodeUnite(domaine.getCodeUnite());
             dto.setUniteDTO(UniteFactory.uniteToUniteDTO(domaine.getUnite()));
 
-              dto.setCodeUniteSecondaire(domaine.getCodeUniteSecondaire());
+            dto.setCodeUniteSecondaire(domaine.getCodeUniteSecondaire());
             dto.setUniteSecondaireDTO(UniteFactory.uniteToUniteDTO(domaine.getUniteSecondaire()));
 
             return dto;
@@ -63,6 +65,8 @@ public class DetailsFicheTechFactory {
             domaine.setConsUni(dto.getConsUni());
             domaine.setPrixTotal(dto.getPrixTotal());
             domaine.setPrixUni(dto.getPrixUni());
+            domaine.setModifPrice(dto.getModifPrice());
+
             domaine.setCodeArticle(dto.getCodeArticle());
             if (domaine.getCodeArticle() != null) {
                 domaine.setArticle(ArticleFactory.createArticleByCode(dto.getCodeArticle()));
@@ -75,9 +79,9 @@ public class DetailsFicheTechFactory {
             if (domaine.getCodeUnite() != null) {
                 domaine.setUnite(UniteFactory.createUniteByCode(dto.getCodeUnite()));
             }
-            
-             domaine.setCodeUniteSecondaire(dto.getCodeUniteSecondaire());
-            if (domaine.getCodeUniteSecondaire()!= null) {
+
+            domaine.setCodeUniteSecondaire(dto.getCodeUniteSecondaire());
+            if (domaine.getCodeUniteSecondaire() != null) {
                 domaine.setUniteSecondaire(UniteFactory.createUniteByCode(dto.getCodeUniteSecondaire()));
             }
 

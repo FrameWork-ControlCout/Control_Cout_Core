@@ -5,18 +5,39 @@
 package com.FrameWork.ControlCout.Achat.web;
 
 //import com.FrameWork.MedLite.Authentification.service.AccessUserService;
+import com.FrameWork.ControlCout.Achat.Edition.BonReceptionEdition;
+import com.FrameWork.ControlCout.Achat.Edition.FactureBonReceptionEdition;
+import com.FrameWork.ControlCout.Achat.domaine.BonReception;
 import com.FrameWork.ControlCout.Achat.domaine.FactureBonReception;
 import com.FrameWork.ControlCout.Achat.dto.FactureBonReceptionDTO;
 import com.FrameWork.ControlCout.Achat.dto.OrderAchatDTO;
+import com.FrameWork.ControlCout.Achat.factory.BonReceptionFactory;
+import com.FrameWork.ControlCout.Achat.factory.FactureBonReceptionFactory;
 import com.FrameWork.ControlCout.Achat.service.FactureBonReceptionService;
+import com.FrameWork.ControlCout.Parametrage.dto.SocDTO;
+import com.FrameWork.ControlCout.Parametrage.dto.SocEditionDTO;
+import com.FrameWork.ControlCout.Parametrage.service.SocService;
+import com.FrameWork.ControlCout.web.Util.Helper;
+import com.crystaldecisions.sdk.occa.report.application.ParameterFieldController;
+import com.crystaldecisions.sdk.occa.report.application.ReportClientDocument;
+import com.crystaldecisions.sdk.occa.report.exportoptions.ReportExportFormat;
+import com.crystaldecisions.sdk.occa.report.lib.ReportSDKException;
 import jakarta.validation.Valid;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import javax.sql.rowset.serial.SerialBlob;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,9 +59,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class FactureBonReceptionRessource {
 
     private final FactureBonReceptionService factureBonReceptionService;
+    private final SocService socService;
 
-    public FactureBonReceptionRessource(FactureBonReceptionService factureBonReceptionService) {
+    public FactureBonReceptionRessource(FactureBonReceptionService factureBonReceptionService, SocService socService) {
         this.factureBonReceptionService = factureBonReceptionService;
+        this.socService = socService;
     }
 
     @GetMapping("facture_bon_reception/{code}")
@@ -80,6 +103,35 @@ public class FactureBonReceptionRessource {
     public ResponseEntity<FactureBonReception> deleteFactureBonReception(@PathVariable("Code") Integer code) {
         factureBonReceptionService.deleteFactureBonReception(code);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("facture_bon_reception/edition")
+    public ResponseEntity<byte[]> editionBonReceptionWithDetails(@RequestParam(name = "code") Integer code) throws ReportSDKException, IOException, SQLException {
+        List<FactureBonReception> factureBonReceptions = factureBonReceptionService.findOneByCodeEdition(code);
+        Collection<FactureBonReceptionEdition> reportData = FactureBonReceptionFactory.flattenFactueBonReceptionForEdition(factureBonReceptions);
+        SocDTO socDTO = socService.findOne(1);
+        Blob blob = new SerialBlob(socDTO.getLogo());
+        SocEditionDTO socEditionDTO = new SocEditionDTO(socDTO.getCode(), blob, socDTO.getNomSociete(), socDTO.getNomSocieteAr());
+        ReportClientDocument reportClientDoc = new ReportClientDocument();
+        reportClientDoc.open("Reports/FactureBonReception.rpt", 0);
+        reportClientDoc.getDatabaseController().setDataSource(reportData, FactureBonReceptionEdition.class, "Commande", "Commande");
+        reportClientDoc.getSubreportController()
+                .getSubreport("entete.rpt")
+                .getDatabaseController()
+                .setDataSource(
+                        java.util.Arrays.asList(socEditionDTO),
+                        SocEditionDTO.class,
+                        "societe",
+                        "societe"
+                );
+        ParameterFieldController paramController = reportClientDoc.getDataDefController().getParameterFieldController();
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        paramController.setCurrentValue("", "user", user);
+        ByteArrayInputStream byteArrayInputStream = (ByteArrayInputStream) reportClientDoc.getPrintOutputController().export(ReportExportFormat.PDF);
+        reportClientDoc.close();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        return ResponseEntity.ok().headers(headers).body(Helper.read(byteArrayInputStream));
     }
 
 }

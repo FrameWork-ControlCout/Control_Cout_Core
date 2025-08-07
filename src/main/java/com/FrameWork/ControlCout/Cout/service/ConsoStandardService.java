@@ -9,6 +9,8 @@ import com.FrameWork.ControlCout.Cout.domaine.DetailsConsoStandard;
 import com.FrameWork.ControlCout.Cout.domaine.PlanRepa;
 import com.FrameWork.ControlCout.Cout.domaine.ConsoStandard;
 import com.FrameWork.ControlCout.Cout.domaine.DetailsConsoStandardPerDay;
+import com.FrameWork.ControlCout.Cout.domaine.DetailsFicheTech;
+import com.FrameWork.ControlCout.Cout.domaine.FicheTech;
 import com.FrameWork.ControlCout.Cout.dto.DetailsConsoStandardDTO;
 import com.FrameWork.ControlCout.Cout.dto.ConsoStandardDTO;
 import com.FrameWork.ControlCout.Cout.dto.DetailsConsoStandardPerDayDTO;
@@ -35,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.FrameWork.ControlCout.Cout.repository.DetailsConsoStandardRepo;
 import com.FrameWork.ControlCout.Cout.repository.ConsoStandardRepo;
 import com.FrameWork.ControlCout.Cout.repository.DetailsConsoStandardPerDayRepo;
+import com.FrameWork.ControlCout.Cout.repository.DetailsFicheTechRepo;
 import com.FrameWork.ControlCout.Parametrage.domaine.Depot;
 import com.FrameWork.ControlCout.Parametrage.domaine.Societe;
 import com.FrameWork.ControlCout.Parametrage.domaine.TraceSociete;
@@ -77,8 +80,9 @@ public class ConsoStandardService {
     private final DepenseRepo depenseRepo;
     private final TraceSocieteRepo traceSocieteRepo;
     private final SocieteRepo societeRepo;
+    private final DetailsFicheTechRepo detailsFicheTechRepo;
 
-    public ConsoStandardService(ConsoStandardRepo consoStandardRepo, DetailsConsoStandardRepo detailsConsoStandardRepo, DetailsConsoStandardPerDayRepo detailsConsoStandardPerDayRepo, CompteurService compteurService, PlanRepaRepo planRepaRepo, MouvementStockService mouvementStockService, DepotRepo depotRepo, DepenseRepo depenseRepo, TraceSocieteRepo traceSocieteRepo, SocieteRepo societeRepo) {
+    public ConsoStandardService(ConsoStandardRepo consoStandardRepo, DetailsConsoStandardRepo detailsConsoStandardRepo, DetailsConsoStandardPerDayRepo detailsConsoStandardPerDayRepo, CompteurService compteurService, PlanRepaRepo planRepaRepo, MouvementStockService mouvementStockService, DepotRepo depotRepo, DepenseRepo depenseRepo, TraceSocieteRepo traceSocieteRepo, SocieteRepo societeRepo, DetailsFicheTechRepo detailsFicheTechRepo) {
         this.consoStandardRepo = consoStandardRepo;
         this.detailsConsoStandardRepo = detailsConsoStandardRepo;
         this.detailsConsoStandardPerDayRepo = detailsConsoStandardPerDayRepo;
@@ -89,6 +93,7 @@ public class ConsoStandardService {
         this.depenseRepo = depenseRepo;
         this.traceSocieteRepo = traceSocieteRepo;
         this.societeRepo = societeRepo;
+        this.detailsFicheTechRepo = detailsFicheTechRepo;
     }
 
     @Transactional(readOnly = true)
@@ -115,6 +120,15 @@ public class ConsoStandardService {
         List<ConsoStandard> domaine = consoStandardRepo.findByActifAndCodeDepotV2(actif, codeDepot);
 
         return ConsoStandardFactory.listConsoStandardToConsoStandardDTOs(domaine);
+
+    }
+
+    @Transactional(readOnly = true)
+    public ConsoStandardDTO findAllConsoStandardBySociete(Integer codeSociete) {
+
+        ConsoStandard domaine = consoStandardRepo.findByCodeSociete(codeSociete);
+
+        return ConsoStandardFactory.consoStandardToConsoStandardDTO(domaine);
 
     }
 
@@ -225,14 +239,11 @@ public class ConsoStandardService {
                     detailsDomaine.setArticle(ArticleFactory.createArticleByCode(detailsDto.getCodeArticle()));
                 }
 
-                
-                  detailsDomaine.setCodeUniteSecondaire(detailsDto.getCodeUniteSecondaire());
+                detailsDomaine.setCodeUniteSecondaire(detailsDto.getCodeUniteSecondaire());
                 if (detailsDomaine.getCodeUniteSecondaire() != null) {
                     detailsDomaine.setUniteSecondaire(UniteFactory.createUniteByCode(detailsDto.getCodeUniteSecondaire()));
                 }
-                
-                
-                
+
                 detailsDomaine.setCodeConsoStandardPerDay(detailsDto.getCodeConsoStandard());
                 if (detailsDomaine.getCodeConsoStandardPerDay() != null) {
                     detailsDomaine.setConsoStandard(ConsoStandardFactory.createConsoStandardByCode(detailsDto.getCodeConsoStandard()));
@@ -259,13 +270,100 @@ public class ConsoStandardService {
         return ConsoStandardFactory.consoStandardToConsoStandardDTO(domaine);
     }
 
+    private void creerConsoStandardPourJour(Integer codeSociete, Date date, Integer nbrePerson, List<PlanRepa> plans) {
+        log.info("Création de la consommation pour société {}, date {}, avec {} personnes.", codeSociete, date, nbrePerson);
+
+        if (plans == null || plans.isEmpty()) {
+            log.warn("Aucun plan de repas, création de consommation annulée.");
+            return;
+        }
+
+        // --- 1. TROUVER L'EN-TÊTE 'ConsoStandard' ---
+        // On cherche une ConsoStandard existante qui couvre cette date.
+        ConsoStandard masterConso = consoStandardRepo.findActiveBySocieteAndDate(codeSociete, date)
+                .stream().findFirst().orElse(null);
+
+        if (masterConso == null) {
+            log.error("ERREUR CRITIQUE: Aucune ConsoStandard maîtresse trouvée pour société {} à la date {}. Le calcul ne peut pas continuer.", codeSociete, date);
+            // Selon vos règles métier, vous pourriez en créer une ici, mais il est plus sûr de lever une exception.
+            throw new IllegalStateException("Aucune ConsoStandard active pour la société " + codeSociete + " à la date " + date);
+        }
+
+        // --- 2. AGRÉGER LES BESOINS EN ARTICLES POUR LA JOURNÉE ---
+        Map<Integer, BigDecimal> besoinsParArticle = new HashMap<>();
+        for (PlanRepa plan : plans) {
+            FicheTech repa = plan.getFicheTech();
+            if (repa == null) {
+                continue;
+            }
+
+            List<DetailsFicheTech> detailsDuRepa = detailsFicheTechRepo.findByCodeFicheTechnique(repa.getCode());
+            for (DetailsFicheTech detailRepa : detailsDuRepa) {
+                BigDecimal qtePourCeRepa = detailRepa.getConsUni().multiply(new BigDecimal(nbrePerson));
+                besoinsParArticle.merge(detailRepa.getCodeArticle(), qtePourCeRepa, BigDecimal::add);
+            }
+        }
+//        log.info("Besoins agrégés pour le jour : {}", besoinsParArticle);
+
+        // --- 3. CRÉER LES DÉTAILS JOURNALIERS ET METTRE À JOUR LES TOTAUX ---
+        for (Map.Entry<Integer, BigDecimal> besoin : besoinsParArticle.entrySet()) {
+            Integer codeArticle = besoin.getKey();
+            BigDecimal qteTotaleJour = besoin.getValue();
+            BigDecimal qteUnitaire = (nbrePerson > 0)
+                    ? qteTotaleJour.divide(new BigDecimal(nbrePerson), 4, BigDecimal.ROUND_HALF_UP)
+                    : BigDecimal.ZERO;
+
+            // 3a. Créer le détail journalier (DetailsConsoStandardPerDay)
+            DetailsConsoStandardPerDay dailyDetail = new DetailsConsoStandardPerDay();
+            dailyDetail.setConsoStandard(masterConso);
+            dailyDetail.setCodeDetailsConsoConsommation(masterConso.getDetailsConsoStandards().iterator().next().getCode());
+
+            dailyDetail.setCodeArticle(codeArticle);
+            dailyDetail.setArticle(ArticleFactory.createArticleByCode(codeArticle));
+            dailyDetail.setDatePlan(date);
+            dailyDetail.setConsTotal(qteTotaleJour);
+            dailyDetail.setConsUni(qteUnitaire);
+            dailyDetail.setNbrePreson(nbrePerson);
+            dailyDetail.setCodeSociete(codeSociete);
+            dailyDetail.setSociete(SocieteFactory.createSocieteByCode(codeSociete));
+            // ... autres liens comme dans votre code 'save'
+
+            detailsConsoStandardPerDayRepo.save(dailyDetail);
+
+            // 3b. Mettre à jour le total dans 'DetailsConsoStandard' (le total de la période)
+            DetailsConsoStandard totalDetail = detailsConsoStandardRepo
+                    .findByCodeConsoStandardAndCodeArticle(masterConso.getCode(), codeArticle)
+                    .orElse(null);
+
+            if (totalDetail == null) {
+                // Le total pour cet article n'existe pas encore, on le crée.
+                totalDetail = new DetailsConsoStandard();
+                totalDetail.setConsoStandard(masterConso);
+                totalDetail.setCodeArticle(codeArticle);
+                totalDetail.setArticle(ArticleFactory.createArticleByCode(codeArticle));
+                totalDetail.setNbrePerson(nbrePerson); // Le nbre de personnes du jour
+                totalDetail.setCodeSociete(codeSociete);
+                totalDetail.setSociete(SocieteFactory.createSocieteByCode(codeSociete));
+                totalDetail.setDateCreate(new Date());
+                totalDetail.setUserCreate(Helper.getUserAuthenticated());
+                totalDetail.setQteDispensee(qteTotaleJour); // La quantité est celle de ce jour
+            } else {
+                // Le total existe déjà, on AJOUTE la quantité de ce jour.
+                BigDecimal qteExistante = totalDetail.getQteDispensee() != null ? totalDetail.getQteDispensee() : BigDecimal.ZERO;
+                totalDetail.setQteDispensee(qteExistante.add(qteTotaleJour));
+            }
+            detailsConsoStandardRepo.save(totalDetail);
+        }
+
+        log.info("Création de la consommation terminée pour le {}.", date);
+    }
+
     public void deleteConsoStandard(Integer code) {
         Preconditions.checkArgument(consoStandardRepo.existsById(code), "error.ConsoStandardNotFound");
         List<DetailsConsoStandard> detailsConsoStandards = detailsConsoStandardRepo.findByCodeConsoStandard(code);
 
         List<Depense> dp = depenseRepo.findByCodeConsoStandard(code);
         Preconditions.checkArgument(dp.isEmpty(), "error.ConsoStandardHaveDepense");
-     
 
         if (detailsConsoStandards != null && !detailsConsoStandards.isEmpty()) {
             Set<Integer> allSocieteCodes = detailsConsoStandards.stream()
@@ -279,7 +377,7 @@ public class ConsoStandardService {
                 }
             }
         }
-           detailsConsoStandardPerDayRepo.deleteByCodeConsoStandardPerDay(code);
+        detailsConsoStandardPerDayRepo.deleteByCodeConsoStandardPerDay(code);
         detailsConsoStandardRepo.deleteByCodeConsoStandard(code);
         consoStandardRepo.deleteById(code);
     }
@@ -288,7 +386,7 @@ public class ConsoStandardService {
         ConsoStandard domaine = consoStandardRepo.findByCode(dto.getCode());
         Preconditions.checkArgument(domaine != null, "error.AlimentationCaisseNotFound");
         domaine.setActif(dto.isActif());
-        domaine = consoStandardRepo.save(domaine); 
+        domaine = consoStandardRepo.save(domaine);
         return ConsoStandardFactory.consoStandardToConsoStandardDTO(domaine);
     }
 
@@ -354,10 +452,22 @@ public class ConsoStandardService {
     }
 
     public void UpdatedNbrePerson(Integer codeSociete, Integer newNbrePerson) {
+        // 1. Attempt to find the existing record.
         ConsoStandard cs = consoStandardRepo.findByCodeSociete(codeSociete);
-        System.out.println("com.FrameWork.ControlCout.Cout.service.ConsoStandardService.UpdatedNbrePerson()" + cs.getCode());
-        cs.setNbrePerson(newNbrePerson);
-        consoStandardRepo.save(cs);
+
+        // 2. The CRITICAL check: Is the object itself null?
+        if (cs != null) {
+            // 3. If it's NOT null, it means a record was found. We can safely update it.
+            log.info("Found existing ConsoStandard for societe code {}. Updating nbrePerson to {}.", codeSociete, newNbrePerson);
+            cs.setNbrePerson(newNbrePerson);
+
+            // 4. Save the updated entity.
+            consoStandardRepo.save(cs);
+        } else {
+            // 5. If it IS null, it means no record was found. Log this and do nothing.
+            //    This matches the behavior seen in your other log message: "No action taken."
+            log.warn("No ConsoStandard found for societe code {}. No update will be performed.", codeSociete);
+        }
     }
 
     public void recalculateFutureDailyConsumption(Integer codeSociete, Integer newNbrePerson, Date changeDate) {
@@ -419,4 +529,67 @@ public class ConsoStandardService {
                 .setScale(0, RoundingMode.CEILING)
                 .divide(new BigDecimal("2.0"));
     }
+
+    public void recalculerPourDateSpecifique(Integer codeSociete, Date date) {
+        log.info("Déclenchement du recalcul pour la société {} à la date {}", codeSociete, date);
+
+        // --- 1. ANNULER LES CALCULS PRÉCÉDENTS POUR CETTE DATE ---
+        List<DetailsConsoStandardPerDay> oldDailyDetails = detailsConsoStandardPerDayRepo.findByCodeSocieteAndDatePlanGreaterThanEqual(codeSociete, date);
+
+        if (!oldDailyDetails.isEmpty()) {
+            log.info("Annulation de {} anciens enregistrements de consommation pour le {}.", oldDailyDetails.size(), date);
+            ConsoStandard masterConso = oldDailyDetails.get(0).getConsoStandard();
+
+            for (DetailsConsoStandardPerDay oldDetail : oldDailyDetails) {
+                // Soustraire l'ancienne quantité du total maître
+                DetailsConsoStandard totalDetail = detailsConsoStandardRepo
+                        .findByCodeConsoStandardAndCodeArticle(masterConso.getCode(), oldDetail.getCodeArticle())
+                        .orElse(null);
+
+                if (totalDetail != null && totalDetail.getQteDispensee() != null) {
+                    BigDecimal nouvelleQte = totalDetail.getQteDispensee().subtract(oldDetail.getConsTotal());
+                    totalDetail.setQteDispensee(nouvelleQte);
+                    detailsConsoStandardRepo.save(totalDetail);
+                }
+            }
+
+            // Supprimer les anciens détails journaliers
+            detailsConsoStandardPerDayRepo.deleteAllInBatch(oldDailyDetails);
+        }
+
+        // --- 2. RÉCUPÉRER LES NOUVELLES DONNÉES D'ENTRÉE ---
+        Integer nbrePersonPourCeJour = trouverNbrePersonPourDate(codeSociete, date);
+        List<PlanRepa> plansDuJour = planRepaRepo.findByCodeSocieteAndDatePlanAndTraiterIsFalse(codeSociete, date);
+
+        if (plansDuJour.isEmpty()) {
+            log.info("Aucun PlanRepa trouvé pour la société {} à la date {}. Le recalcul est terminé (rien à calculer).", codeSociete, date);
+            // Mettre à jour le statut 'traiter' à false si nécessaire pour les anciens plans supprimés
+            return;
+        }
+
+        // --- 3. LANCER LE NOUVEAU CALCUL ---
+        creerConsoStandardPourJour(codeSociete, date, nbrePersonPourCeJour, plansDuJour);
+
+        // --- 4. MARQUER LES PLANS COMME TRAITÉS ---
+        plansDuJour.forEach(plan -> plan.setTraiter(true));
+        planRepaRepo.saveAll(plansDuJour);
+    }
+
+    /**
+     * Trouve le nombre de personnes d'une société à une date donnée en se
+     * basant sur l'historique.
+     */
+    private Integer trouverNbrePersonPourDate(Integer codeSociete, Date date) {
+        // Cherche la dernière trace de changement AVANT ou À la date donnée.
+        TraceSociete derniereTrace = traceSocieteRepo.findTopByCodeSocieteAndDateUpdateLessThanEqualOrderByDateUpdateDesc(codeSociete, date);
+
+        if (derniereTrace != null) {
+            return derniereTrace.getNbrePersonNew();
+        } else {
+            // Si aucune trace, on prend la valeur actuelle de la société (cas initial)
+            Societe societe = societeRepo.findByCode(codeSociete);
+            return (societe != null) ? societe.getNbrePerson() : 0;
+        }
+    }
+
 }

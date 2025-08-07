@@ -4,13 +4,9 @@
  */
 package com.FrameWork.ControlCout.Cout.domaine;
 
-import com.FrameWork.ControlCout.Achat.domaine.*;
 import com.FrameWork.ControlCout.Parametrage.domaine.Article;
-import com.FrameWork.ControlCout.Parametrage.domaine.Fournisseur;
 import com.FrameWork.ControlCout.Parametrage.domaine.Unite;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,15 +15,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
+import lombok.*;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
@@ -39,6 +33,8 @@ import org.hibernate.envers.Audited;
 @Table(name = "Details_Fiche_Technique", schema = "cout")
 @Audited
 @AuditTable("Details_Fiche_Technique_AUD")
+@Getter
+@Setter
 public class DetailsFicheTech {
 
      @Id
@@ -93,7 +89,7 @@ public class DetailsFicheTech {
     
     
    @Column(name = "Qte_Besoin_Unitaire" )
-    private Integer consUni;
+    private BigDecimal consUni;
     @Column(name = "Qte_Besoin_Total", nullable = false, columnDefinition = ("decimal(18,3)"))
     private BigDecimal consTotal;
 
@@ -103,129 +99,10 @@ public class DetailsFicheTech {
     @Column(name = "Montant_Total_TTC", nullable = false, columnDefinition = ("decimal(18,3)"))
     private BigDecimal prixTotal;
  
- 
+ @Column(name = "Modif_Price" , length = 3, columnDefinition = "nvarchar(3)")
+    private String modifPrice;
     
     public DetailsFicheTech() {
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public FicheTech getFicheTechnique() {
-        return ficheTechnique;
-    }
-
-    public void setFicheTechnique(FicheTech ficheTechnique) {
-        this.ficheTechnique = ficheTechnique;
-    }
-
-    public Integer getCodeFicheTechnique() {
-        return codeFicheTechnique;
-    }
-
-    public void setCodeFicheTechnique(Integer codeFicheTechnique) {
-        this.codeFicheTechnique = codeFicheTechnique;
-    }
-
-    public String getUserCreate() {
-        return userCreate;
-    }
-
-    public void setUserCreate(String userCreate) {
-        this.userCreate = userCreate;
-    }
-
-    public Date getDateCreate() {
-        return dateCreate;
-    }
-
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-    public Article getArticle() {
-        return article;
-    }
-
-    public void setArticle(Article article) {
-        this.article = article;
-    }
-
-    public Integer getCodeArticle() {
-        return codeArticle;
-    }
-
-    public void setCodeArticle(Integer codeArticle) {
-        this.codeArticle = codeArticle;
-    }
-
-    public Unite getUnite() {
-        return unite;
-    }
-
-    public void setUnite(Unite unite) {
-        this.unite = unite;
-    }
-
-    public Integer getCodeUnite() {
-        return codeUnite;
-    }
-
-    public void setCodeUnite(Integer codeUnite) {
-        this.codeUnite = codeUnite;
-    }
-
-    public Integer getConsUni() {
-        return consUni;
-    }
-
-    public void setConsUni(Integer consUni) {
-        this.consUni = consUni;
-    }
-
-    public BigDecimal getConsTotal() {
-        return consTotal;
-    }
-
-    public void setConsTotal(BigDecimal consTotal) {
-        this.consTotal = consTotal;
-    }
-
-    public BigDecimal getPrixUni() {
-        return prixUni;
-    }
-
-    public void setPrixUni(BigDecimal prixUni) {
-        this.prixUni = prixUni;
-    }
-
-    public BigDecimal getPrixTotal() {
-        return prixTotal;
-    }
-
-    public void setPrixTotal(BigDecimal prixTotal) {
-        this.prixTotal = prixTotal;
-    }
-
-    public Unite getUniteSecondaire() {
-        return uniteSecondaire;
-    }
-
-    public void setUniteSecondaire(Unite uniteSecondaire) {
-        this.uniteSecondaire = uniteSecondaire;
-    }
-
-    public Integer getCodeUniteSecondaire() {
-        return codeUniteSecondaire;
-    }
-
-    public void setCodeUniteSecondaire(Integer codeUniteSecondaire) {
-        this.codeUniteSecondaire = codeUniteSecondaire;
     }
  
     

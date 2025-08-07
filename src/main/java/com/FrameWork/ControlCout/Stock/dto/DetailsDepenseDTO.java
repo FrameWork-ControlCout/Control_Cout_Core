@@ -73,7 +73,7 @@ public class DetailsDepenseDTO {
         
           private Integer codeDetailsConsoStandard;
           
-
+  private boolean consStandard;
     public DetailsDepenseDTO() {
     }
 

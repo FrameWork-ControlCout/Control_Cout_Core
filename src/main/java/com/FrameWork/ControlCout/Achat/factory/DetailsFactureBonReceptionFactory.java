@@ -36,8 +36,8 @@ public class DetailsFactureBonReceptionFactory {
             domaine.setPrixUniAchat(dto.getPrixUniAchat());
             domaine.setPrixTotalAchat(dto.getPrixTotalAchat());
 
-            domaine.setPrixUniGros(dto.getPrixTotalGros());
             domaine.setPrixUniGros(dto.getPrixUniGros());
+            domaine.setPrixTotalGros(dto.getPrixTotalGros());
 
             domaine.setDiffPrixUni(dto.getDiffPrixUni());
             domaine.setDiffPrixTotal(dto.getDiffPrixTotal());
@@ -61,15 +61,15 @@ public class DetailsFactureBonReceptionFactory {
                 domaine.setFournisseur(FournisseurFactory.createFournisseurByCode(dto.getCodeFournisseur()));
             }
 
-            domaine.setCodeDepot(dto.getCodeDepot());
-            if (domaine.getCodeDepot() != null) {
-                domaine.setDepot(DepotFactory.createDepotByCode(dto.getCodeDepot()));
-            }
+//            domaine.setCodeDepot(dto.getCodeDepot());
+//            if (domaine.getCodeDepot() != null) {
+//                domaine.setDepot(DepotFactory.createDepotByCode(dto.getCodeDepot()));
+//            }
 
-            domaine.setCodeDetailsOrderAchat(dto.getCodeDetailsOrderAchat());
-            if (domaine.getCodeDetailsOrderAchat() != null) {
-                domaine.setDetailsOrderAchat(DetailsOrderAchatFactory.createOrderAchatByCode(dto.getCodeDetailsOrderAchat()));
-            }
+//            domaine.setCodeDetailsOrderAchat(dto.getCodeDetailsOrderAchat());
+//            if (domaine.getCodeDetailsOrderAchat() != null) {
+//                domaine.setDetailsOrderAchat(DetailsOrderAchatFactory.createOrderAchatByCode(dto.getCodeDetailsOrderAchat()));
+//            }
             domaine.setQteBesoin(dto.getQteBesoin());
             domaine.setQteReceptionner(dto.getQteReceptionner());
 
@@ -107,11 +107,11 @@ public class DetailsFactureBonReceptionFactory {
             dto.setQteBesoin(domaine.getQteBesoin());
             dto.setFournisseurDTO(FournisseurFactory.fournisseurToFournisseurDTO(domaine.getFournisseur()));
             dto.setCodeFournisseur(domaine.getCodeFournisseur());
-            dto.setDetailsOrderAchatDTO(DetailsOrderAchatFactory.detailsorderAchatToDetailsOrderAchatDTO(domaine.getDetailsOrderAchat()));
-            dto.setCodeDetailsOrderAchat(domaine.getCodeDetailsOrderAchat());
+//            dto.setDetailsOrderAchatDTO(DetailsOrderAchatFactory.detailsorderAchatToDetailsOrderAchatDTO(domaine.getDetailsOrderAchat()));
+//            dto.setCodeDetailsOrderAchat(domaine.getCodeDetailsOrderAchat());
 
-            dto.setDepotDTO(DepotFactory.depotToDepotDTO(domaine.getDepot()));
-            dto.setCodeDepot(domaine.getCodeDepot());
+//            dto.setDepotDTO(DepotFactory.depotToDepotDTO(domaine.getDepot()));
+//            dto.setCodeDepot(domaine.getCodeDepot());
 
             return dto;
         } else {

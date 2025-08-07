@@ -49,17 +49,14 @@ public class FactureBonReception {
 
     @Column(name = "Code_Depot", updatable = false, insertable = false)
     private Integer codeDepot;
-    
-  
-    
-        @JoinColumn(name = "Code_Bon_Reception", referencedColumnName = "Code" )
+
+    @JoinColumn(name = "Code_Bon_Reception", referencedColumnName = "Code")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JsonBackReference
     private BonReception bonReception;
 
-    @Column(name = "Code_Bon_Reception", updatable = false, insertable = false )
+    @Column(name = "Code_Bon_Reception", updatable = false, insertable = false)
     private Integer codeBonReception;
-    
 
     @JoinColumn(name = "Fournisseur", referencedColumnName = "Code", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -77,10 +74,6 @@ public class FactureBonReception {
     @Column(name = "Date_Create", nullable = false, columnDefinition = "datetime default (getdate())")
     private Date dateCreate;
 
-
-
-  
-
     @Column(name = "Num_Fact_Frs", nullable = false, columnDefinition = ("varchar(200)"))
     private String numFactFrs;
 
@@ -96,6 +89,10 @@ public class FactureBonReception {
 
     @Column(name = "Prix_Total", nullable = false, columnDefinition = ("decimal(18,3)"))
     private BigDecimal prixTotal;
+
+    @OneToMany(mappedBy = "codeFactureBonReception", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @JsonBackReference("listFactureBonReception") // Unique name
+    private List<DetailsFactureBonReception> detailsFactureBonReceptions;
 
     public FactureBonReception() {
     }

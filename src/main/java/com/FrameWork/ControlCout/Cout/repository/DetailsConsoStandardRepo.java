@@ -9,6 +9,7 @@ import com.FrameWork.ControlCout.Cout.domaine.DetailsConsoStandard;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -30,6 +31,9 @@ public interface DetailsConsoStandardRepo extends JpaRepository<DetailsConsoStan
     List<DetailsConsoStandard> findByCodeConsoStandardInAndCodeArticle(List<Integer> codeConsoStandard, Integer codeArticle);
 
     List<DetailsConsoStandard> findByCodeConsoStandardInAndCodeArticleIn(List<Integer> codeConsoStandard, List<Integer> codeArticle);
+    
+        Optional<DetailsConsoStandard> findByCodeConsoStandardAndCodeArticle(Integer codeConsoStandard, Integer codeArticle);
+
 
     List<DetailsConsoStandard> findByCodeConsoStandardInAndHaveOA(List<Integer> codeConsoStandard, boolean haveOA);
 

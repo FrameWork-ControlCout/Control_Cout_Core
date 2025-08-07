@@ -23,5 +23,7 @@ public class OrderAchatEdition {
     private String unite;
     private BigDecimal qteBesoin;
     private String UserCreate;
+        private String observationFrs;
+
 
 }

@@ -50,13 +50,13 @@ public class DetailsFactureBonReception {
     @Column(name = "Qte_Receptionner", precision = 18, scale = 3)
     private BigDecimal qteReceptionner;
 
-    @JoinColumn(name = "Code_Depot", referencedColumnName = "Code", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JsonBackReference
-    private Depot depot;
-
-    @Column(name = "Code_Depot", updatable = false, insertable = false)
-    private Integer codeDepot;
+//    @JoinColumn(name = "Code_Depot", referencedColumnName = "Code", nullable = false)
+//    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+//    @JsonBackReference
+//    private Depot depot;
+//
+//    @Column(name = "Code_Depot", updatable = false, insertable = false)
+//    private Integer codeDepot;
 
     @JoinColumn(name = "Fournisseur", referencedColumnName = "Code", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -66,13 +66,13 @@ public class DetailsFactureBonReception {
     @Column(name = "Fournisseur", updatable = false, insertable = false, nullable = false)
     private Integer codeFournisseur;
 
-    @JoinColumn(name = "Code_Details_Order", referencedColumnName = "Code", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JsonBackReference
-    private DetailsOrderAchat detailsOrderAchat;
-
-    @Column(name = "Code_Details_Order", updatable = false, insertable = false)
-    private Integer codeDetailsOrderAchat;
+//    @JoinColumn(name = "Code_Details_Order", referencedColumnName = "Code", nullable = false)
+//    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+//    @JsonBackReference
+//    private DetailsOrderAchat detailsOrderAchat;
+//
+//    @Column(name = "Code_Details_Order", updatable = false, insertable = false)
+//    private Integer codeDetailsOrderAchat;
     @NotNull
     @Column(name = "User_Create", nullable = false, length = 255, columnDefinition = "nvarchar(200)")
     private String userCreate;

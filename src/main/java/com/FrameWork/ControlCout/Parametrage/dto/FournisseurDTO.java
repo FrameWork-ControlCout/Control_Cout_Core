@@ -32,15 +32,16 @@ public class FournisseurDTO {
 
     private String userCreate;
 
-    private Date dateCreate; 
+    private Date dateCreate;
 
-     private String adress;
-       
-  private String numTel;
-  
-      private boolean gros;
+    private String adress;
+
+    private String numTel;
+    private String observationReceving;
+
+    private boolean gros;
+
     public FournisseurDTO() {
     }
- 
-    
+
 }

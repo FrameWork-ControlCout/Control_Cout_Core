@@ -85,6 +85,13 @@ public class OrderAchatService {
                 orderAchatRepo.findByCodeEtatFacture(codeEtatFacture)
         );
     }
+    
+      @Transactional(readOnly = true)
+    public List<OrderAchatDTO> findOrderAchatByEtatFactureAndCodeEtatRepecet(Integer codeEtatFacture,List<Integer> codeEtatReception) {
+        return OrderAchatFactory.listOrderAchatToOrderAchatDTOs(
+                orderAchatRepo.findByCodeEtatFactureAndCodeEtatReceptionIn(codeEtatFacture,codeEtatReception)
+        );
+    }
 
     @Transactional(readOnly = true)
     public List<OrderAchatDTO> findOrderAchatByFournisseur(Integer codeFournisseur) {

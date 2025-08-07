@@ -34,4 +34,9 @@ public interface PlanRepaRepo extends JpaRepository<PlanRepa, Integer> {
     @Query("SELECT p FROM PlanRepa p WHERE p.datePlan >= :startDate AND p.codeSociete = :codeSociete")
     List<PlanRepa> findAllDateAndCodeSocieteIn(@Param("startDate") Date startDate, @Param("codeSociete") Integer codeSociete);
 
+       List<PlanRepa> findByCodeSocieteAndDatePlanAndTraiterIsFalse(Integer codeSociete , Date datePlan);
+       
+              List<PlanRepa> findByCodeSocieteAndDatePlanAndTraiterIsTrue(Integer codeSociete , Date datePlan);
+
+    
 }

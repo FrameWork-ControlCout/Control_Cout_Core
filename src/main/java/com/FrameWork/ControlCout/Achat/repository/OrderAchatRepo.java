@@ -29,6 +29,9 @@ public interface OrderAchatRepo extends JpaRepository<OrderAchat, Integer> {
     List<OrderAchat> findByCodeIn(List<Integer> code);
 
     List<OrderAchat> findByCodeEtatFacture(Integer codeEtatFacture);
+    
+        List<OrderAchat> findByCodeEtatFactureAndCodeEtatReceptionIn(Integer codeEtatFacture,List<Integer> codeEtatReception);
+
 
     List<OrderAchat> findByCodeFournisseur(Integer codeFournisseur);
 

@@ -19,5 +19,8 @@ public interface MouvementFournisseurRepo extends JpaRepository<MouvementFournis
     List<MouvementFournisseur> findByCodeFournisseur(Integer codeFournisseur);
 
     List<MouvementFournisseur> findByCodeFournisseurAndTypeMouvement(Integer codeFournisseur, String typeMouvement);
+    
+        MouvementFournisseur findByCodeFournisseurAndTypeMouvementAndCodeFactureBonReception(Integer codeFournisseur, String typeMouvement,Integer codeFactureBonReception);
+
 
 }

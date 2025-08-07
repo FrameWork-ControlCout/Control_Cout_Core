@@ -16,6 +16,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DetailsFicheTechRepo extends JpaRepository<DetailsFicheTech, Integer>{
     List<DetailsFicheTech> findByCodeFicheTechnique (Integer codeFicheTechnique);
+    
+        List<DetailsFicheTech> findByCodeArticleIn (List<Integer> codeArticle);
+
     public void deleteByCodeFicheTechnique(Integer codeFicheTechnique);
     
    DetailsFicheTech findByCode (Integer code);

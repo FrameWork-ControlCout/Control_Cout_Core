@@ -21,6 +21,9 @@ import org.springframework.stereotype.Repository;
 public interface ArticleRepo extends JpaRepository<Article, Integer> {
 
     Article findByCode(Integer code);
+    
+        List<Article> findArticleByCodeIn(List<Integer> code);
+
 
     List<Article> findAllByCodeIn(Set<Integer> codes);
 

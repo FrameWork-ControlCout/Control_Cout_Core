@@ -29,6 +29,8 @@ public interface BonReceptionRepo extends JpaRepository<BonReception, Integer> {
 
     BonReception findByCode(Integer code);
 
+    List<BonReception> findByCodeDepot(Integer codeDepot);
+
     List<BonReception> findByCodeIn(List<Integer> code);
 
     List<BonReception> findByHaveFBR(Boolean haveFBR);

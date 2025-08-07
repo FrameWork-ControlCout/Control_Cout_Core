@@ -4,6 +4,7 @@
  */
 package com.FrameWork.ControlCout.Achat.repository;
  
+import com.FrameWork.ControlCout.Achat.domaine.BonReception;
 import com.FrameWork.ControlCout.Achat.domaine.FactureBonReception;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -24,7 +25,11 @@ public interface FactureBonReceptionRepo extends JpaRepository<FactureBonRecepti
     Collection<FactureBonReception> findAllByDateCreateBetween(LocalDate dateDebut, LocalDate dateFin);
 
     FactureBonReception findByCode(Integer code);
- 
+//        List<FactureBonReception> findAllByCode(Integer code);
+
+    @Query("SELECT a FROM FactureBonReception a JOIN FETCH a.fournisseur JOIN FETCH a.detailsFactureBonReceptions b  JOIN FETCH  b.article JOIN FETCH b.unite   WHERE a.code = :code")
+    List<FactureBonReception> findAllByCode(@Param("code") Integer code);
+        
     List<FactureBonReception> findByCodeFournisseur(Integer codeFournisseur);
     
   

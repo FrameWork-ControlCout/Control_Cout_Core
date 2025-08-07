@@ -34,4 +34,7 @@ public interface DetailsConsoStandardPerDayRepo extends JpaRepository<DetailsCon
  
     @Modifying
     void deleteByCodeConsoStandardPerDay(Integer codeConsoStandardPerDay);
+    
+      @Modifying
+    void deleteByCodeSocieteAndDatePlan(Integer codeSociete,Date datePlan);
 }

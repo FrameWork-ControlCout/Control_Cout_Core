@@ -100,6 +100,9 @@ public class DetailsDepense {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "Date_Create", nullable = false, columnDefinition = "datetime default (getdate())")
     private Date dateCreate;
+    
+     @Column(name = "Conso_Standard", nullable = false)
+    private boolean consStandard;
 
     public DetailsDepense() {
     }

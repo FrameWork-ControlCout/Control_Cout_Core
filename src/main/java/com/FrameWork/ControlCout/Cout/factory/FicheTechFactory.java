@@ -17,30 +17,33 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class FicheTechFactory {
-    
+
     public static FicheTech createFicheTechniqueByCode(int code) {
         FicheTech domaine = new FicheTech();
         domaine.setCode(code);
         return domaine;
     }
-    
+
     public static FicheTech ficheTechniqueDTOToFicheTechnique(FicheTechDTO dto, FicheTech domaine) {
         if (dto != null) {
             domaine.setCode(dto.getCode());
             domaine.setCodeSaisie(dto.getCodeSaisie());
             domaine.setPrixTotal(dto.getPrixTotal());
             domaine.setActif(dto.isActif());
-            domaine.setDesignationAr(dto.getDesignationAr());            
+            domaine.setDesignationAr(dto.getDesignationAr());
             domaine.setCoutUnitaire(dto.getCoutUnitaire());
-            
+            domaine.setAutreCout(dto.getAutreCout());
+            domaine.setPourcentAutreAcharge(dto.getPourcentAutreAcharge());
+            domaine.setNbrePersRef(dto.getNbrePersRef());
+
             return domaine;
         } else {
             return null;
         }
     }
-    
+
     public static FicheTechDTO ficheTechniqueToFicheTechniqueDTO(FicheTech domaine) {
-        
+
         if (domaine != null) {
             FicheTechDTO dto = new FicheTechDTO();
             dto.setCode(domaine.getCode());
@@ -49,15 +52,18 @@ public class FicheTechFactory {
             dto.setUserCreate(domaine.getUserCreate());
             dto.setPrixTotal(domaine.getPrixTotal());
             dto.setActif(domaine.isActif());
-            dto.setDesignationAr(domaine.getDesignationAr());            
-            dto.setCoutUnitaire(domaine.getCoutUnitaire()); 
-            
+            dto.setDesignationAr(domaine.getDesignationAr());
+            dto.setCoutUnitaire(domaine.getCoutUnitaire());
+            dto.setAutreCout(domaine.getAutreCout());
+            dto.setPourcentAutreAcharge(domaine.getPourcentAutreAcharge());
+            dto.setNbrePersRef(domaine.getNbrePersRef());
+
             return dto;
         } else {
             return null;
         }
     }
-    
+
     public static List<FicheTechDTO> listFicheTechniqueToFicheTechniqueDTOs(List<FicheTech> ficheTechniques) {
         List<FicheTechDTO> list = new ArrayList<>();
         for (FicheTech ficheTechnique : ficheTechniques) {
@@ -65,7 +71,7 @@ public class FicheTechFactory {
         }
         return list;
     }
-    
+
     public static Collection<FicheTechDTO> CollectionFicheTechniqueToFicheTechniqueDTOs(Collection<FicheTech> ficheTechniques) {
         Collection<FicheTechDTO> collection = new ArrayList<>();
         for (FicheTech ficheTechnique : ficheTechniques) {

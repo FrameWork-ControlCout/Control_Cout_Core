@@ -263,15 +263,12 @@ public class GestionStockService {
         }
     }
 
-// 
-//    @Transactional(readOnly = true)
-//     public List<EtatStock> getEtatStockForDepot(Integer depotCode) {
-//        // First, create a reference to the Depot entity. 
-//        // Using getReferenceById is efficient as it doesn't hit the DB if the object is only used for the query.
-//         Depot depot = depotRepo.findByCode(depotCode);
-//         System.out.println("depot code saisie" + depot.getCodeSaisie());
-//        // Now, call the updated repository method with the Depot object
-//        return etatStockRepo.findAllByDepot(depot);
-//    }
+ public void DeleteMouvementFrsFromFactureBonReception(FactureBonReception factureBonReception) {
+        MouvementFournisseur mvtFrs = mouvementFournisseurRepo.findByCodeFournisseurAndTypeMouvementAndCodeFactureBonReception
+        (factureBonReception.getCodeFournisseur(), "BON_RECEPTION" , factureBonReception.getCode());
+       
+        mouvementFournisseurRepo.deleteById(mvtFrs.getCode());
+
+    }
 
 }

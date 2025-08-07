@@ -88,36 +88,7 @@ public class ConsoStandardFactory {
         }
         return collection;
     }
-
-//    public static Collection<ConsoStandardEdition> flattenConsoStandardForEdition(List<ConsoStandard> consoStandards) {
-//    if (consoStandards == null) {
-//        return new ArrayList<>();
-//    }
-//
-//    List<ConsoStandardEdition> flattenedList = new ArrayList<>();
-//
-//    for (ConsoStandard cs : consoStandards) {
-//        // Since getDetailsBonReceptions() is lazy-loaded, ensure you are in a transactional context when calling this.
-//        // Your service method already is, so this is safe.
-//        if (cs.getDetailsConsoStandards()!= null) {
-//            for (DetailsConsoStandard detail : cs.getDetailsConsoStandards()) {
-//                ConsoStandardEdition  dto = new ConsoStandardEdition();
-// 
-//                dto.setQteBesoinTotal(detail .getConsTotal());
-//                if (detail.getArticle() != null) {
-//                    dto.setCodeSaisieArticle(detail.getArticle().getCodeSaisie());
-//                    dto.setDesignationArArticle(detail.getArticle().getDesignationAr());
-//                    // Assuming Article has a relationship to a Unite entity
-//                    if (detail.getArticle().getUnite() != null) {
-//                        dto.setDesignationArUnite(detail.getArticle().getUniteSecondaire().getDesignationAr());
-//                    }
-//                }
-//                flattenedList.add(dto);
-//            }
-//        }
-//    }
-//    return flattenedList;
-//}
+ 
     public static Collection<ConsoStandardEdition> flattenConsoStandardForEdition(List<ConsoStandard> consoStandards) {
         if (consoStandards == null) {
             return new ArrayList<>();
@@ -145,12 +116,6 @@ public class ConsoStandardFactory {
                         newDto.setDesignationArArticle(perDayDetail.getArticle().getDesignationAr());
                         newDto.setDesignationArUnite(perDayDetail.getUniteSecondaire().getDesignationAr());
 
-//                        DetailsConsoStandard parentDetail = perDayDetail.getDetailsConsoStandard();
-//                        if (parentDetail != null && parentDetail.getUniteSecondaire() != null) {
-//                            newDto.setDesignationArUnite(parentDetail.getUniteSecondaire().getDesignationAr());
-//                        } else {
-//                            newDto.setDesignationArUnite("N/A"); // Fallback if unit is not found
-//                        } 
                         articleAggregationMap.put(articleCode, newDto);
                     }
                 }

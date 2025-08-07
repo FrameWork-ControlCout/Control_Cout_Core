@@ -4,12 +4,16 @@
  */
 package com.FrameWork.ControlCout.Cout.service;
 
+import com.FrameWork.ControlCout.Cout.domaine.ConsoStandard;
 import com.FrameWork.ControlCout.Cout.domaine.PlanRepa;
 import com.FrameWork.ControlCout.Cout.dto.PlanRepaDTO;
 import com.FrameWork.ControlCout.Cout.factory.PlanRepaFactory;
+import com.FrameWork.ControlCout.Cout.repository.ConsoStandardRepo;
 import com.FrameWork.ControlCout.Cout.repository.PlanRepaRepo;
 import com.FrameWork.ControlCout.Parametrage.domaine.Societe;
+import com.FrameWork.ControlCout.Parametrage.domaine.TraceSociete;
 import com.FrameWork.ControlCout.Parametrage.repository.SocieteRepo;
+import com.FrameWork.ControlCout.Parametrage.repository.TraceSocieteRepo;
 import com.FrameWork.ControlCout.web.Util.Helper;
 
 import com.google.common.base.Preconditions;
@@ -18,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,10 +42,14 @@ public class PlanRepaService {
 
     private final PlanRepaRepo planRepaRepo;
     private final SocieteRepo societeRepo;
+    private final ConsoStandardService consoStandardService;
+    private final ConsoStandardRepo consoStandardRepo;
 
-    public PlanRepaService(PlanRepaRepo planRepaRepo, SocieteRepo societeRepo) {
+    public PlanRepaService(PlanRepaRepo planRepaRepo, SocieteRepo societeRepo, ConsoStandardService consoStandardService, ConsoStandardRepo consoStandardRepo) {
         this.planRepaRepo = planRepaRepo;
         this.societeRepo = societeRepo;
+        this.consoStandardService = consoStandardService;
+        this.consoStandardRepo = consoStandardRepo;
     }
 
     @Transactional(readOnly = true)
@@ -90,15 +99,6 @@ public class PlanRepaService {
         return PlanRepaFactory.planRepaToPlanRepaDTO(domaine);
     }
 
-//    public PlanRepaDTO save(PlanRepaDTO dto) {
-//        PlanRepa domaine = PlanRepaFactory.planRepaDTOToPlanRepa(dto, new PlanRepa());
-//        domaine.setDateCreate(new Date());
-//        domaine.setUserCreate(Helper.getUserAuthenticated());
-//
-//        domaine = planRepaRepo.save(domaine);
-//        return PlanRepaFactory.planRepaToPlanRepaDTO(domaine);
-//    }
-
     public PlanRepaDTO saveTraiter(PlanRepaDTO dto) {
         PlanRepa domaine = planRepaRepo.findByCode(dto.getCode());
         domaine.setTraiter(dto.isTraiter());
@@ -116,13 +116,25 @@ public class PlanRepaService {
                     domaine.setDateCreate(currentDate);
                     domaine.setUserCreate(currentUser);
                     Societe sc = societeRepo.findByCode(dto.getCodeSociete());
-                    System.out.println("com.FrameWork.ControlCout.Cout.service.PlanRepaService.save()" + sc.getNbrePerson());
-                    domaine.setNbrePerson(sc.getNbrePerson());
+                    if (sc != null) {
+                        domaine.setNbrePerson(sc.getNbrePerson());
+                    }
                     return domaine;
                 })
                 .collect(Collectors.toList());
 
         List<PlanRepa> savedPlans = planRepaRepo.saveAll(plansToSave);
+
+        // TRIGGER : Déclencher le recalcul pour chaque date/société affectée
+//        savedPlans.stream()
+//                .collect(Collectors.groupingBy(PlanRepa::getCodeSociete,
+//                        Collectors.mapping(PlanRepa::getDatePlan, Collectors.toSet())))
+//                .forEach((codeSociete, dates) -> {
+//                    dates.forEach(date -> {
+//                        consoStandardService.recalculerPourDateSpecifique(codeSociete, date);
+//                    });
+//                });
+
         return savedPlans.stream()
                 .map(PlanRepaFactory::planRepaToPlanRepaDTO)
                 .collect(Collectors.toList());
@@ -131,15 +143,48 @@ public class PlanRepaService {
     public void deletePlanRepa(Integer code) {
         Preconditions.checkArgument(planRepaRepo.existsById(code), "error.PlanRepaNotFound");
         PlanRepa pl = planRepaRepo.findByCode(code);
+
+        
+        
         Preconditions.checkArgument(pl.isTraiter() != Boolean.TRUE, "error.PlanRepaHaveConsStandard");
+        Integer codeSociete = pl.getCodeSociete();
+        Date datePlan = pl.getDatePlan();
         planRepaRepo.deleteById(code);
+//        planRepaRepo.flush(); // Forcer la suppression dans la base de données avant le recalcul
+
+        // TRIGGER : Déclencher le recalcul pour la date qui vient d'être modifiée
+//        consoStandardService.recalculerPourDateSpecifique(codeSociete, datePlan);
+
     }
 
+//    public PlanRepaDTO update(PlanRepaDTO dto) {
+//        PlanRepa domaine = planRepaRepo.findByCode(dto.getCode());
+//        Preconditions.checkArgument(domaine != null, "error.AlimentationCaisseNotFound");
+//        domaine = PlanRepaFactory.planRepaDTOToPlanRepa(dto, domaine);
+//        domaine = planRepaRepo.save(domaine);
+//        PlanRepaDTO resultDTO = PlanRepaFactory.planRepaToPlanRepaDTO(domaine);
+//        
+//        return resultDTO;
+//    }
     public PlanRepaDTO update(PlanRepaDTO dto) {
         PlanRepa domaine = planRepaRepo.findByCode(dto.getCode());
-        Preconditions.checkArgument(domaine != null, "error.AlimentationCaisseNotFound");
+        Preconditions.checkArgument(domaine != null, "error.PlanRepaNotFound");
+        Date oldDate = domaine.getDatePlan();
+        Integer codeSociete = domaine.getCodeSociete();
+        // Apply all DTO changes to the domain object
         domaine = PlanRepaFactory.planRepaDTOToPlanRepa(dto, domaine);
         domaine = planRepaRepo.save(domaine);
+
+//        // TRIGGER : Déclencher le recalcul
+//        // Si la date a changé, il faut recalculer pour l'ancienne ET la nouvelle date.
+//        if (!Objects.equals(oldDate, domaine.getDatePlan())) {
+//            log.info("La date du PlanRepa a changé. Recalcul pour l'ancienne date : {} et la nouvelle : {}", oldDate, domaine.getDatePlan());
+//            consoStandardService.recalculerPourDateSpecifique(codeSociete, oldDate);
+//        }
+//
+//        // Toujours recalculer pour la date finale du plan
+//        consoStandardService.recalculerPourDateSpecifique(codeSociete, domaine.getDatePlan());
+
         PlanRepaDTO resultDTO = PlanRepaFactory.planRepaToPlanRepaDTO(domaine);
         return resultDTO;
     }

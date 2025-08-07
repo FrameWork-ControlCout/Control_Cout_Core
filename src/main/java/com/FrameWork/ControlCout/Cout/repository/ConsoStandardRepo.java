@@ -24,9 +24,14 @@ public interface ConsoStandardRepo extends JpaRepository<ConsoStandard, Integer>
 
     ConsoStandard findByCode(Integer code);
         ConsoStandard findByCodeSociete(Integer codeSociete);
+                List<ConsoStandard> findAllByCodeSociete(Integer codeSociete);
+
 
 
     List<ConsoStandard> findByActif(Boolean actif);
+    
+      
+
 
     @EntityGraph(attributePaths = {"detailsConsoStandards", "detailsConsoStandards.societe", "detailsConsoStandards.article"})
     ConsoStandard findWithDetailsByCode(Integer code);
@@ -47,4 +52,7 @@ public interface ConsoStandardRepo extends JpaRepository<ConsoStandard, Integer>
 
      List<ConsoStandard> findByCodeSocieteAndActifIsTrueAndDateFinGreaterThanEqual(Integer codeSociete, Date aDate);
     
+     
+        @Query("SELECT cs FROM ConsoStandard cs WHERE cs.codeSociete = :societeCode AND cs.actif = true AND :planDate BETWEEN cs.dateDebut AND cs.dateFin")
+    List<ConsoStandard> findActiveBySocieteAndDate(@Param("societeCode") Integer societeCode, @Param("planDate") Date planDate);
 }

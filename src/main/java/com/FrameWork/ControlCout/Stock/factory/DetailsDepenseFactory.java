@@ -32,6 +32,8 @@ public class DetailsDepenseFactory {
             domaine.setCode(dto.getCode());
             domaine.setQteDispenser(dto.getQteDispenser());
             domaine.setQteDemander(dto.getQteDemander());
+                        domaine.setConsStandard(dto.isConsStandard());
+
 
             domaine.setCodeDepense(dto.getCodeDepense());
             if (domaine.getCodeDepense() != null) {
@@ -87,6 +89,9 @@ public class DetailsDepenseFactory {
 
             dto.setArticleDTO(ArticleFactory.articleToArticleDTO(domaine.getArticle()));
             dto.setCodeArticle(domaine.getCodeArticle());
+            
+                        dto.setConsStandard(domaine.isConsStandard());
+
 
             return dto;
         } else {

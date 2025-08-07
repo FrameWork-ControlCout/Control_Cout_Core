@@ -65,7 +65,7 @@ public class FactureBonReceptionDTO {
 
     private Integer codeBonReception;
     
-    
+      private List<DetailsFactureBonReceptionDTO> detailsFactureBonReceptionDTOs;
     
     
     

@@ -60,7 +60,7 @@ spring:
         livereload:
             enabled: true
     datasource:
-        url: jdbc:sqlserver://localhost\sql2019;database=ControlCout;integratedSecurity=false;encrypt=false;trustServerCertificate=true
+        url: jdbc:sqlserver://localhost\sql2019;database=ControlCoutFAO;integratedSecurity=false;encrypt=false;trustServerCertificate=true
         username: sa
         password: 123
         driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver   
