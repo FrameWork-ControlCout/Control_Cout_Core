@@ -58,8 +58,8 @@ public class DeviseRessource {
     }
     
     @GetMapping("devise/hasTaux")
-    public ResponseEntity<List<DeviseDTO>> getAllDeviseByTaux() {        
-        return ResponseEntity.ok().body(deviseService.findByHasTaux(false));
+    public ResponseEntity<List<DeviseDTO>> getAllDeviseByTaux(@RequestParam Boolean hasTaux) {        
+        return ResponseEntity.ok().body(deviseService.findByHasTaux(hasTaux));
     }
     
     @PostMapping("devise")
