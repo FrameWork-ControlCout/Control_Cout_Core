@@ -51,5 +51,7 @@ public class DetailsConsoStandardPerDayDTO {
      
        private UniteDTO uniteSecondaireDTO;
     private Integer codeUniteSecondaire;
+      @Column(name = "Satisfait", nullable = false)
+    private boolean satisfait;
 
 }

@@ -52,6 +52,8 @@ public class DetailsConsoStandardPerDayFactory {
             dto.setDatePlan(domaine.getDatePlan());
 
             dto.setNbrePreson(domaine.getNbrePreson());
+                        dto.setSatisfait(domaine.isSatisfait());
+
 
             return dto;
         } else {
@@ -89,6 +91,8 @@ public class DetailsConsoStandardPerDayFactory {
             domaine.setConsTotal(dto.getConsTotal());
             domaine.setDatePlan(dto.getDatePlan());
             domaine.setNbrePreson(dto.getNbrePreson());
+                        domaine.setSatisfait(dto.isSatisfait());
+
 
             return domaine;
         } else {

@@ -21,10 +21,13 @@ import com.FrameWork.ControlCout.Achat.repository.FactureBonReceptionRepo;
 import com.FrameWork.ControlCout.Achat.repository.OrderAchatRepo;
 import com.FrameWork.ControlCout.Cout.domaine.DetailsFicheTech;
 import com.FrameWork.ControlCout.Cout.domaine.FicheTech;
+import com.FrameWork.ControlCout.Cout.domaine.HistoriqueFicheTechnique;
 import com.FrameWork.ControlCout.Cout.repository.DetailsFicheTechRepo;
 import com.FrameWork.ControlCout.Cout.repository.FicheTechRepo;
+import com.FrameWork.ControlCout.Cout.repository.HistoriqueFicheTechniqueRepo;
 import com.FrameWork.ControlCout.Parametrage.domaine.Article;
 import com.FrameWork.ControlCout.Parametrage.domaine.Compteur;
+import com.FrameWork.ControlCout.Parametrage.factory.ArticleFactory;
 import com.FrameWork.ControlCout.Parametrage.factory.EtatReceptionFactory;
 import com.FrameWork.ControlCout.Parametrage.repository.ArticleRepo;
 import com.FrameWork.ControlCout.Parametrage.service.ArticleService;
@@ -71,10 +74,11 @@ public class BonReceptionService {
     private final ArticleRepo articleRepo;
     private final GestionStockService gestionStockService;
     private final DetailsFicheTechRepo detailsFicheTechRepo;
+    private final HistoriqueFicheTechniqueRepo historiqueFicheTechniqueRepo;
     private final FicheTechRepo ficheTechRepo;
     private static final BigDecimal BIG_DECIMAL_100 = new BigDecimal("100");
 
-    public BonReceptionService(BonReceptionRepo bonReceptionRepo, DetailsBonReceptionRepo detailsBonReceptionRepo, CompteurService compteurService, DetailsOrderAchatRepo detailsOrderAchatRepo, OrderAchatRepo orderAchatRepo, FactureBonReceptionRepo factureBonReceptionRepo, SocService cliniqueService, ArticleRepo articleRepo, GestionStockService gestionStockService, DetailsFicheTechRepo detailsFicheTechRepo, FicheTechRepo ficheTechRepo) {
+    public BonReceptionService(BonReceptionRepo bonReceptionRepo, DetailsBonReceptionRepo detailsBonReceptionRepo, CompteurService compteurService, DetailsOrderAchatRepo detailsOrderAchatRepo, OrderAchatRepo orderAchatRepo, FactureBonReceptionRepo factureBonReceptionRepo, SocService cliniqueService, ArticleRepo articleRepo, GestionStockService gestionStockService, DetailsFicheTechRepo detailsFicheTechRepo, HistoriqueFicheTechniqueRepo historiqueFicheTechniqueRepo, FicheTechRepo ficheTechRepo) {
         this.bonReceptionRepo = bonReceptionRepo;
         this.detailsBonReceptionRepo = detailsBonReceptionRepo;
         this.compteurService = compteurService;
@@ -85,6 +89,7 @@ public class BonReceptionService {
         this.articleRepo = articleRepo;
         this.gestionStockService = gestionStockService;
         this.detailsFicheTechRepo = detailsFicheTechRepo;
+        this.historiqueFicheTechniqueRepo = historiqueFicheTechniqueRepo;
         this.ficheTechRepo = ficheTechRepo;
     }
 
@@ -163,7 +168,7 @@ public class BonReceptionService {
         detailsBonReceptionRepo.saveAll(newDetailsList);
         articleRepo.saveAll(articles);
 
-        updateFicheTechniqueCosts(articles);
+        updateFicheTechniqueCosts(articles,domaine.getCodeSaisie());
 
         updateRelatedOrdersAndStock(domaine, dto.getDetailsBonReceptionDTOs());
         List<DetailsBonReception> savedDetails = detailsBonReceptionRepo.saveAll(newDetailsList);
@@ -207,7 +212,7 @@ public class BonReceptionService {
         List<DetailsBonReception> savedDetails = detailsBonReceptionRepo.saveAll(newDetailsList);
         articleRepo.saveAll(articles);
         updateRelatedOrdersAndStock(domaine, dto.getDetailsBonReceptionDTOs());
-        updateFicheTechniqueCosts(articles);
+        updateFicheTechniqueCosts(articles,domaine.getCodeSaisie());
         gestionStockService.createEntreesFromBonReception(savedDetails);
         return BonReceptionFactory.bonReceptionToBonReceptionDTO(domaine);
     }
@@ -223,92 +228,204 @@ public class BonReceptionService {
         bonReceptionRepo.deleteById(code);
     }
 
-    private void updateFicheTechniqueCosts(List<Article> updatedArticles) {
+//    private void updateFicheTechniqueCosts(List<Article> updatedArticles) {
+//        if (updatedArticles == null || updatedArticles.isEmpty()) {
+//            return;
+//        }
+//
+//        // Create a map of Article Code -> New Price for efficient lookup.
+//        Map<Integer, BigDecimal> articlePriceMap = updatedArticles.stream()
+//                .collect(Collectors.toMap(Article::getCode, Article::getLastPrixAchat));
+//
+//        List<Integer> articleCodes = new ArrayList<>(articlePriceMap.keySet());
+//
+//        // Find all Fiche Technique details that use any of the updated articles.
+//        // Assumes DetailsFicheTechRepo has a method findByCodeArticleIn
+//        List<DetailsFicheTech> detailsToUpdate = detailsFicheTechRepo.findByCodeArticleIn(articleCodes);
+//
+//        if (detailsToUpdate.isEmpty()) {
+//            log.info("No Fiche Technique details found for the updated articles.");
+//            return;
+//        }
+//
+//        log.info("Found {} Fiche Technique details to update with new costs.", detailsToUpdate.size());
+//    List<HistoriqueFicheTechnique> historiqueFicheTechnique = new ArrayList<>(); 
+//        // Update price and total cost for each affected detail.
+//        for (DetailsFicheTech detail : detailsToUpdate) {
+//            BigDecimal newPrice = articlePriceMap.get(detail.getCodeArticle());
+//
+//        
+//            if (detail.getPrixUni().compareTo(newPrice) > 0) {
+//                detail.setModifPrice("REM");
+//            } else {
+//                detail.setModifPrice("AUG");
+//            }
+////            
+//            if (newPrice != null) {
+//                detail.setPrixUni(newPrice);
+//                // Recalculate the total price for the component.
+//                if (detail.getConsTotal() != null) {
+//                    detail.setPrixTotal(detail.getConsTotal().multiply(newPrice));
+//                }
+//            }
+//            
+//        }
+//
+//        historiqueFicheTechniqueRepo.saveAll(historiqueFicheTechnique);
+//        // Persist all changes to the database.
+//        detailsFicheTechRepo.saveAll(detailsToUpdate);
+//        log.info("Successfully updated costs for {} Fiche Technique details.", detailsToUpdate.size());
+//
+//        Set<FicheTech> fichesToRecalculate = detailsToUpdate.stream()
+//                .map(DetailsFicheTech::getFicheTechnique)
+//                .collect(Collectors.toSet());
+//
+//        // Step 4: Iterate through each unique recipe and recalculate its total cost.
+//        for (FicheTech fiche : fichesToRecalculate) {
+//
+//            // For each recipe, sum the cost of all its ingredients.
+//            // Cost of one ingredient = (quantity in recipe) * (latest purchase price of article)
+//            // Using BigDecimal for precision in financial calculations.
+//            BigDecimal newTotalCost = fiche.getDetailsFicheTechniques().stream()
+//                    .map(detail -> {
+//                        // We need the article's price from its entity.
+//                        Article ingredientArticle = detail.getArticle();
+//                        BigDecimal quantity = detail.getConsTotal();
+//                        BigDecimal price = ingredientArticle.getLastPrixAchat();
+//                        return quantity.multiply(price);
+//                    })
+//                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+// 
+//            BigDecimal pourcentAutreAcharge = fiche.getPourcentAutreAcharge(); 
+//            if (pourcentAutreAcharge == null || pourcentAutreAcharge.compareTo(BigDecimal.ZERO) == 0) {
+//                fiche.setAutreCout(BigDecimal.ZERO); 
+//                fiche.setPrixTotal(newTotalCost);
+//            } else { 
+//                BigDecimal pourcentageFacteur = pourcentAutreAcharge.divide(BIG_DECIMAL_100, 4, RoundingMode.HALF_UP); 
+//                BigDecimal autreCout = newTotalCost.multiply(pourcentageFacteur);
+//                fiche.setAutreCout(autreCout); 
+//                BigDecimal mntTTC = newTotalCost.add(autreCout);
+//                BigDecimal coutUni = mntTTC.divide(BigDecimal.valueOf(fiche.getNbrePersRef()));
+//
+//                fiche.setCoutUnitaire(coutUni);
+//                fiche.setPrixTotal(mntTTC);
+//            }
+//
+//        }
+//
+//        ficheTechRepo.saveAll(fichesToRecalculate);
+//
+//        // Note: After updating details, you might need a mechanism to recalculate 
+//        // the total cost of the parent FicheTechnique entities if that is not handled automatically.
+//    }
+    private void updateFicheTechniqueCosts(List<Article> updatedArticles, String codeSaisieBonReception) {
         if (updatedArticles == null || updatedArticles.isEmpty()) {
             return;
         }
 
-        // Create a map of Article Code -> New Price for efficient lookup.
         Map<Integer, BigDecimal> articlePriceMap = updatedArticles.stream()
                 .collect(Collectors.toMap(Article::getCode, Article::getLastPrixAchat));
-
         List<Integer> articleCodes = new ArrayList<>(articlePriceMap.keySet());
 
-        // Find all Fiche Technique details that use any of the updated articles.
-        // Assumes DetailsFicheTechRepo has a method findByCodeArticleIn
         List<DetailsFicheTech> detailsToUpdate = detailsFicheTechRepo.findByCodeArticleIn(articleCodes);
 
         if (detailsToUpdate.isEmpty()) {
             log.info("No Fiche Technique details found for the updated articles.");
             return;
         }
-
         log.info("Found {} Fiche Technique details to update with new costs.", detailsToUpdate.size());
-
-        // Update price and total cost for each affected detail.
-        for (DetailsFicheTech detail : detailsToUpdate) {
-            BigDecimal newPrice = articlePriceMap.get(detail.getCodeArticle());
-
-            if (detail.getPrixUni().compareTo(newPrice) > 0) {
-                detail.setModifPrice("REM");
-            } else {
-                detail.setModifPrice("AUG");
-            }
-//            
-            if (newPrice != null) {
-                detail.setPrixUni(newPrice);
-                // Recalculate the total price for the component.
-                if (detail.getConsTotal() != null) {
-                    detail.setPrixTotal(detail.getConsTotal().multiply(newPrice));
-                }
-            }
-        }
-
-        // Persist all changes to the database.
-        detailsFicheTechRepo.saveAll(detailsToUpdate);
-        log.info("Successfully updated costs for {} Fiche Technique details.", detailsToUpdate.size());
 
         Set<FicheTech> fichesToRecalculate = detailsToUpdate.stream()
                 .map(DetailsFicheTech::getFicheTechnique)
                 .collect(Collectors.toSet());
 
-        // Step 4: Iterate through each unique recipe and recalculate its total cost.
+        // Step 1: Before any changes, cache the old total costs of affected FicheTechnique
+        // and the old prices of the specific details that will be updated.
+        Map<Integer, BigDecimal> oldFicheCostsMap = fichesToRecalculate.stream()
+                .collect(Collectors.toMap(FicheTech::getCode, fiche -> fiche.getPrixTotal() != null ? fiche.getPrixTotal() : BigDecimal.ZERO));
+        Map<Integer, BigDecimal> oldDetailPricesMap = detailsToUpdate.stream()
+                .collect(Collectors.toMap(DetailsFicheTech::getCode, detail -> detail.getPrixUni() != null ? detail.getPrixUni() : BigDecimal.ZERO));
+
+        // Step 2: Update the price for each affected detail in memory
+        for (DetailsFicheTech detail : detailsToUpdate) {
+            BigDecimal newPrice = articlePriceMap.get(detail.getCodeArticle());
+            if (newPrice != null && newPrice.compareTo(detail.getPrixUni()) != 0) {
+                detail.setModifPrice(detail.getPrixUni().compareTo(newPrice) > 0 ? "REM" : "AUG");
+                detail.setPrixUni(newPrice);
+                if (detail.getConsTotal() != null) {
+                    detail.setPrixTotal(detail.getConsTotal().multiply(newPrice));
+                }
+            }
+        }
+        detailsFicheTechRepo.saveAll(detailsToUpdate); // Persist changes to details
+        log.info("Successfully updated costs for {} Fiche Technique details.", detailsToUpdate.size());
+
+        // Step 3: Recalculate totals for each FicheTechnique and create history records
+        List<HistoriqueFicheTechnique> historyRecords = new ArrayList<>();
+        String currentUser = Helper.getUserAuthenticated();
+        Date currentDate = new Date();
+
         for (FicheTech fiche : fichesToRecalculate) {
+            BigDecimal oldTotalCost = oldFicheCostsMap.get(fiche.getCode());
 
-            // For each recipe, sum the cost of all its ingredients.
-            // Cost of one ingredient = (quantity in recipe) * (latest purchase price of article)
-            // Using BigDecimal for precision in financial calculations.
-            BigDecimal newTotalCost = fiche.getDetailsFicheTechniques().stream()
-                    .map(detail -> {
-                        // We need the article's price from its entity.
-                        Article ingredientArticle = detail.getArticle();
-                        BigDecimal quantity = detail.getConsTotal();
-                        BigDecimal price = ingredientArticle.getLastPrixAchat();
-                        return quantity.multiply(price);
-                    })
+            // Recalculate total cost of ingredients from all (now updated) details
+            BigDecimal newIngredientsCost = fiche.getDetailsFicheTechniques().stream()
+                    .map(d -> d.getPrixTotal() != null ? d.getPrixTotal() : BigDecimal.ZERO)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
- 
-            BigDecimal pourcentAutreAcharge = fiche.getPourcentAutreAcharge(); 
-            if (pourcentAutreAcharge == null || pourcentAutreAcharge.compareTo(BigDecimal.ZERO) == 0) {
-                fiche.setAutreCout(BigDecimal.ZERO); 
-                fiche.setPrixTotal(newTotalCost);
-            } else { 
-                BigDecimal pourcentageFacteur = pourcentAutreAcharge.divide(BIG_DECIMAL_100, 4, RoundingMode.HALF_UP); 
-                BigDecimal autreCout = newTotalCost.multiply(pourcentageFacteur);
-                fiche.setAutreCout(autreCout); 
-                BigDecimal mntTTC = newTotalCost.add(autreCout);
-                BigDecimal coutUni = mntTTC.divide(BigDecimal.valueOf(fiche.getNbrePersRef()));
 
-                fiche.setCoutUnitaire(coutUni);
-                fiche.setPrixTotal(mntTTC);
+            BigDecimal finalNewTotalCost;
+            BigDecimal pourcentAutreAcharge = fiche.getPourcentAutreAcharge();
+            if (pourcentAutreAcharge == null || pourcentAutreAcharge.compareTo(BigDecimal.ZERO) == 0) {
+                fiche.setAutreCout(BigDecimal.ZERO);
+                finalNewTotalCost = newIngredientsCost;
+            } else {
+                BigDecimal pourcentageFacteur = pourcentAutreAcharge.divide(BIG_DECIMAL_100, 4, RoundingMode.HALF_UP);
+                BigDecimal autreCout = newIngredientsCost.multiply(pourcentageFacteur);
+                fiche.setAutreCout(autreCout);
+                finalNewTotalCost = newIngredientsCost.add(autreCout);
             }
 
+            // Update FicheTechnique with new final costs
+            fiche.setPrixTotal(finalNewTotalCost);
+            if (fiche.getNbrePersRef() != null && fiche.getNbrePersRef() > 0) {
+                BigDecimal coutUni = finalNewTotalCost.divide(BigDecimal.valueOf(fiche.getNbrePersRef()), 4, RoundingMode.HALF_UP);
+                fiche.setCoutUnitaire(coutUni);
+            }
+
+            // If total cost has changed, create history records for the responsible articles
+            if (oldTotalCost.compareTo(finalNewTotalCost) != 0) {
+                for (DetailsFicheTech detail : fiche.getDetailsFicheTechniques()) {
+                    if (articlePriceMap.containsKey(detail.getCodeArticle())) {
+                        BigDecimal oldArticlePrice = oldDetailPricesMap.get(detail.getCode());
+                        BigDecimal newArticlePrice = detail.getPrixUni();
+
+                        // Create history only if this specific article's price changed
+                        if (oldArticlePrice != null && oldArticlePrice.compareTo(newArticlePrice) != 0) {
+                            HistoriqueFicheTechnique history = new HistoriqueFicheTechnique();
+                            history.setFicheTechnique(fiche);
+                            history.setDateCreate(currentDate);
+                            history.setUserCreate(currentUser);
+                            history.setPrixFicheTechOld(oldTotalCost);
+                            history.setPrixFicheTechNew(finalNewTotalCost);
+                            history.setCodeSaisieBR(codeSaisieBonReception);
+
+                            history.setCodeArticle(detail.getCodeArticle());
+                            if (history.getCodeArticle() != null) {
+                                history.setArticle(ArticleFactory.createArticleByCode(detail.getCodeArticle()));
+                            }
+
+                            history.setPrixArticleOld(oldArticlePrice);
+                            history.setPrixArticleNew(newArticlePrice);
+                            historyRecords.add(history);
+                        }
+                    }
+                }
+            }
         }
 
+        // Step 4: Save all created history records and updated FicheTechnique entities
+        historiqueFicheTechniqueRepo.saveAll(historyRecords);
         ficheTechRepo.saveAll(fichesToRecalculate);
-
-        // Note: After updating details, you might need a mechanism to recalculate 
-        // the total cost of the parent FicheTechnique entities if that is not handled automatically.
     }
 
     /**

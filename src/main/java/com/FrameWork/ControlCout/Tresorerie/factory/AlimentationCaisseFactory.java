@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.FrameWork.ControlCout.Tresorerie.factory;
- 
+
 import com.FrameWork.ControlCout.Parametrage.factory.DeviseFactory;
 import com.FrameWork.ControlCout.Parametrage.factory.ModeReglementFactory;
 import com.FrameWork.ControlCout.Tresorerie.domaine.AlimentationCaisse;
@@ -11,11 +11,12 @@ import com.FrameWork.ControlCout.Tresorerie.domaine.DetailsAlimentationCaisse;
 import com.FrameWork.ControlCout.Tresorerie.domaine.DetailsAlimentationCaissePK;
 import com.FrameWork.ControlCout.Tresorerie.dto.AlimentationCaisseDTO;
 import com.FrameWork.ControlCout.Tresorerie.dto.DetailsAlimentationCaisseDTO;
+import com.FrameWork.ControlCout.web.Util.Helper;
 import com.FrameWork.ControlCout.web.Util.Preconditions;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List; 
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,15 +32,15 @@ public class AlimentationCaisseFactory {
         return domaine;
     }
 
-    public static AlimentationCaisse alimentationCaisseDTOToAlimentationCaisse( AlimentationCaisse domaine ,AlimentationCaisseDTO dto) {
+    public static AlimentationCaisse alimentationCaisseDTOToAlimentationCaisse(AlimentationCaisse domaine, AlimentationCaisseDTO dto) {
         if (dto != null) {
             domaine.setCode(dto.getCode());
 
             domaine.setObservation(dto.getObservation());
-            domaine.setCodeSaisie(dto.getCodeSaisie()); 
+            domaine.setCodeSaisie(dto.getCodeSaisie());
             domaine.setMontant(dto.getMontant());
             domaine.setMontantEnDevise(dto.getMontantEnDevise());
-            domaine.setTauxChange(dto.getTauxChange()); 
+            domaine.setTauxChange(dto.getTauxChange());
 
             Preconditions.checkBusinessLogique(dto.getCodeCaisse() != null, "error.CaisseRequired");
             domaine.setCodeCaisse(dto.getCodeCaisse());
@@ -63,10 +64,10 @@ public class AlimentationCaisseFactory {
             if (domaine.getCodeEtatApprouver() != null) {
                 domaine.setEtatApprouver(EtatApprouverFactory.createEtatApprouverByCode(dto.getCodeEtatApprouver()));
             }
-            
-            if(dto.getDetailsAlimentationCaisseDTOs().isEmpty()){
-                 throw new IllegalArgumentException("error.DetailsRequired");
-            }  
+
+            if (dto.getDetailsAlimentationCaisseDTOs().isEmpty()) {
+                throw new IllegalArgumentException("error.DetailsRequired");
+            }
             Collection<DetailsAlimentationCaisse> detailsCollections = new ArrayList<>();
             dto.getDetailsAlimentationCaisseDTOs().forEach(x -> {
                 DetailsAlimentationCaisse detailsAlimentationCaisse = new DetailsAlimentationCaisse();
@@ -78,12 +79,11 @@ public class AlimentationCaisseFactory {
                 detailsAlimentationCaisse.setDetailsAlimentationCaissePK(detailsPK);
 
                 Preconditions.checkBusinessLogique(x.getMontant() != null, "error.MontantRequired");
-                detailsAlimentationCaisse.setMontant(x.getMontant());    
-                
-                detailsAlimentationCaisse.setMontantDevise(x.getMontantDevise());
+                detailsAlimentationCaisse.setMontant(x.getMontant());
 
-                detailsAlimentationCaisse.setDateCreate(domaine.getDateCreate());
-                detailsAlimentationCaisse.setUsercreate(domaine.getUserCreate());
+                detailsAlimentationCaisse.setMontantDevise(x.getMontantDevise());
+                detailsAlimentationCaisse.setDateCreate(new Date());  // Set in domaine
+                detailsAlimentationCaisse.setUsercreate(Helper.getUserAuthenticated());
                 detailsAlimentationCaisse.setAlimentationCaisse(domaine);
                 detailsCollections.add(detailsAlimentationCaisse);
             });
@@ -111,11 +111,9 @@ public class AlimentationCaisseFactory {
             dto.setDateCreate(domaine.getDateCreate());
             dto.setUserCreate(domaine.getUserCreate());
             dto.setMontant(domaine.getMontant());
-            dto.setMontantEnDevise(domaine.getMontantEnDevise());       
+            dto.setMontantEnDevise(domaine.getMontantEnDevise());
             dto.setTauxChange(domaine.getTauxChange());
             dto.setCodeUserApprouver(domaine.getCodeUserApprouver());
-
-            
 
             dto.setCaisseDTO(CaisseFactory.caisseToCaisseDTO(domaine.getCaisse()));
             dto.setCodeCaisse(domaine.getCodeCaisse());
@@ -150,7 +148,6 @@ public class AlimentationCaisseFactory {
         }
     }
 
-    
     public static AlimentationCaisseDTO alimentationCaisseToAlimentationCaisseDTO(AlimentationCaisse domaine) {
 
         if (domaine != null) {
@@ -161,11 +158,9 @@ public class AlimentationCaisseFactory {
             dto.setDateCreate(domaine.getDateCreate());
             dto.setUserCreate(domaine.getUserCreate());
             dto.setMontant(domaine.getMontant());
-            dto.setMontantEnDevise(domaine.getMontantEnDevise());       
+            dto.setMontantEnDevise(domaine.getMontantEnDevise());
             dto.setTauxChange(domaine.getTauxChange());
             dto.setCodeUserApprouver(domaine.getCodeUserApprouver());
-
-            
 
             dto.setCaisseDTO(CaisseFactory.caisseToCaisseDTO(domaine.getCaisse()));
             dto.setCodeCaisse(domaine.getCodeCaisse());
@@ -199,8 +194,7 @@ public class AlimentationCaisseFactory {
             return null;
         }
     }
-    
-    
+
     public static List<AlimentationCaisseDTO> listAlimentationCaisseToAlimentationCaisseDTOs(List<AlimentationCaisse> alimentationCaisses) {
         List<AlimentationCaisseDTO> list = new ArrayList<>();
         for (AlimentationCaisse alimentationCaisse : alimentationCaisses) {
@@ -231,7 +225,7 @@ public class AlimentationCaisseFactory {
     }
 
     public static AlimentationCaisse CancelAlimentationCaisseDTOToAlimentationCaisse(AlimentationCaisse domaine, AlimentationCaisseDTO dto) {
-        domaine.setCode(dto.getCode());  
+        domaine.setCode(dto.getCode());
         domaine.setCodeSaisie(dto.getCodeSaisie());
 
         domaine.setCodeEtatApprouver(dto.getCodeEtatApprouver());

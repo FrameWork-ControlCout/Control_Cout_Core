@@ -93,5 +93,9 @@ public class DetailsConsoStandardPerDay {
 
     @Column(name = "Code_Unite_Secondaire", updatable = false, insertable = false, nullable = false)
     private Integer codeUniteSecondaire;
+    
+      @Column(name = "Satisfait", nullable = false)
+    private boolean satisfait;
+      
 
 }

@@ -42,7 +42,7 @@ public class DetailsAlimentationCaisse {
     protected DetailsAlimentationCaissePK detailsAlimentationCaissePK;
 
     @MapsId("codeAlimentationCaisse")
-    @JoinColumn(name = "Code_AAlimentation_Caisse", referencedColumnName = "Code", nullable = false)
+    @JoinColumn(name = "Code_Alimentation_Caisse", referencedColumnName = "Code", nullable = false)
     @ManyToOne(optional = false)
     private AlimentationCaisse alimentationCaisse;
 

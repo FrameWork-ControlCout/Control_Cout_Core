@@ -114,7 +114,7 @@ public class DepenseService {
             return DepenseFactory.depenseToDepenseDTO(domaine);
         }
 
-        // 2. CREATE BON RECEPTION DETAILS
+        // 2. CREATE DETAILS DEPENSE
         List<DetailsDepense> newDetailsList = new ArrayList<>();
         for (DetailsDepenseDTO detailsDto : dto.getDetailsDepensesDTOs()) {
             DetailsDepense detailsDomaine = DetailsDepenseFactory.detailsDepenseDTOToDetailsDepense(detailsDto, new DetailsDepense());
@@ -126,9 +126,7 @@ public class DepenseService {
             newDetailsList.add(detailsDomaine);
         }
         detailsDepenseRepo.saveAll(newDetailsList);
-
-        // 3. UPDATE ORIGINAL ORDERS & STOCK
-//        updateRelatedOrdersAndStock(domaine, dto.getDetailsDepensesDTOs());
+ 
         List<DetailsDepense> savedDetails = detailsDepenseRepo.saveAll(newDetailsList);
 
         gestionStockService.createSortieFromDepenseSource(savedDetails);

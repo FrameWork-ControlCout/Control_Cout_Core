@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.FrameWork.ControlCout.Tresorerie.factory;
- 
+
 import com.FrameWork.ControlCout.Tresorerie.domaine.EtatApprouver;
 import com.FrameWork.ControlCout.Tresorerie.dto.EtatApprouverDTO;
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class EtatApprouverFactory {
+
     static String LANGUAGE_SEC;
 
     @Value("${lang.secondary}")
@@ -35,9 +36,9 @@ public class EtatApprouverFactory {
     public static EtatApprouver etatApprouverDTOToEtatApprouver(EtatApprouverDTO Dto, EtatApprouver domaine) {
         if (Dto != null) {
             domaine.setCode(Dto.getCode());
-         
+
             domaine.setDesignation(Dto.getDesignation());
-             
+            domaine.setType(Dto.getType());
 
             return domaine;
         } else {
@@ -50,9 +51,10 @@ public class EtatApprouverFactory {
         if (domaine != null) {
             EtatApprouverDTO dTO = new EtatApprouverDTO();
             dTO.setCode(domaine.getCode());
-          
-            dTO.setDesignation(domaine.getDesignation()); 
-            
+
+            dTO.setDesignation(domaine.getDesignation());
+            dTO.setType(domaine.getType());
+
             return dTO;
         } else {
             return null;

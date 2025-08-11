@@ -24,7 +24,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Table(name = "Etat_approuve", schema = "tresorerie")
 @Audited
-@AuditTable(value ="Etat_approuve_AUD")
+@AuditTable(value = "Etat_approuve_AUD")
 public class EtatApprouver {
 
     @Id
@@ -38,7 +38,10 @@ public class EtatApprouver {
     @Column(name = "Designation", length = 200, columnDefinition = "nvarchar(200)")
     private String designation;
 
- 
+    @Size(max = 3)
+    @NotNull
+    @Column(name = "Type", length = 3, columnDefinition = "nvarchar(3)")
+    private String type;
 
     public EtatApprouver() {
     }
@@ -59,7 +62,12 @@ public class EtatApprouver {
         this.designation = designation;
     }
 
- 
-    
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
 }

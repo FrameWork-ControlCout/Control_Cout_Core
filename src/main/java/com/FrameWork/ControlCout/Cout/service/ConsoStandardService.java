@@ -224,42 +224,43 @@ public class ConsoStandardService {
             List<DetailsConsoStandardPerDayDTO> detailsConsoStandardPerDayDTOs = dto.getDetailsConsoStandardPerDayDTOs();
 
             for (DetailsConsoStandardPerDayDTO detailsDto : detailsConsoStandardPerDayDTOs) {
-                DetailsConsoStandardPerDay detailsDomaine = DetailsConsoStandardPerDayFactory.detailsConsoStandardDPerDayTOToDetailsConsoStandardPerDay(detailsDto, new DetailsConsoStandardPerDay());
+                DetailsConsoStandardPerDay consoStandardPerDay = DetailsConsoStandardPerDayFactory.detailsConsoStandardDPerDayTOToDetailsConsoStandardPerDay(detailsDto, new DetailsConsoStandardPerDay());
 
-                detailsDomaine.setConsoStandard(domaine);
+                consoStandardPerDay.setConsoStandard(domaine);
 //                detailsDomaine.setDetailsConsoStandard(det);
 
-                detailsDomaine.setCodeDetailsConsoConsommation(det.getCode());
-                if (detailsDomaine.getCodeDetailsConsoConsommation() != null) {
-                    detailsDomaine.setDetailsConsoStandard(det);
+                consoStandardPerDay.setCodeDetailsConsoConsommation(det.getCode());
+                if (consoStandardPerDay.getCodeDetailsConsoConsommation() != null) {
+                    consoStandardPerDay.setDetailsConsoStandard(det);
                 }
 
-                detailsDomaine.setCodeArticle(detailsDto.getCodeArticle());
-                if (detailsDomaine.getCodeArticle() != null) {
-                    detailsDomaine.setArticle(ArticleFactory.createArticleByCode(detailsDto.getCodeArticle()));
+                consoStandardPerDay.setCodeArticle(detailsDto.getCodeArticle());
+                if (consoStandardPerDay.getCodeArticle() != null) {
+                    consoStandardPerDay.setArticle(ArticleFactory.createArticleByCode(detailsDto.getCodeArticle()));
                 }
 
-                detailsDomaine.setCodeUniteSecondaire(detailsDto.getCodeUniteSecondaire());
-                if (detailsDomaine.getCodeUniteSecondaire() != null) {
-                    detailsDomaine.setUniteSecondaire(UniteFactory.createUniteByCode(detailsDto.getCodeUniteSecondaire()));
+                consoStandardPerDay.setCodeUniteSecondaire(detailsDto.getCodeUniteSecondaire());
+                if (consoStandardPerDay.getCodeUniteSecondaire() != null) {
+                    consoStandardPerDay.setUniteSecondaire(UniteFactory.createUniteByCode(detailsDto.getCodeUniteSecondaire()));
                 }
 
-                detailsDomaine.setCodeConsoStandardPerDay(detailsDto.getCodeConsoStandard());
-                if (detailsDomaine.getCodeConsoStandardPerDay() != null) {
-                    detailsDomaine.setConsoStandard(ConsoStandardFactory.createConsoStandardByCode(detailsDto.getCodeConsoStandard()));
+                consoStandardPerDay.setCodeConsoStandardPerDay(detailsDto.getCodeConsoStandard());
+                if (consoStandardPerDay.getCodeConsoStandardPerDay() != null) {
+                    consoStandardPerDay.setConsoStandard(ConsoStandardFactory.createConsoStandardByCode(detailsDto.getCodeConsoStandard()));
                 }
 
-                detailsDomaine.setCodeSociete(detailsDto.getCodeSociete());
-                if (detailsDomaine.getCodeSociete() != null) {
-                    detailsDomaine.setSociete(SocieteFactory.createSocieteByCode(detailsDto.getCodeSociete()));
+                consoStandardPerDay.setCodeSociete(detailsDto.getCodeSociete());
+                if (consoStandardPerDay.getCodeSociete() != null) {
+                    consoStandardPerDay.setSociete(SocieteFactory.createSocieteByCode(detailsDto.getCodeSociete()));
                 }
 
-                detailsDomaine.setDatePlan(detailsDto.getDatePlan());
-                detailsDomaine.setConsUni(detailsDto.getConsUni());
-                detailsDomaine.setConsTotal(detailsDto.getConsTotal());
-                detailsDomaine.setNbrePreson(nbrePers);
+                consoStandardPerDay.setDatePlan(detailsDto.getDatePlan());
+                consoStandardPerDay.setConsUni(detailsDto.getConsUni());
+                consoStandardPerDay.setConsTotal(detailsDto.getConsTotal());
+                consoStandardPerDay.setNbrePreson(nbrePers);
+                consoStandardPerDay.setSatisfait(det.isSatisfait());
 
-                detailsConsoStandardPerDayRepo.save(detailsDomaine); // Assuming you have a detailsConsoStandardRepo
+                detailsConsoStandardPerDayRepo.save(consoStandardPerDay); // Assuming you have a detailsConsoStandardRepo
 
             }
 
@@ -326,6 +327,8 @@ public class ConsoStandardService {
             dailyDetail.setNbrePreson(nbrePerson);
             dailyDetail.setCodeSociete(codeSociete);
             dailyDetail.setSociete(SocieteFactory.createSocieteByCode(codeSociete));
+                   
+
             // ... autres liens comme dans votre code 'save'
 
             detailsConsoStandardPerDayRepo.save(dailyDetail);

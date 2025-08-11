@@ -4,7 +4,6 @@
  */
 package com.FrameWork.ControlCout.Tresorerie.service;
 
- 
 import com.FrameWork.ControlCout.Parametrage.domaine.Compteur;
 import com.FrameWork.ControlCout.Parametrage.factory.DeviseFactory;
 import com.FrameWork.ControlCout.Parametrage.factory.ModeReglementFactory;
@@ -27,7 +26,7 @@ import com.google.common.base.Preconditions;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List; 
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,36 +99,12 @@ public class AlimentationCaisseService {
         String codeSaisieAC = CompteurCodeSaisie.getPrefixe() + CompteurCodeSaisie.getSuffixe();
         domaine.setCodeSaisie(codeSaisieAC);
         compteurService.incrementeSuffixe(CompteurCodeSaisie);
-               domaine.setDateCreate(new Date());  // Set in domaine
+        domaine.setDateCreate(new Date());  // Set in domaine
         domaine.setUserCreate(Helper.getUserAuthenticated());
         domaine = alimentationCaisseRepo.save(domaine);
         return AlimentationCaisseFactory.alimentationCaisseToAlimentationCaisseDTO(domaine);
     }
-//
-//    public AlimentationCaisse update(AlimentationCaisseDTO dTO) { 
-//        AlimentationCaisse domaine = alimentationCaisseRepo.getReferenceById(dTO.getCode());
-//        Preconditions.checkArgument(true, "error.AlimentationCaisseNotFound");
-//    
-//        domaine.getDetailsAlimentationCaisses().clear();
-//        alimentationCaisseRepo.flush();
-//        AlimentationCaisseFactory.alimentationCaisseDTOToAlimentationCaisse(dTO, domaine);
-//        return alimentationCaisseRepo.save(domaine);
-//    }
-//    
 
-//    public AlimentationCaisseDTO update(AlimentationCaisseDTO dto) {
-//
-//        AlimentationCaisse domaine = alimentationCaisseRepo.getReferenceById(dto.getCode());
-//        Preconditions.checkArgument(domaine != null, "error.AlimentationCaisseNotFound");
-////        domaine.getDetailsAlimentationCaisses().clear();
-//
-//        detailsAlimentationCaisseRepo.deleteByCodeAlimentationCaisse(domaine.getCode());
-//        alimentationCaisseRepo.deleteById(domaine.getCode());
-//        domaine = AlimentationCaisseFactory.alimentationCaisseDTOToAlimentationCaisse(domaine, dto);
-//        domaine = alimentationCaisseRepo.save(domaine);
-//        AlimentationCaisseDTO resultDTO = AlimentationCaisseFactory.alimentationCaisseToAlimentationCaisseDTO(domaine);
-//        return resultDTO;
-//    }
     public AlimentationCaisseDTO updateNewWithFlush(AlimentationCaisseDTO dto) {
         AlimentationCaisse domaine = alimentationCaisseRepo.findByCode(dto.getCode());
         Preconditions.checkArgument(domaine != null, "error.AlimentationCaisseNotFound");

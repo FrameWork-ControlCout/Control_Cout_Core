@@ -21,21 +21,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class EtatApprouverService {
-    private final EtatApprouverRepo etatApprouverOrdreAchatRepo;
+    private final EtatApprouverRepo etatApprouveRepo;
 
-    public EtatApprouverService(EtatApprouverRepo etatApprouverOrdreAchatRepo) {
-        this.etatApprouverOrdreAchatRepo = etatApprouverOrdreAchatRepo;
+    public EtatApprouverService(EtatApprouverRepo etatApprouveRepo) {
+        this.etatApprouveRepo = etatApprouveRepo;
     }
 
+   
+
     @Transactional(readOnly = true)
-    public List<EtatApprouverDTO> findAllEtatApprouverOrdreAchat() {
-        return EtatApprouverFactory.listEtatApprouverToEtatApprouverDTOs(etatApprouverOrdreAchatRepo.findAll());
+    public List<EtatApprouverDTO> findAllEtatApprouve() {
+        return EtatApprouverFactory.listEtatApprouverToEtatApprouverDTOs(etatApprouveRepo.findAll());
 
     }
 
     @Transactional(readOnly = true)
     public EtatApprouverDTO findOne(Integer code) {
-        EtatApprouver domaine = etatApprouverOrdreAchatRepo.getReferenceById(code);
+        EtatApprouver domaine = etatApprouveRepo.getReferenceById(code);
         Preconditions.checkArgument(domaine.getCode() != null, "error.EtatApprouverOrdreAchatNotFound");
         return EtatApprouverFactory.etatApprouverToEtatApprouverDTO(domaine);
     }
